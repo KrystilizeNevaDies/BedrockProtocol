@@ -1,6 +1,6 @@
 package com.nukkitx.protocol.bedrock.handler;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockSession;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.ReferenceCountUtil;

@@ -1,22 +1,27 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
+import org.jetbrains.annotations.NotNull;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class AddBehaviorTreePacket extends BedrockPacket {
-    private String behaviorTreeJson;
+import java.io.IOException;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
+public interface AddBehaviorTreePacket extends BedrockPacket {
+    @NotNull String json();
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.ADD_BEHAVIOR_TREE;
+    record v291(@NotNull String json) implements AddBehaviorTreePacket, Codec291 {
+        public static final Interpreter<v291> INTERPRETER = new Interpreter<>() {
+
+            @Override
+            public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {
+                return new v291(readString(input));
+            }
+        };
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, json);
+        }
     }
 }

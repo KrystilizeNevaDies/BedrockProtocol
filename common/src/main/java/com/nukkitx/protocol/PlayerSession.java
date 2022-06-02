@@ -1,6 +1,7 @@
 package com.nukkitx.protocol;
 
 import com.nukkitx.network.util.DisconnectReason;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -10,7 +11,7 @@ public interface PlayerSession {
 
     void close();
 
-    void onDisconnect(@Nonnull DisconnectReason reason);
+    void onDisconnect(@NotNull DisconnectReason reason);
 
-    void onDisconnect(@Nonnull String reason);
+    void onDisconnect(@NotNull String reason);
 }

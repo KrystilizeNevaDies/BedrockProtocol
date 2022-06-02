@@ -1,25 +1,21 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.BlockSyncType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class UpdateBlockSyncedPacket extends UpdateBlockPacket {
+import java.util.Set;
+
+interface UpdateBlockSyncedPacket extends UpdateBlockPacket {
     private long runtimeEntityId;
     private BlockSyncType entityBlockSyncType;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
-
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.UPDATE_BLOCK_SYNCED;
-    }
 
     public String toString() {
         return "UpdateBlockSyncedPacket(runtimeEntityId=" + this.runtimeEntityId +
@@ -29,5 +25,40 @@ public class UpdateBlockSyncedPacket extends UpdateBlockPacket {
                 ", runtimeId=" + this.runtimeId +
                 ", dataLayer=" + this.dataLayer +
                 ")";
+    }
+
+    public class UpdateBlockSyncedReader_v291 implements BedrockPacketReader<UpdateBlockSyncedPacket> {
+        public static final UpdateBlockSyncedReader_v291 INSTANCE = new UpdateBlockSyncedReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateBlockSyncedPacket packet) {
+            helper.writeBlockPosition(buffer, packet.getBlockPosition());
+            VarInts.writeUnsignedInt(buffer, packet.getRuntimeId());
+            int flagValue = 0;
+            for (Flag flag : packet.getFlags()) {
+                flagValue |= (1 << flag.ordinal());
+            }
+            VarInts.writeUnsignedInt(buffer, flagValue);
+            VarInts.writeUnsignedInt(buffer, packet.getDataLayer());
+            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
+            VarInts.writeUnsignedLong(buffer, packet.getEntityBlockSyncType().ordinal());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateBlockSyncedPacket packet) {
+            packet.setBlockPosition(helper.readBlockPosition(buffer));
+            packet.setRuntimeId(VarInts.readUnsignedInt(buffer));
+            int flagValue = VarInts.readUnsignedInt(buffer);
+            Set<Flag> flags = packet.getFlags();
+            for (Flag flag : Flag.values()) {
+                if ((flagValue & (1 << flag.ordinal())) != 0) {
+                    flags.add(flag);
+                }
+            }
+            packet.setDataLayer(VarInts.readUnsignedInt(buffer));
+            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
+            packet.setEntityBlockSyncType(BlockSyncType.values()[(int) VarInts.readUnsignedLong(buffer)]);
+        }
     }
 }

@@ -2,18 +2,20 @@ package com.nukkitx.protocol.bedrock.packet;
 
 
 import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * Extension of the {@link SetEntityMotionPacket} which adds the {@link #onGround} field.
  */
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class MotionPredictionHintsPacket extends BedrockPacket {
+interface MotionPredictionHintsPacket extends BedrockPacket {
 
     /**
      * The runtime ID of the entity to set motion.
@@ -39,13 +41,26 @@ public class MotionPredictionHintsPacket extends BedrockPacket {
      */
     private boolean onGround;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    @Overrid
+
+    public class MotionPredictionHintsReader_v419 implements BedrockPacketReader<MotionPredictionHintsPacket> {
+
+        public static final MotionPredictionHintsReader_v419 INSTANCE = new MotionPredictionHintsReader_v419();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MotionPredictionHintsPacket packet) {
+            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
+            helper.writeVector3f(buffer, packet.getMotion());
+            buffer.writeBoolean(packet.isOnGround());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MotionPredictionHintsPacket packet) {
+            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
+            packet.setMotion(helper.readVector3f(buffer));
+            packet.setOnGround(buffer.readBoolean());
+        }
     }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SET_ENTITY_MOTION_PLUS;
-    }
 }

@@ -1,18 +1,20 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class SubChunkRequestPacket extends BedrockPacket {
+interface SubChunkRequestPacket extends BedrockPacket {
     private int dimension;
     private Vector3i subChunkPosition;
     /**
@@ -20,13 +22,56 @@ public class SubChunkRequestPacket extends BedrockPacket {
      */
     private List<Vector3i> positionOffsets = new ObjectArrayList<>();
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    @Overrid
+
+    public class SubChunkRequestReader_v471 implements BedrockPacketReader<SubChunkRequestPacket> {
+        public static final SubChunkRequestReader_v471 INSTANCE = new SubChunkRequestReader_v471();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {
+            VarInts.writeInt(buffer, packet.getDimension());
+            helper.writeVector3i(buffer, packet.getSubChunkPosition());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {
+            packet.setDimension(VarInts.readInt(buffer));
+            packet.setSubChunkPosition(helper.readVector3i(buffer));
+        }
     }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SUB_CHUNK_REQUEST;
+    public class SubChunkRequestReader_v486 extends SubChunkRequestReader_v471 {
+        public static final SubChunkRequestReader_v486 INSTANCE = new SubChunkRequestReader_v486();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {
+            VarInts.writeInt(buffer, packet.getDimension());
+            helper.writeVector3i(buffer, packet.getSubChunkPosition());
+
+            buffer.writeIntLE(packet.getPositionOffsets().size());
+            packet.getPositionOffsets().forEach(position -> this.writeSubChunkOffset(buffer, position));
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {
+            packet.setDimension(VarInts.readInt(buffer));
+            packet.setSubChunkPosition(helper.readVector3i(buffer));
+
+            int requestCount = buffer.readIntLE(); // Unsigned but realistically, we're not going to read that many.
+            for (int i = 0; i < requestCount; i++) {
+                packet.getPositionOffsets().add(this.readSubChunkOffset(buffer));
+            }
+        }
+
+        protected void writeSubChunkOffset(ByteBuf buffer, Vector3i offsetPosition) {
+            buffer.writeByte(offsetPosition.getX());
+            buffer.writeByte(offsetPosition.getY());
+            buffer.writeByte(offsetPosition.getZ());
+        }
+
+        protected Vector3i readSubChunkOffset(ByteBuf buffer) {
+            return Vector3i.from(buffer.readByte(), buffer.readByte(), buffer.readByte());
+        }
     }
 }

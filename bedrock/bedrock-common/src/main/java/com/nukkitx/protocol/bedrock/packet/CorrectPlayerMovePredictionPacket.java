@@ -1,18 +1,20 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * Sent to the client when the server's movement prediction system does not match what the client is sending.
  */
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class CorrectPlayerMovePredictionPacket extends BedrockPacket {
+interface CorrectPlayerMovePredictionPacket extends BedrockPacket {
 
     /**
      * Client's reported position by the server
@@ -46,13 +48,28 @@ public class CorrectPlayerMovePredictionPacket extends BedrockPacket {
      */
     private long tick;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    @Overrid
+
+    public class CorrectPlayerMovePredictionReader_v419 implements BedrockPacketReader<CorrectPlayerMovePredictionPacket> {
+
+        public static final CorrectPlayerMovePredictionReader_v419 INSTANCE = new CorrectPlayerMovePredictionReader_v419();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CorrectPlayerMovePredictionPacket packet) {
+            helper.writeVector3f(buffer, packet.getPosition());
+            helper.writeVector3f(buffer, packet.getDelta());
+            buffer.writeBoolean(packet.isOnGround());
+            VarInts.writeUnsignedLong(buffer, packet.getTick());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CorrectPlayerMovePredictionPacket packet) {
+            packet.setPosition(helper.readVector3f(buffer));
+            packet.setDelta(helper.readVector3f(buffer));
+            packet.setOnGround(buffer.readBoolean());
+            packet.setTick(VarInts.readUnsignedInt(buffer));
+        }
     }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.CORRECT_PLAYER_MOVE_PREDICTION;
-    }
 }

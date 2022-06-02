@@ -1,34 +1,50 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.ee.AgentActionType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 /**
  * @since v503
  */
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@ToString(doNotUseGetters = true)
-public class AgentActionEventPacket extends BedrockPacket {
-    private String requestId;
-    private AgentActionType actionType;
+interface AgentActionEventPacket extends BedrockPacket {
+    String requestId();
+    AgentActionType actionType();
     /**
-     * @see AgentActionType for type specific JSON
+     * @see AgentActionType for valueType specific JSON
      */
-    private String responseJson;
+    String responseJson();
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
+    record v503(String requestId, AgentActionType actionType, String responseJson) implements AgentActionEventPacket, Codec503 {
+        public static final Interpreter<v503> INTERPRETER = new Interpreter<>() {
+            @Override
+            public @NotNull v503 interpret(@NotNull BitInput input) throws IOException {
+                return new v503(
+                        readString(input),
+                        VALUES[readIntLE(input)],
+                        readString(input));
+            }
+        };
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.AGENT_ACTION_EVENT;
+        private static final AgentActionType[] VALUES = AgentActionType.values();
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, requestId());
+            writeIntLE(output, actionType().ordinal());
+            writeString(output, responseJson());
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.nukkitx.protocol.bedrock;
 import com.nukkitx.network.raknet.RakNetSession;
 import com.nukkitx.protocol.MinecraftServerSession;
 import com.nukkitx.protocol.bedrock.packet.DisconnectPacket;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.wrapper.BedrockWrapperSerializer;
 import io.netty.channel.EventLoop;
 

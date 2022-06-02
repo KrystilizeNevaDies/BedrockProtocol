@@ -1,26 +1,41 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class PlaySoundPacket extends BedrockPacket {
+interface PlaySoundPacket extends BedrockPacket {
     private String sound;
     private Vector3f position;
     private float volume;
     private float pitch;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    public class PlaySoundReader_v291 implements BedrockPacketReader<PlaySoundPacket> {
+        public static final PlaySoundReader_v291 INSTANCE = new PlaySoundReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlaySoundPacket packet) {
+            helper.writeString(buffer, packet.getSound());
+            helper.writeBlockPosition(buffer, packet.getPosition().mul(8).toInt());
+            buffer.writeFloatLE(packet.getVolume());
+            buffer.writeFloatLE(packet.getPitch());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PlaySoundPacket packet) {
+            packet.setSound(helper.readString(buffer));
+            packet.setPosition(helper.readBlockPosition(buffer).toFloat().div(8));
+            packet.setVolume(buffer.readFloatLE());
+            packet.setPitch(buffer.readFloatLE());
+        }
     }
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.PLAY_SOUND;
-    }
 }

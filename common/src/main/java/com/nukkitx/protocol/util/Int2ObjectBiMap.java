@@ -7,9 +7,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.ObjIntConsumer;
+import java.util.function.Supplier;
 
 public class Int2ObjectBiMap<T> {
     private final Int2ObjectMap<T> forwards;
@@ -40,6 +42,11 @@ public class Int2ObjectBiMap<T> {
         this.backwards = new Object2IntOpenHashMap<>(initialCapacity, loadFactor);
         this.forwards.defaultReturnValue(noEntryValue);
         this.backwards.defaultReturnValue(noEntryKey);
+    }
+
+    public Int2ObjectBiMap(Int2ObjectMap<T> forwards, Object2IntMap<T> backwards) {
+        this.forwards = forwards;
+        this.backwards = backwards;
     }
 
     public T get(int key) {

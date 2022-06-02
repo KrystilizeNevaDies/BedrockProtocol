@@ -1,12 +1,17 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.inventory.ContainerSlotType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,20 +20,11 @@ import java.util.List;
  * client will simply continue as normal. If rejected, the client will undo the actions so that the inventory
  * should be in sync with the server again.
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class ItemStackResponsePacket extends BedrockPacket {
+interface ItemStackResponsePacket extends BedrockPacket {
     private final List<Response> entries = new ArrayList<>();
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.ITEM_STACK_RESPONSE;
-    }
+    @Overrid
 
     public enum ResponseStatus {
         OK,
@@ -124,4 +120,157 @@ public class ItemStackResponsePacket extends BedrockPacket {
          */
         int durabilityCorrection;
     }
+
+    public class ItemStackResponseReader_v407 implements BedrockPacketReader<ItemStackResponsePacket> {
+
+        public static final ItemStackResponseReader_v407 INSTANCE = new ItemStackResponseReader_v407();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
+            helper.writeArray(buffer, packet.getEntries(), (buf, response) -> {
+                buf.writeBoolean(response.isSuccess());
+                VarInts.writeInt(buffer, response.getRequestId());
+
+                if (!response.isSuccess())
+                    return;
+
+                helper.writeArray(buf, response.getContainers(), (buf2, containerEntry) -> {
+                    buf2.writeByte(containerEntry.getContainer().ordinal());
+
+                    helper.writeArray(buf2, containerEntry.getItems(), this::writeItemEntry);
+                });
+            });
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
+            List<ItemStackResponsePacket.Response> entries = packet.getEntries();
+            helper.readArray(buffer, entries, buf -> {
+                boolean success = buf.readBoolean();
+                int requestId = VarInts.readInt(buf);
+
+                if (!success)
+                    return new ItemStackResponsePacket.Response(success, requestId, Collections.emptyList());
+
+                List<ItemStackResponsePacket.ContainerEntry> containerEntries = new ArrayList<>();
+                helper.readArray(buf, containerEntries, buf2 -> {
+                    ContainerSlotType container = ContainerSlotType.values()[buf2.readByte()];
+
+                    List<ItemStackResponsePacket.ItemEntry> itemEntries = new ArrayList<>();
+                    helper.readArray(buf2, itemEntries, byteBuf -> this.readItemEntry(byteBuf, helper));
+                    return new ItemStackResponsePacket.ContainerEntry(container, itemEntries);
+                });
+                return new ItemStackResponsePacket.Response(success, requestId, containerEntries);
+            });
+        }
+
+        protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
+            return new ItemStackResponsePacket.ItemEntry(
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    VarInts.readInt(buffer),
+                    "",
+                    0);
+        }
+
+        protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry itemEntry) {
+            buffer.writeByte(itemEntry.getSlot());
+            buffer.writeByte(itemEntry.getHotbarSlot());
+            buffer.writeByte(itemEntry.getCount());
+            VarInts.writeInt(buffer, itemEntry.getStackNetworkId());
+        }
+    }
+
+    public class ItemStackResponseReader_v419 extends ItemStackResponseReader_v407 {
+
+        public static final ItemStackResponseReader_v419 INSTANCE = new ItemStackResponseReader_v419();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
+            helper.writeArray(buffer, packet.getEntries(), (buf, response) -> {
+                buf.writeByte(response.getResult().ordinal());
+                VarInts.writeInt(buffer, response.getRequestId());
+
+                if (response.getResult() != ItemStackResponsePacket.ResponseStatus.OK)
+                    return;
+
+                helper.writeArray(buf, response.getContainers(), (buf2, containerEntry) -> {
+                    buf2.writeByte(containerEntry.getContainer().ordinal());
+
+                    helper.writeArray(buf2, containerEntry.getItems(), this::writeItemEntry);
+                });
+            });
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
+            List<ItemStackResponsePacket.Response> entries = packet.getEntries();
+            helper.readArray(buffer, entries, buf -> {
+                ItemStackResponsePacket.ResponseStatus result = ItemStackResponsePacket.ResponseStatus.values()[buf.readByte()];
+                int requestId = VarInts.readInt(buf);
+
+                if (result != ItemStackResponsePacket.ResponseStatus.OK)
+                    return new ItemStackResponsePacket.Response(result, requestId, Collections.emptyList());
+
+                List<ItemStackResponsePacket.ContainerEntry> containerEntries = new ArrayList<>();
+                helper.readArray(buf, containerEntries, buf2 -> {
+                    ContainerSlotType container = ContainerSlotType.values()[buf2.readByte()];
+
+                    List<ItemStackResponsePacket.ItemEntry> itemEntries = new ArrayList<>();
+                    helper.readArray(buf2, itemEntries, byteBuf -> this.readItemEntry(buf2, helper));
+                    return new ItemStackResponsePacket.ContainerEntry(container, itemEntries);
+                });
+                return new ItemStackResponsePacket.Response(result, requestId, containerEntries);
+            });
+        }
+
+    }
+
+    public class ItemStackResponseReader_v422 extends ItemStackResponseReader_v419 {
+
+        public static final ItemStackResponseReader_v422 INSTANCE = new ItemStackResponseReader_v422();
+
+        @Override
+        protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
+            return new ItemStackResponsePacket.ItemEntry(
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    VarInts.readInt(buffer),
+                    helper.readString(buffer),
+                    0);
+        }
+
+        @Override
+        protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry itemEntry) {
+            super.writeItemEntry(buffer, helper, itemEntry);
+            helper.writeString(buffer, itemEntry.getCustomName());
+        }
+    }
+
+    public class ItemStackResponseReader_v428 extends ItemStackResponseReader_v422 {
+
+        public static final ItemStackResponseReader_v428 INSTANCE = new ItemStackResponseReader_v428();
+
+        @Override
+        protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
+            return new ItemStackResponsePacket.ItemEntry(
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    buffer.readByte(),
+                    VarInts.readInt(buffer),
+                    helper.readString(buffer),
+                    VarInts.readInt(buffer));
+        }
+
+        @Override
+        protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry itemEntry) {
+            super.writeItemEntry(buffer, helper, itemEntry);
+            VarInts.writeInt(buffer, itemEntry.getDurabilityCorrection());
+        }
+    }
+
+
+
 }

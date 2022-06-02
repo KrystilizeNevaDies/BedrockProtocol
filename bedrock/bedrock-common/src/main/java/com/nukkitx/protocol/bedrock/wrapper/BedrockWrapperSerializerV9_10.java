@@ -1,7 +1,7 @@
 package com.nukkitx.protocol.bedrock.wrapper;
 
 import com.nukkitx.network.VarInts;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.BedrockSession;
 import com.nukkitx.protocol.bedrock.exception.PacketSerializeException;
@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufUtil;
 
-import java.util.Collection;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 
 public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
@@ -24,19 +24,21 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
     }
 
     @Override
-    public void serialize(ByteBuf buffer, BedrockPacketCodec codec, Collection<BedrockPacket> packets, int level, BedrockSession session) {
+    public void serialize(ByteBuf buffer, BedrockPacketCodec codec, Map<BedrockPacket, PacketMetadata> packets, int level, BedrockSession session) {
         ByteBuf uncompressed = ByteBufAllocator.DEFAULT.ioBuffer(packets.size() << 3);
         try {
-            for (BedrockPacket packet : packets) {
+            for (Map.Entry<BedrockPacket, PacketMetadata> entry : packets.entrySet()) {
+                BedrockPacket packet = entry.getKey();
+                PacketMetadata metadata = entry.getValue();
                 ByteBuf packetBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
                 try {
                     int id = codec.getId(packet);
                     int header = 0;
                     header |= (id & 0x3ff);
-                    header |= (packet.getSenderId() & 3) << 10;
-                    header |= (packet.getClientId() & 3) << 12;
+                    header |= (metadata.senderId() & 3) << 10;
+                    header |= (metadata.clientId() & 3) << 12;
                     VarInts.writeUnsignedInt(packetBuffer, header);
-                    codec.tryEncode(packetBuffer, packet, session);
+                    codec.tryEncode(packetBuffer, packet);
 
                     VarInts.writeUnsignedInt(uncompressed, packetBuffer.readableBytes());
                     uncompressed.writeBytes(packetBuffer);
@@ -55,7 +57,7 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
     }
 
     @Override
-    public void deserialize(ByteBuf compressed, BedrockPacketCodec codec, Collection<BedrockPacket> packets, BedrockSession session) {
+    public void deserialize(ByteBuf compressed, BedrockPacketCodec codec, Map<BedrockPacket, PacketMetadata> packets, BedrockSession session) {
         ByteBuf decompressed = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             zlib.inflate(compressed, decompressed, 12 * 1024 * 1024); // 12MBs
@@ -71,11 +73,10 @@ public class BedrockWrapperSerializerV9_10 extends BedrockWrapperSerializer {
                 try {
                     int header = VarInts.readUnsignedInt(packetBuffer);
                     int packetId = header & 0x3ff;
-                    BedrockPacket packet = codec.tryDecode(packetBuffer, packetId, session);
-                    packet.setPacketId(packetId);
-                    packet.setSenderId((header >>> 10) & 3);
-                    packet.setClientId((header >>> 12) & 3);
-                    packets.add(packet);
+                    BedrockPacket packet = codec.tryDecode(packetBuffer, packetId);
+                    int senderId = (header >>> 10) & 3;
+                    int clientId = (header >>> 12) & 3;
+                    packets.put(packet, new PacketMetadata(senderId, clientId));
                 } catch (PacketSerializeException e) {
                     log.debug("Error occurred whilst decoding packet", e);
                     if (log.isTraceEnabled()) {

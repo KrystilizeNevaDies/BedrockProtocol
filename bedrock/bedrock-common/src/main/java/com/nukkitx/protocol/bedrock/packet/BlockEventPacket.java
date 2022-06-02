@@ -1,11 +1,20 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 /**
  * Used to trigger Note blocks, Chests and End Gateways
@@ -38,40 +47,40 @@ import lombok.EqualsAndHashCode;
  * </blockquote>
  *
  **/
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class BlockEventPacket extends BedrockPacket {
+interface BlockEventPacket extends BedrockPacket {
 
     /**
      * Position to execute block event.
-     *
-     * @param blockPosition block event position
      * @return block event position
      */
-    private Vector3i blockPosition;
+    Vector3i blockPosition();
 
     /**
-     * Block event type to execute
-     *
-     * @param eventType block event type
-     * @return block event type
+     * Block event valueType to execute
+     * @return block event valueType
      */
-    private int eventType;
+    int eventType();
 
     /**
      * Data used by event (if applicable)
-     *
-     * @param eventData data for event
      * @return data for event
      */
-    private int eventData;
+    int eventData();
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+    record v291(@NotNull Vector3i blockPosition, int eventType, int eventData) implements BlockEventPacket, Codec291 {
+        public static final Interpreter<v291> INTERPRETER = new Interpreter<>() {
+            @Override
+            public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {
+                return new v291(readBlockPosition(input), readInt(input), readInt(input));
+            }
+        };
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeBlockPosition(output, blockPosition());
+            writeInt(output, eventType());
+            writeInt(output, eventData());
+        }
     }
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.BLOCK_EVENT;
-    }
 }

@@ -1,14 +1,16 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class ContainerSetDataPacket extends BedrockPacket {
+interface ContainerSetDataPacket extends BedrockPacket {
 
     public static final int FURNACE_TICK_COUNT = 0;
     public static final int FURNACE_LIT_TIME = 1;
@@ -24,12 +26,23 @@ public class ContainerSetDataPacket extends BedrockPacket {
     private int property;
     private int value;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    public class ContainerSetDataReader_v291 implements BedrockPacketReader<ContainerSetDataPacket> {
+        public static final ContainerSetDataReader_v291 INSTANCE = new ContainerSetDataReader_v291();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerSetDataPacket packet) {
+            buffer.writeByte(packet.getWindowId());
+            VarInts.writeInt(buffer, packet.getProperty());
+            VarInts.writeInt(buffer, packet.getValue());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerSetDataPacket packet) {
+            packet.setWindowId(buffer.readByte());
+            packet.setProperty(VarInts.readInt(buffer));
+            packet.setValue(VarInts.readInt(buffer));
+        }
     }
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.CONTAINER_SET_DATA;
-    }
 }

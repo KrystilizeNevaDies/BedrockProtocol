@@ -1,23 +1,33 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class PhotoInfoRequestPacket extends BedrockPacket {
+interface PhotoInfoRequestPacket extends BedrockPacket {
     private long photoId;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    @Overrid
+
+    public class PhotoInfoRequestReader_v471 implements BedrockPacketReader<PhotoInfoRequestPacket> {
+        public static final PhotoInfoRequestReader_v471 INSTANCE = new PhotoInfoRequestReader_v471();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoInfoRequestPacket packet) {
+            VarInts.writeLong(buffer, packet.getPhotoId());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoInfoRequestPacket packet) {
+            packet.setPhotoId(VarInts.readLong(buffer));
+        }
     }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.PHOTO_INFO_REQUEST;
-    }
 }

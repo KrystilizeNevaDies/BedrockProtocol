@@ -1,23 +1,26 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.nbt.NbtMap;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
+import org.jetbrains.annotations.NotNull;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class BiomeDefinitionListPacket extends BedrockPacket {
-    private NbtMap definitions;
+import java.io.IOException;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
+interface BiomeDefinitionListPacket extends BedrockPacket {
+    @NotNull NbtMap definitions();
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.BIOME_DEFINITIONS_LIST;
+    record v313(@NotNull NbtMap definitions) implements BiomeDefinitionListPacket, Codec313 {
+        public static final Interpreter<v313> INTERPRETER = new Interpreter<v313>() {
+            @Override
+            public @NotNull v313 interpret(@NotNull BitInput input) throws IOException {
+                return new v313(readNBTMap(input));
+            }
+        };
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeNBTMap(output, definitions);
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.nukkitx.protocol.bedrock.data.inventory;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.network.util.Preconditions;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.NonFinal;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.Arrays;
@@ -70,5 +72,9 @@ public final class ItemData {
         if (obj == this) return true;
         if (!(obj instanceof ItemData)) return false;
         return equals((ItemData) obj, true, true, true);
+    }
+
+    public void write(@NotNull BitOutput output) {
+        // TODO write to output
     }
 }

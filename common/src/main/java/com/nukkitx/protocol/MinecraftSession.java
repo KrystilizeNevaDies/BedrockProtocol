@@ -1,5 +1,7 @@
 package com.nukkitx.protocol;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.net.InetSocketAddress;
 
@@ -10,15 +12,15 @@ public interface MinecraftSession<T extends MinecraftPacket> {
 
     void disconnect();
 
-    InetSocketAddress getAddress();
+    @NotNull InetSocketAddress getAddress();
 
-    default InetSocketAddress getRealAddress() {
+    default @NotNull InetSocketAddress getRealAddress() {
         return getAddress();
     }
 
-    void sendPacket(T packet);
+    void sendPacket(@NotNull T packet);
 
-    void sendPacketImmediately(T packet);
+    void sendPacketImmediately(@NotNull T packet);
 
     long getLatency();
 }

@@ -1,13 +1,15 @@
 package com.nukkitx.protocol;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 
 public interface MinecraftInterface {
 
-    CompletableFuture<Void> bind();
+    @NotNull CompletableFuture<Void> bind();
 
     void close();
 
-    InetSocketAddress getBindAddress();
+    @NotNull InetSocketAddress getBindAddress();
 }

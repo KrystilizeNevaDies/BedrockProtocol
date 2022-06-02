@@ -1,16 +1,18 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class SetSpawnPositionPacket extends BedrockPacket {
-    // spawnType is the type of spawn to set. It is either PLAYER_SPAWN or WORLD_SPAWN, and specifies
+interface SetSpawnPositionPacket extends BedrockPacket {
+    // spawnType is the valueType of spawn to set. It is either PLAYER_SPAWN or WORLD_SPAWN, and specifies
     // the behaviour of the spawn set. If WORLD_SPAWN is set, the position to which compasses will point is
     // also changed.
     private Type spawnType;
@@ -31,17 +33,51 @@ public class SetSpawnPositionPacket extends BedrockPacket {
     @Deprecated
     private boolean spawnForced;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
-
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SET_SPAWN_POSITION;
-    }
 
     public enum Type {
         PLAYER_SPAWN,
         WORLD_SPAWN
     }
+
+    public class SetSpawnPositionReader_v291 implements BedrockPacketReader<SetSpawnPositionPacket> {
+        public static final SetSpawnPositionReader_v291 INSTANCE = new SetSpawnPositionReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetSpawnPositionPacket packet) {
+            VarInts.writeInt(buffer, packet.getSpawnType().ordinal());
+            helper.writeBlockPosition(buffer, packet.getBlockPosition());
+            buffer.writeBoolean(packet.isSpawnForced());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SetSpawnPositionPacket packet) {
+            packet.setSpawnType(SetSpawnPositionPacket.Type.values()[VarInts.readInt(buffer)]);
+            packet.setBlockPosition(helper.readBlockPosition(buffer));
+            packet.setSpawnForced(buffer.readBoolean());
+        }
+    }
+
+    public class SetSpawnPositionReader_v407 implements BedrockPacketReader<SetSpawnPositionPacket> {
+        public static final SetSpawnPositionReader_v407 INSTANCE = new SetSpawnPositionReader_v407();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetSpawnPositionPacket packet) {
+            VarInts.writeInt(buffer, packet.getSpawnType().ordinal());
+            helper.writeBlockPosition(buffer, packet.getBlockPosition());
+            VarInts.writeInt(buffer, packet.getDimensionId());
+            helper.writeBlockPosition(buffer, packet.getSpawnPosition());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SetSpawnPositionPacket packet) {
+            packet.setSpawnType(SetSpawnPositionPacket.Type.values()[VarInts.readInt(buffer)]);
+            packet.setBlockPosition(helper.readBlockPosition(buffer));
+            packet.setDimensionId(VarInts.readInt(buffer));
+            packet.setSpawnPosition(helper.readBlockPosition(buffer));
+        }
+    }
+
+
 }

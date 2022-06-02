@@ -1,25 +1,56 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.data.entity.EntityDataMap;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class SetEntityDataPacket extends BedrockPacket {
+interface SetEntityDataPacket extends BedrockPacket {
     private final EntityDataMap metadata = new EntityDataMap();
     private long runtimeEntityId;
     private long tick;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    public class SetEntityDataReader_v291 implements BedrockPacketReader<SetEntityDataPacket> {
+        public static final SetEntityDataReader_v291 INSTANCE = new SetEntityDataReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetEntityDataPacket packet) {
+            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
+            helper.writeEntityData(buffer, packet.getMetadata());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SetEntityDataPacket packet) {
+            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
+            helper.readEntityData(buffer, packet.getMetadata());
+        }
     }
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SET_ENTITY_DATA;
+    public class SetEntityDataReader_v419 extends SetEntityDataReader_v291 {
+
+        public static final SetEntityDataReader_v419 INSTANCE = new SetEntityDataReader_v419();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetEntityDataPacket packet) {
+            super.serialize(buffer, helper, packet);
+
+            VarInts.writeUnsignedLong(buffer, packet.getTick());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SetEntityDataPacket packet) {
+            super.deserialize(buffer, helper, packet);
+
+            packet.setTick(VarInts.readUnsignedLong(buffer));
+        }
     }
+
+
 }

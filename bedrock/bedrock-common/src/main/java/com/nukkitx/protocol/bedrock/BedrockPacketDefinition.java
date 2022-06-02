@@ -1,6 +1,9 @@
 package com.nukkitx.protocol.bedrock;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import lombok.Value;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -8,5 +11,9 @@ import java.util.function.Supplier;
 public class BedrockPacketDefinition<T extends BedrockPacket> {
     int id;
     Supplier<T> factory;
-    BedrockPacketSerializer<T> serializer;
+    BedrockPacketReader<T> serializer;
+
+    public @NotNull T read(@NotNull BitInput input) {
+        throw new UnsupportedOperationException();
+    }
 }

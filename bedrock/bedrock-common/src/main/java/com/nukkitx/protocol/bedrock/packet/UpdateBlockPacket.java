@@ -1,9 +1,13 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,9 +15,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class UpdateBlockPacket extends BedrockPacket {
+interface UpdateBlockPacket extends BedrockPacket {
     public static final Set<Flag> FLAG_ALL = Collections.unmodifiableSet(EnumSet.of(Flag.NEIGHBORS, Flag.NETWORK));
     public static final Set<Flag> FLAG_ALL_PRIORITY = Collections.unmodifiableSet(
             EnumSet.of(Flag.NEIGHBORS, Flag.NETWORK, Flag.PRIORITY));
@@ -23,14 +25,6 @@ public class UpdateBlockPacket extends BedrockPacket {
     int runtimeId;
     int dataLayer;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
-
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.UPDATE_BLOCK;
-    }
 
     public enum Flag {
         NEIGHBORS,
@@ -39,4 +33,36 @@ public class UpdateBlockPacket extends BedrockPacket {
         UNUSED,
         PRIORITY
     }
+
+    public class UpdateBlockReader_v291 implements BedrockPacketReader<UpdateBlockPacket> {
+        public static final UpdateBlockReader_v291 INSTANCE = new UpdateBlockReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateBlockPacket packet) {
+            helper.writeBlockPosition(buffer, packet.getBlockPosition());
+            VarInts.writeUnsignedInt(buffer, packet.getRuntimeId());
+            int flagValue = 0;
+            for (Flag flag : packet.getFlags()) {
+                flagValue |= (1 << flag.ordinal());
+            }
+            VarInts.writeUnsignedInt(buffer, flagValue);
+            VarInts.writeUnsignedInt(buffer, packet.getDataLayer());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateBlockPacket packet) {
+            packet.setBlockPosition(helper.readBlockPosition(buffer));
+            packet.setRuntimeId(VarInts.readUnsignedInt(buffer));
+            int flagValue = VarInts.readUnsignedInt(buffer);
+            Set<Flag> flags = packet.getFlags();
+            for (Flag flag : Flag.values()) {
+                if ((flagValue & (1 << flag.ordinal())) != 0) {
+                    flags.add(flag);
+                }
+            }
+            packet.setDataLayer(VarInts.readUnsignedInt(buffer));
+        }
+    }
+
 }

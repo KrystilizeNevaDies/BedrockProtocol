@@ -1,22 +1,32 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class SetPlayerGameTypePacket extends BedrockPacket {
+interface SetPlayerGameTypePacket extends BedrockPacket {
     private int gamemode;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    public class SetPlayerGameTypeReader_v291 implements BedrockPacketReader<SetPlayerGameTypePacket> {
+        public static final SetPlayerGameTypeReader_v291 INSTANCE = new SetPlayerGameTypeReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetPlayerGameTypePacket packet) {
+            VarInts.writeInt(buffer, packet.getGamemode());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, SetPlayerGameTypePacket packet) {
+            packet.setGamemode(VarInts.readInt(buffer));
+        }
     }
 
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SET_PLAYER_GAME_TYPE;
-    }
 }

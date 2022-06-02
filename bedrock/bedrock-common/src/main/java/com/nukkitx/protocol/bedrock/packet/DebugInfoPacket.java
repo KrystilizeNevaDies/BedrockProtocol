@@ -1,24 +1,36 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class DebugInfoPacket extends BedrockPacket {
+interface DebugInfoPacket extends BedrockPacket {
     private long uniqueEntityId;
     private String data;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
+
+    @Overrid
+
+    public class DebugInfoReader_v407 implements BedrockPacketReader<DebugInfoPacket> {
+        public static final DebugInfoReader_v407 INSTANCE = new DebugInfoReader_v407();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, DebugInfoPacket packet) {
+            VarInts.writeLong(buffer, packet.getUniqueEntityId());
+            helper.writeString(buffer, packet.getData());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, DebugInfoPacket packet) {
+            packet.setUniqueEntityId(VarInts.readLong(buffer));
+            packet.setData(helper.readString(buffer));
+        }
     }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.DEBUG_INFO;
-    }
 }

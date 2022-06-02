@@ -50,4 +50,8 @@ public class CommandParam {
     public String toString() {
         return "CommandParam(type=" + (this.paramType == null ? "UNKNOWN" : this.paramType.name()) + ", defaultValue=" + this.defaultValue + ")";
     }
+
+    public int value() {
+        return 0;
+    }
 }

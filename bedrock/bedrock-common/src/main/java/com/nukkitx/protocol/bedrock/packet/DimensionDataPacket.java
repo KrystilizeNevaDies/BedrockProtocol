@@ -1,9 +1,13 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.definition.DimensionDefinition;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,19 +23,38 @@ import java.util.List;
  *
  * @since v503
  */
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@ToString(doNotUseGetters = true)
-public class DimensionDataPacket extends BedrockPacket {
+interface DimensionDataPacket extends BedrockPacket {
     private final List<DimensionDefinition> definitions = new ObjectArrayList<>();
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.DIMENSION_DATA;
+    @Overrid
+
+    public class DimensionDataReader_v503 implements BedrockPacketReader<DimensionDataPacket> {
+        public static final DimensionDataReader_v503 INSTANCE = new DimensionDataReader_v503();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, DimensionDataPacket packet) {
+            helper.writeArray(buffer, packet.getDefinitions(), this::writeDefinition);
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, DimensionDataPacket packet) {
+            helper.readArray(buffer, packet.getDefinitions(), this::readDefinition);
+        }
+
+        protected void writeDefinition(ByteBuf buffer, BedrockPacketHelper helper, DimensionDefinition definition) {
+            helper.writeString(buffer, definition.getId());
+            VarInts.writeInt(buffer, definition.getMaximumHeight());
+            VarInts.writeInt(buffer, definition.getMinimumHeight());
+            VarInts.writeInt(buffer, definition.getGeneratorType());
+        }
+
+        protected DimensionDefinition readDefinition(ByteBuf buffer, BedrockPacketHelper helper) {
+            String id = helper.readString(buffer);
+            int maximumHeight = VarInts.readInt(buffer);
+            int minimumHeight = VarInts.readInt(buffer);
+            int generatorType = VarInts.readInt(buffer);
+            return new DimensionDefinition(id, maximumHeight, minimumHeight, generatorType);
+        }
     }
 }

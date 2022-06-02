@@ -1,24 +1,17 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class PlayStatusPacket extends BedrockPacket {
+interface PlayStatusPacket extends BedrockPacket {
     private Status status;
 
-    @Override
-    public final boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
-
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.PLAY_STATUS;
-    }
 
     public enum Status {
 
@@ -59,4 +52,20 @@ public class PlayStatusPacket extends BedrockPacket {
          */
         FAILED_SERVER_FULL_SUB_CLIENT
     }
+
+    public class PlayStatusReader_v291 implements BedrockPacketReader<PlayStatusPacket> {
+        public static final PlayStatusReader_v291 INSTANCE = new PlayStatusReader_v291();
+
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayStatusPacket packet) {
+            buffer.writeInt(packet.getStatus().ordinal());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PlayStatusPacket packet) {
+            packet.setStatus(Status.values()[buffer.readInt()]);
+        }
+    }
+
 }

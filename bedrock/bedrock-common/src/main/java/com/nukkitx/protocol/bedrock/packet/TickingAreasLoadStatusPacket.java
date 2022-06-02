@@ -1,8 +1,11 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,19 +15,23 @@ import lombok.ToString;
  *
  * @since v503
  */
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-@ToString(doNotUseGetters = true)
-public class TickingAreasLoadStatusPacket extends BedrockPacket {
+interface TickingAreasLoadStatusPacket extends BedrockPacket {
     boolean waitingForPreload;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.TICKING_AREAS_LOAD_STATUS;
+    @Overrid
+
+    public class TickingAreasLoadStatusReader_v503 implements BedrockPacketReader<TickingAreasLoadStatusPacket> {
+        public static final TickingAreasLoadStatusReader_v503 INSTANCE = new TickingAreasLoadStatusReader_v503();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, TickingAreasLoadStatusPacket packet) {
+            buffer.writeBoolean(packet.isWaitingForPreload());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, TickingAreasLoadStatusPacket packet) {
+            packet.setWaitingForPreload(buffer.readBoolean());
+        }
     }
 }

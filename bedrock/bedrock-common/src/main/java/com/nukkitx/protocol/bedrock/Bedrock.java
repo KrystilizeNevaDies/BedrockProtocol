@@ -4,6 +4,7 @@ import com.nukkitx.network.raknet.RakNet;
 import com.nukkitx.protocol.MinecraftInterface;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.EventLoopGroup;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +26,7 @@ public abstract class Bedrock implements MinecraftInterface {
 
     public abstract RakNet getRakNet();
 
-    public InetSocketAddress getBindAddress() {
+    public @NotNull InetSocketAddress getBindAddress() {
         return this.getRakNet().getBindAddress();
     }
 
@@ -33,7 +34,7 @@ public abstract class Bedrock implements MinecraftInterface {
         return this.getRakNet().getBootstrap();
     }
 
-    public CompletableFuture<Void> bind() {
+    public @NotNull CompletableFuture<Void> bind() {
         return this.getRakNet().bind();
     }
 

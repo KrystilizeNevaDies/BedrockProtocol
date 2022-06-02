@@ -1,14 +1,16 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
+import com.nukkitx.network.VarInts;
+import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
+import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class NpcDialoguePacket extends BedrockPacket {
+interface NpcDialoguePacket extends BedrockPacket {
 
     private long uniqueEntityId;
     private Action action;
@@ -17,18 +19,38 @@ public class NpcDialoguePacket extends BedrockPacket {
     private String npcName;
     private String actionJson;
 
-    @Override
-    public boolean handle(BedrockPacketHandler handler) {
-        return handler.handle(this);
-    }
 
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.NPC_DIALOGUE;
-    }
+    @Overrid
 
     public enum Action {
         OPEN,
         CLOSE
     }
+
+    public class NpcDialogueReader_v448 implements BedrockPacketReader<NpcDialoguePacket> {
+        public static final NpcDialogueReader_v448 INSTANCE = new NpcDialogueReader_v448();
+
+        private static final NpcDialoguePacket.Action[] VALUES = NpcDialoguePacket.Action.values();
+
+        @Override
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NpcDialoguePacket packet) {
+            buffer.writeLongLE(packet.getUniqueEntityId());
+            VarInts.writeInt(buffer, packet.getAction().ordinal());
+            helper.writeString(buffer, packet.getDialogue());
+            helper.writeString(buffer, packet.getSceneName());
+            helper.writeString(buffer, packet.getNpcName());
+            helper.writeString(buffer, packet.getActionJson());
+        }
+
+        @Override
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, NpcDialoguePacket packet) {
+            packet.setUniqueEntityId(buffer.readLongLE());
+            packet.setAction(VALUES[VarInts.readInt(buffer)]);
+            packet.setDialogue(helper.readString(buffer));
+            packet.setSceneName(helper.readString(buffer));
+            packet.setNpcName(helper.readString(buffer));
+            packet.setActionJson(helper.readString(buffer));
+        }
+    }
+
 }
