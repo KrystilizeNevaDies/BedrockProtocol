@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetEntityMotionPacket extends BedrockPacket {
+public interface SetEntityMotionPacket extends BedrockPacket {
     private long runtimeEntityId;
     private Vector3f motion;
 

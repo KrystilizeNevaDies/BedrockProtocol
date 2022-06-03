@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetLocalPlayerAsInitializedPacket extends BedrockPacket {
+public interface SetLocalPlayerAsInitializedPacket extends BedrockPacket {
     private long runtimeEntityId;
 
 

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Sent to the client when the server's movement prediction system does not match what the client is sending.
  */
-interface CorrectPlayerMovePredictionPacket extends BedrockPacket {
+public interface CorrectPlayerMovePredictionPacket extends BedrockPacket {
 
     /**
      * Client's reported position by the server

@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetDisplayObjectivePacket extends BedrockPacket {
+public interface SetDisplayObjectivePacket extends BedrockPacket {
     private String displaySlot;
     private String objectiveId;
     private String displayName;

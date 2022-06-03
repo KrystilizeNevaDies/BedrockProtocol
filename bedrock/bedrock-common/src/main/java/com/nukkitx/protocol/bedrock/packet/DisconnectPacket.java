@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface DisconnectPacket extends BedrockPacket {
+public interface DisconnectPacket extends BedrockPacket {
     private boolean messageSkipped;
     private String kickMessage;
 

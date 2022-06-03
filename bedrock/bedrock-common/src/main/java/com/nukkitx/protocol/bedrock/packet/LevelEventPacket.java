@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface LevelEventPacket extends BedrockPacket {
+public interface LevelEventPacket extends BedrockPacket {
     private LevelEventType valueType;
     private Vector3f position;
     private int data;

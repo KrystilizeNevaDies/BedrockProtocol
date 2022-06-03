@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface BossEventPacket extends BedrockPacket {
+public interface BossEventPacket extends BedrockPacket {
     @NotNull Action action();
 
     interface Action extends BitDataWritable, PacketDataWriter {

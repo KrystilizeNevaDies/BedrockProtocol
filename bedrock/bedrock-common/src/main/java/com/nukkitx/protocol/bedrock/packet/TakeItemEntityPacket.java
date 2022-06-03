@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface TakeItemEntityPacket extends BedrockPacket {
+public interface TakeItemEntityPacket extends BedrockPacket {
     private long itemRuntimeEntityId;
     private long runtimeEntityId;
 

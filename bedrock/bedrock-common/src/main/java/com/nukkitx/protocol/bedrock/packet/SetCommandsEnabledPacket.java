@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetCommandsEnabledPacket extends BedrockPacket {
+public interface SetCommandsEnabledPacket extends BedrockPacket {
     private boolean commandsEnabled;
 
 

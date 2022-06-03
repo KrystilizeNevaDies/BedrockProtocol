@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ShowCreditsPacket extends BedrockPacket {
+public interface ShowCreditsPacket extends BedrockPacket {
     private long runtimeEntityId;
     private Status status;
 

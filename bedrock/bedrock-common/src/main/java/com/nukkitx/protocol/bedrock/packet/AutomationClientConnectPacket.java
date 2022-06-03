@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface AutomationClientConnectPacket extends BedrockPacket {
+public interface AutomationClientConnectPacket extends BedrockPacket {
     @NotNull String address();
 
     record v291(String address) implements AutomationClientConnectPacket, Codec291 {

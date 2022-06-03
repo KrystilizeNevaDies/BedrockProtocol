@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetTitlePacket extends BedrockPacket {
+public interface SetTitlePacket extends BedrockPacket {
     private Type valueType;
     private String text;
     private int fadeInTime;

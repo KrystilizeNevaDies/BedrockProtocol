@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface BlockPickRequestPacket extends BedrockPacket {
+public interface BlockPickRequestPacket extends BedrockPacket {
     @NotNull Vector3i blockPosition();
     boolean addUserData();
     byte hotbarSlot();

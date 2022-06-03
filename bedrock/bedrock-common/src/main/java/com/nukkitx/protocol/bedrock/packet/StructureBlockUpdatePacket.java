@@ -13,7 +13,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface StructureBlockUpdatePacket extends BedrockPacket {
+public interface StructureBlockUpdatePacket extends BedrockPacket {
     private Vector3i blockPosition;
     private StructureEditorData editorData;
     private boolean powered;

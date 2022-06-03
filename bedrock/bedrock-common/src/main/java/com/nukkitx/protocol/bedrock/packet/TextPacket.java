@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface TextPacket extends BedrockPacket {
+public interface TextPacket extends BedrockPacket {
     private Type valueType;
     private boolean needsTranslation;
     private String sourceName;

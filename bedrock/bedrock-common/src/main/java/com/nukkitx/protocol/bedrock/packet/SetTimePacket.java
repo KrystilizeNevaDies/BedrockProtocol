@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetTimePacket extends BedrockPacket {
+public interface SetTimePacket extends BedrockPacket {
     private int time;
 
 

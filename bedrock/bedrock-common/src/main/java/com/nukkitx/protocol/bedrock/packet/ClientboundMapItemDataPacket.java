@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface ClientboundMapItemDataPacket extends BedrockPacket {
+public interface ClientboundMapItemDataPacket extends BedrockPacket {
 
     @NotNull MapComponents mapComponents();
 

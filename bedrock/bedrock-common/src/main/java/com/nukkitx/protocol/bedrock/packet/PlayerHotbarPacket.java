@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PlayerHotbarPacket extends BedrockPacket {
+public interface PlayerHotbarPacket extends BedrockPacket {
     private int selectedHotbarSlot;
     private int containerId;
     private boolean selectHotbarSlot;

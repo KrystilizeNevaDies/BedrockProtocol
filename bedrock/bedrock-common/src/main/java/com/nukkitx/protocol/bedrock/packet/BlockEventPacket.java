@@ -47,7 +47,7 @@ import java.io.IOException;
  * </blockquote>
  *
  **/
-interface BlockEventPacket extends BedrockPacket {
+public interface BlockEventPacket extends BedrockPacket {
 
     /**
      * Position to execute block event.

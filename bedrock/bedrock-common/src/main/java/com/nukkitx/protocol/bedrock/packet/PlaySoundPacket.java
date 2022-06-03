@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PlaySoundPacket extends BedrockPacket {
+public interface PlaySoundPacket extends BedrockPacket {
     private String sound;
     private Vector3f position;
     private float volume;

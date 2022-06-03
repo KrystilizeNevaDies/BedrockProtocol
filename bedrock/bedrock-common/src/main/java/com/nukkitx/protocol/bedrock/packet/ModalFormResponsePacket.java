@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ModalFormResponsePacket extends BedrockPacket {
+public interface ModalFormResponsePacket extends BedrockPacket {
     private int formId;
     private String formData;
 

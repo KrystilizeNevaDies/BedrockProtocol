@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface MoveEntityAbsolutePacket extends BedrockPacket {
+public interface MoveEntityAbsolutePacket extends BedrockPacket {
     private long runtimeEntityId;
     private Vector3f position;
     private Vector3f rotation;

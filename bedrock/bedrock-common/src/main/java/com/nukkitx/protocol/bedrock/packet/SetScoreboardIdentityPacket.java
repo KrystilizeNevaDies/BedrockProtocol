@@ -15,7 +15,7 @@ import lombok.Value;
 import java.util.List;
 import java.util.UUID;
 
-interface SetScoreboardIdentityPacket extends BedrockPacket {
+public interface SetScoreboardIdentityPacket extends BedrockPacket {
     private final List<Entry> entries = new ObjectArrayList<>();
     private Action action;
 

@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface InventoryTransactionPacket extends BedrockPacket {
+public interface InventoryTransactionPacket extends BedrockPacket {
     private int legacyRequestId;
     private final List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
     private final List<InventoryActionData> actions = new ObjectArrayList<>();

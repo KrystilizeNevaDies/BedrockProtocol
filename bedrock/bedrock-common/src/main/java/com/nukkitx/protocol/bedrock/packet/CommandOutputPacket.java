@@ -1,33 +1,29 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
-import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.command.CommandOriginData;
 import com.nukkitx.protocol.bedrock.data.command.CommandOutputMessage;
 import com.nukkitx.protocol.bedrock.data.command.CommandOutputType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
 
 
-interface CommandOutputPacket extends BedrockPacket {
-    private final List<CommandOutputMessage> messages = new ObjectArrayList<>();
-    private CommandOriginData commandOriginData;
-    private CommandOutputType valueType;
-    private int successCount;
-    private String data;
+public interface CommandOutputPacket extends BedrockPacket {
+    CommandOutputMessage[] messages();
+    @NotNull CommandOriginData commandOriginData();
+    @NotNull CommandOutputType valueType();
+    int successCount();
 
 
-    public class CommandOutputReader_v291 implements BedrockPacketReader<CommandOutputPacket> {
+    record v291(CommandOutputMessage[] messages, CommandOriginData commandOriginData, CommandOutputType valueType,
+                int successCount) implements CommandOutputPacket {
         public static final CommandOutputReader_v291 INSTANCE = new CommandOutputReader_v291();
 
         @Override
@@ -63,12 +59,21 @@ interface CommandOutputPacket extends BedrockPacket {
             return new CommandOutputMessage(internal, messageId, parameters);
         }
 
-        public void writeMessage(ByteBuf buffer, BedrockPacketHelper helper, CommandOutputMessage outputMessage) {
+        public void writeMessage(@NotNull BitOutput output, @NotNull CommandOutputMessage message) {
             requireNonNull(outputMessage, "CommandOutputMessage is null");
 
             buffer.writeBoolean(outputMessage.isInternal());
             helper.writeString(buffer, outputMessage.getMessageId());
             helper.writeArray(buffer, outputMessage.getParameters(), helper::writeString);
+        }
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            commandOriginData().write(output);
+            writeByte(output, (byte) valueType().id());
+            writeUnsignedInt(output, successCount());
+            writeArray(output, messages(), this::writeMessage);
+            data().write(output);
         }
     }
 

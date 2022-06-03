@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface ExplodePacket extends BedrockPacket {
+public interface ExplodePacket extends BedrockPacket {
     private final List<Vector3i> records = new ObjectArrayList<>();
     private Vector3f position;
     private float radius;

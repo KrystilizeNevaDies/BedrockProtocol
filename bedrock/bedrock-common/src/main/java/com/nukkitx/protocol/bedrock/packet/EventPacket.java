@@ -22,7 +22,7 @@ import java.util.function.BiFunction;
 import static com.nukkitx.protocol.bedrock.data.event.EventDataType.*;
 import static com.nukkitx.protocol.bedrock.data.event.EventDataType.FISH_BUCKETED;
 
-interface EventPacket extends BedrockPacket {
+public interface EventPacket extends BedrockPacket {
     private long uniqueEntityId;
     private byte usePlayerId;
     private EventData eventData;

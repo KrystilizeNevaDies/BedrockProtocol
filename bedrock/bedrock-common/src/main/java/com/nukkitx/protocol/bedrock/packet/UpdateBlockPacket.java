@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
-interface UpdateBlockPacket extends BedrockPacket {
+public interface UpdateBlockPacket extends BedrockPacket {
     public static final Set<Flag> FLAG_ALL = Collections.unmodifiableSet(EnumSet.of(Flag.NEIGHBORS, Flag.NETWORK));
     public static final Set<Flag> FLAG_ALL_PRIORITY = Collections.unmodifiableSet(
             EnumSet.of(Flag.NEIGHBORS, Flag.NETWORK, Flag.PRIORITY));

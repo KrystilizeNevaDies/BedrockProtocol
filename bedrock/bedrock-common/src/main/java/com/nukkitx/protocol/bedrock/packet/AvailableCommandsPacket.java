@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface AvailableCommandsPacket extends BedrockPacket {
+public interface AvailableCommandsPacket extends BedrockPacket {
     @NotNull CommandData @NotNull [] commands();
 
     record v291(String[] enumValues, String[] postFixes, CommandEnumData[] enums, CommandData[] commands,

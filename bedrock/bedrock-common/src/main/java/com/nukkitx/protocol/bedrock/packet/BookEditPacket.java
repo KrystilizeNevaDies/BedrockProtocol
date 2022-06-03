@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface BookEditPacket extends BedrockPacket {
+public interface BookEditPacket extends BedrockPacket {
     @NotNull Action action();
 
     interface Action extends BitDataWritable, PacketDataWriter {

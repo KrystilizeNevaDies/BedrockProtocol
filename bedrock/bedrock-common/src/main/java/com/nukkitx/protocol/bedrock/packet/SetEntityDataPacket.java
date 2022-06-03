@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetEntityDataPacket extends BedrockPacket {
+public interface SetEntityDataPacket extends BedrockPacket {
     private final EntityDataMap metadata = new EntityDataMap();
     private long runtimeEntityId;
     private long tick;

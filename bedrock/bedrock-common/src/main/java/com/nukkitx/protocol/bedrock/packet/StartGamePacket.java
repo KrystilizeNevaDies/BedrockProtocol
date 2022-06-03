@@ -23,7 +23,7 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 
-interface StartGamePacket extends BedrockPacket {
+public interface StartGamePacket extends BedrockPacket {
     private static final InternalLogger log = InternalLoggerFactory.getInstance(StartGamePacket.class);
 
     private final List<GameRuleData<?>> gamerules = new ObjectArrayList<>();

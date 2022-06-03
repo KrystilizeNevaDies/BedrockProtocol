@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ContainerClosePacket extends BedrockPacket {
+public interface ContainerClosePacket extends BedrockPacket {
     private byte id;
     private boolean unknownBool0;
 

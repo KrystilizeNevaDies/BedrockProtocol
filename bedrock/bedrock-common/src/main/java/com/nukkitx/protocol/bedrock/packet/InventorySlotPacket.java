@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface InventorySlotPacket extends BedrockPacket {
+public interface InventorySlotPacket extends BedrockPacket {
     private int containerId;
     private int slot;
     private ItemData item;

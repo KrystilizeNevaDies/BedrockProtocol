@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SpawnExperienceOrbPacket extends BedrockPacket {
+public interface SpawnExperienceOrbPacket extends BedrockPacket {
     private Vector3f position;
     private int amount;
 

@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SimpleEventPacket extends BedrockPacket {
+public interface SimpleEventPacket extends BedrockPacket {
     private SimpleEventType event;
 
 

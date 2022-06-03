@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetLastHurtByPacket extends BedrockPacket {
+public interface SetLastHurtByPacket extends BedrockPacket {
     private int entityTypeId;
 
 

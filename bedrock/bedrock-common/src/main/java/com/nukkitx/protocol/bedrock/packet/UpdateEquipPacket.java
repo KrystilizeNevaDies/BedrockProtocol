@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface UpdateEquipPacket extends BedrockPacket {
+public interface UpdateEquipPacket extends BedrockPacket {
     private short windowId;
     private short windowType;
     private int size; // Couldn't find anything on this one. Looks like it isn't used?

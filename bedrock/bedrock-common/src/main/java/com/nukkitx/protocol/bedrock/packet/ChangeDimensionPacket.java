@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface ChangeDimensionPacket extends BedrockPacket {
+public interface ChangeDimensionPacket extends BedrockPacket {
     int dimension();
     @NotNull Vector3f position();
     boolean respawn();

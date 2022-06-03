@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ShowStoreOfferPacket extends BedrockPacket {
+public interface ShowStoreOfferPacket extends BedrockPacket {
     private String offerId;
     private boolean shownToAll;
 

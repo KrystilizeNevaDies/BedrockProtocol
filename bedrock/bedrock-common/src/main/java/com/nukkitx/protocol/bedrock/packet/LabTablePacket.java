@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface LabTablePacket extends BedrockPacket {
+public interface LabTablePacket extends BedrockPacket {
     private LabTableType valueType;
     private Vector3i position;
     private LabTableReactionType reactionType;

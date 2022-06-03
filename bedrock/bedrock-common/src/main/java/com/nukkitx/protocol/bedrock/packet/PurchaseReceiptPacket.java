@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface PurchaseReceiptPacket extends BedrockPacket {
+public interface PurchaseReceiptPacket extends BedrockPacket {
     private final List<String> receipts = new ObjectArrayList<>();
 
 

@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ServerSettingsRequestPacket extends BedrockPacket {
+public interface ServerSettingsRequestPacket extends BedrockPacket {
 
 
     public class ServerSettingsRequestReader_v291 implements BedrockPacketReader<ServerSettingsRequestPacket> {

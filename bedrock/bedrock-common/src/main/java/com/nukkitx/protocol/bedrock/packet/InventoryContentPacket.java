@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface InventoryContentPacket extends BedrockPacket {
+public interface InventoryContentPacket extends BedrockPacket {
     private List<ItemData> contents = new ObjectArrayList<>();
     private int containerId;
 

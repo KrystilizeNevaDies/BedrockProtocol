@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface ClientToServerHandshakePacket extends BedrockPacket {
+public interface ClientToServerHandshakePacket extends BedrockPacket {
 
     record v291() implements ClientToServerHandshakePacket, Codec291 {
         public static final Interpreter<v291> INTERPRETER = input -> new v291();

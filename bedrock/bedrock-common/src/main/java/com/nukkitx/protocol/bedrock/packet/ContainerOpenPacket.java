@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ContainerOpenPacket extends BedrockPacket {
+public interface ContainerOpenPacket extends BedrockPacket {
     private byte id;
     private ContainerType valueType;
     private Vector3i blockPosition;

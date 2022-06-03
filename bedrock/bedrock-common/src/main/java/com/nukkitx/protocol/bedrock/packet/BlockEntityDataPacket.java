@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface BlockEntityDataPacket extends BedrockPacket {
+public interface BlockEntityDataPacket extends BedrockPacket {
     @NotNull Vector3i blockPosition();
     @NotNull NbtMap data();
 

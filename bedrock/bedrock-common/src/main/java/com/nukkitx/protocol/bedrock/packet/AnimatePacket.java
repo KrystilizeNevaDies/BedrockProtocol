@@ -23,7 +23,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-interface AnimatePacket extends BedrockPacket {
+public interface AnimatePacket extends BedrockPacket {
     @NotNull Action action();
     long runtimeEntityId();
 

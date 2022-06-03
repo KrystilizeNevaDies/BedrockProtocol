@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface InteractPacket extends BedrockPacket {
+public interface InteractPacket extends BedrockPacket {
     private Action action;
     private long runtimeEntityId;
     private Vector3f mousePosition;

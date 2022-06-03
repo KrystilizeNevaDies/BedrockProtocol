@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetHealthPacket extends BedrockPacket {
+public interface SetHealthPacket extends BedrockPacket {
     private int health;
 
 

@@ -11,9 +11,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public interface BitDataReader {
-    @NotNull BitDataReader INSTANCE = new BitDataReader() {};
+    @NotNull BitDataReader INSTANCE = new BitDataReader() {
+    };
+
     /**
      * Reads an unsigned int from the input.
+     *
      * @param input the input
      * @return the unsigned int
      * @throws IOException if an I/O error occurs
@@ -24,6 +27,7 @@ public interface BitDataReader {
 
     /**
      * Reads an int from the input.
+     *
      * @param input the input
      * @return the int
      * @throws IOException if an I/O error occurs
@@ -34,13 +38,23 @@ public interface BitDataReader {
     }
 
     /**
+     * Reads an unsigned LE int from the input.
+     * @param input the input
+     * @return the int
+     * @throws IOException if an I/O error occurs
+     */
+    default int readUnsignedIntLE(@NotNull BitInput input) throws IOException {
+        return Integer.reverse(readUnsignedInt(input));
+    }
+
+    /**
      * Reads a LE int from the input.
      * @param input the input
      * @return the int
      * @throws IOException if an I/O error occurs
      */
     default int readIntLE(@NotNull BitInput input) throws IOException {
-        return Integer.reverse(input.readInt32());
+        return Integer.reverse(readInt(input));
     }
 
     /**

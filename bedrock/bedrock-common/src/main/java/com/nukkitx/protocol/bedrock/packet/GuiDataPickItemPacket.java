@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface GuiDataPickItemPacket extends BedrockPacket {
+public interface GuiDataPickItemPacket extends BedrockPacket {
     private String description;
     private String itemEffects;
     private int hotbarSlot;

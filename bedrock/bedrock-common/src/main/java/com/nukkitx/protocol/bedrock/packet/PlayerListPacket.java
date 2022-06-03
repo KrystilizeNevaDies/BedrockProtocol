@@ -17,7 +17,7 @@ import lombok.ToString;
 import java.util.List;
 import java.util.UUID;
 
-interface PlayerListPacket extends BedrockPacket {
+public interface PlayerListPacket extends BedrockPacket {
     private final List<Entry> entries = new ObjectArrayList<>();
     private Action action;
 

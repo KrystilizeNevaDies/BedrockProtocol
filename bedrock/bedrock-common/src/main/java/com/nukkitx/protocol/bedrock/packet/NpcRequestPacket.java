@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface NpcRequestPacket extends BedrockPacket {
+public interface NpcRequestPacket extends BedrockPacket {
     private long runtimeEntityId;
     private NpcRequestType requestType;
     private String command;

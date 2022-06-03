@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
-interface ResourcePackChunkRequestPacket extends BedrockPacket {
+public interface ResourcePackChunkRequestPacket extends BedrockPacket {
     private UUID packId;
     private String packVersion;
     private int chunkIndex;

@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
-interface PlayerSkinPacket extends BedrockPacket {
+public interface PlayerSkinPacket extends BedrockPacket {
     private UUID uuid;
     private SerializedSkin skin;
     private String newSkinName;

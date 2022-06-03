@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PlayStatusPacket extends BedrockPacket {
+public interface PlayStatusPacket extends BedrockPacket {
     private Status status;
 
 

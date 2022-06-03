@@ -20,6 +20,9 @@ public interface BitDataWriter {
     default void writeUnsignedInt(@NotNull BitOutput output, int value) throws IOException {
     }
 
+    default void writeUnsignedIntLE(@NotNull BitOutput output, int value) throws IOException {
+    }
+
     default void writeInt(@NotNull BitOutput output, int value) throws IOException {
     }
 

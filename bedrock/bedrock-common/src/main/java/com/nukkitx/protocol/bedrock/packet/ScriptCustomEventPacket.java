@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ScriptCustomEventPacket extends BedrockPacket {
+public interface ScriptCustomEventPacket extends BedrockPacket {
     private String eventName;
     private String data;
 

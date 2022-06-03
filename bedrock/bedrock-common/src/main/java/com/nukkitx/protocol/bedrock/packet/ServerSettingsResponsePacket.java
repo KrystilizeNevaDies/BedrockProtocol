@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ServerSettingsResponsePacket extends BedrockPacket {
+public interface ServerSettingsResponsePacket extends BedrockPacket {
     private int formId;
     private String formData;
 

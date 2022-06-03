@@ -6,7 +6,7 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface RiderJumpPacket extends BedrockPacket {
+public interface RiderJumpPacket extends BedrockPacket {
     private int jumpStrength;
 
 

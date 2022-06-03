@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetPlayerGameTypePacket extends BedrockPacket {
+public interface SetPlayerGameTypePacket extends BedrockPacket {
     private int gamemode;
 
 

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface ChunkRadiusUpdatedPacket extends BedrockPacket {
+public interface ChunkRadiusUpdatedPacket extends BedrockPacket {
     int radius();
 
     record v291(int radius) implements ChunkRadiusUpdatedPacket {

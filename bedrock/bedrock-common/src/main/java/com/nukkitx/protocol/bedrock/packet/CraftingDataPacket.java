@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 
-interface CraftingDataPacket extends BedrockPacket {
+public interface CraftingDataPacket extends BedrockPacket {
     private final List<CraftingData> craftingData = new ObjectArrayList<>();
     private final List<PotionMixData> potionMixData = new ObjectArrayList<>();
     private final List<ContainerMixData> containerMixData = new ObjectArrayList<>();

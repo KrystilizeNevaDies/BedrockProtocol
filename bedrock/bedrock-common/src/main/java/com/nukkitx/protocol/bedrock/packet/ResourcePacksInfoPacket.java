@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-interface ResourcePacksInfoPacket extends BedrockPacket {
+public interface ResourcePacksInfoPacket extends BedrockPacket {
     private final List<Entry> behaviorPackInfos = new ObjectArrayList<>();
     private final List<Entry> resourcePackInfos = new ObjectArrayList<>();
     private boolean forcedToAccept;

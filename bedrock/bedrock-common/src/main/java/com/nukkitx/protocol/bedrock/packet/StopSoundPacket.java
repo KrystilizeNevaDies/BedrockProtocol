@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface StopSoundPacket extends BedrockPacket {
+public interface StopSoundPacket extends BedrockPacket {
     private String soundName;
     private boolean stoppingAllSound;
 

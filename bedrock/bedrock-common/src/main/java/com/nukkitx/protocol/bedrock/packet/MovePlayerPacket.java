@@ -13,7 +13,7 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface MovePlayerPacket extends BedrockPacket {
+public interface MovePlayerPacket extends BedrockPacket {
     private long runtimeEntityId;
     private Vector3f position;
     private Vector3f rotation;

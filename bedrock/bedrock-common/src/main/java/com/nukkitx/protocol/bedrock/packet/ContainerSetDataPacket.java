@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ContainerSetDataPacket extends BedrockPacket {
+public interface ContainerSetDataPacket extends BedrockPacket {
 
     public static final int FURNACE_TICK_COUNT = 0;
     public static final int FURNACE_LIT_TIME = 1;

@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface NetworkStackLatencyPacket extends BedrockPacket {
+public interface NetworkStackLatencyPacket extends BedrockPacket {
     private long timestamp;
     private boolean fromServer;
 

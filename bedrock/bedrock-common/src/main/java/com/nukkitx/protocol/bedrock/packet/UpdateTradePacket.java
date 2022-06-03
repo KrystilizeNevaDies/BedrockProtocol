@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface UpdateTradePacket extends BedrockPacket {
+public interface UpdateTradePacket extends BedrockPacket {
     private int containerId;
     private ContainerType containerType;
     private int size; // Hardcoded to 0

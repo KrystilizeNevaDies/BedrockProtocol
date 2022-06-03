@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PlayerActionPacket extends BedrockPacket {
+public interface PlayerActionPacket extends BedrockPacket {
     private long runtimeEntityId;
     private PlayerActionType action;
     private Vector3i blockPosition;

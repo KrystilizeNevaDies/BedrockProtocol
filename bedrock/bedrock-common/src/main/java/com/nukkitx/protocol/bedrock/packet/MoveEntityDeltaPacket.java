@@ -15,7 +15,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Set;
 
-interface MoveEntityDeltaPacket extends BedrockPacket {
+public interface MoveEntityDeltaPacket extends BedrockPacket {
     private long runtimeEntityId;
 
     private final Set<Flag> flags = EnumSet.noneOf(Flag.class);

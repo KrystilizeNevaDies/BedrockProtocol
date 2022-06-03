@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ItemFrameDropItemPacket extends BedrockPacket {
+public interface ItemFrameDropItemPacket extends BedrockPacket {
     private Vector3i blockPosition;
 
 

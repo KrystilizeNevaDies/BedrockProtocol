@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-interface ServerToClientHandshakePacket extends BedrockPacket {
+public interface ServerToClientHandshakePacket extends BedrockPacket {
     private String jwt;
 
 

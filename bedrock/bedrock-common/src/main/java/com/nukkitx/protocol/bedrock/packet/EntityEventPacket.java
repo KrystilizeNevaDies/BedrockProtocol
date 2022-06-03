@@ -13,7 +13,7 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface EntityEventPacket extends BedrockPacket {
+public interface EntityEventPacket extends BedrockPacket {
     private long runtimeEntityId;
     private EntityEventType valueType;
     private int data;

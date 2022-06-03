@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface RemoveObjectivePacket extends BedrockPacket {
+public interface RemoveObjectivePacket extends BedrockPacket {
     private String objectiveId;
 
 

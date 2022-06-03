@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 import java.util.UUID;
 
-interface CraftingEventPacket extends BedrockPacket {
+public interface CraftingEventPacket extends BedrockPacket {
     private final List<ItemData> inputs = new ObjectArrayList<>();
     private final List<ItemData> outputs = new ObjectArrayList<>();
     private byte containerId;

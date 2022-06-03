@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface EntityPickRequestPacket extends BedrockPacket {
+public interface EntityPickRequestPacket extends BedrockPacket {
     private long runtimeEntityId;
     private int hotbarSlot;
     /**

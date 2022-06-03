@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface GameRulesChangedPacket extends BedrockPacket {
+public interface GameRulesChangedPacket extends BedrockPacket {
     private final List<GameRuleData<?>> gameRules = new ObjectArrayList<>();
 
 

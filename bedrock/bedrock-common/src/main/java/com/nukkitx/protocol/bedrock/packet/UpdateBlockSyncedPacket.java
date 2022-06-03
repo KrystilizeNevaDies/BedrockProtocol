@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
-interface UpdateBlockSyncedPacket extends UpdateBlockPacket {
+public interface UpdateBlockSyncedPacket extends UpdateBlockPacket {
     private long runtimeEntityId;
     private BlockSyncType entityBlockSyncType;
 

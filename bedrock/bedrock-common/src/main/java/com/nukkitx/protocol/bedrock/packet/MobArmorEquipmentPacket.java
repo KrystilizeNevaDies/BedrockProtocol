@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface MobArmorEquipmentPacket extends BedrockPacket {
+public interface MobArmorEquipmentPacket extends BedrockPacket {
     private long runtimeEntityId;
     private ItemData helmet;
     private ItemData chestplate;

@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PlayerInputPacket extends BedrockPacket {
+public interface PlayerInputPacket extends BedrockPacket {
     private Vector2f inputMotion;
     private boolean jumping;
     private boolean sneaking;

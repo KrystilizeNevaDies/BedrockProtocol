@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface RespawnPacket extends BedrockPacket {
+public interface RespawnPacket extends BedrockPacket {
     private Vector3f position;
     private State state;
     private long runtimeEntityId; // Only used server bound and pretty pointless

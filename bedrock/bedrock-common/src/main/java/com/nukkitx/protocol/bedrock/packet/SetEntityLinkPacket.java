@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetEntityLinkPacket extends BedrockPacket {
+public interface SetEntityLinkPacket extends BedrockPacket {
     private EntityLinkData entityLink;
 
 

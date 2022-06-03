@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface ShowProfilePacket extends BedrockPacket {
+public interface ShowProfilePacket extends BedrockPacket {
     private String xuid;
 
 

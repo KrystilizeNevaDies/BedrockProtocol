@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-interface CameraPacket extends BedrockPacket {
+public interface CameraPacket extends BedrockPacket {
     long cameraUniqueEntityId();
     long playerUniqueEntityId();
 

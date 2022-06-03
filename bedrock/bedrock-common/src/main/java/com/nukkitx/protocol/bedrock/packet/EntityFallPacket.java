@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface EntityFallPacket extends BedrockPacket {
+public interface EntityFallPacket extends BedrockPacket {
     private long runtimeEntityId;
     private float fallDistance;
     private boolean inVoid;

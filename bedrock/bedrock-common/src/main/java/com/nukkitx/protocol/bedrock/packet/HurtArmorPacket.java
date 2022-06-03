@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface HurtArmorPacket extends BedrockPacket {
+public interface HurtArmorPacket extends BedrockPacket {
     private int cause;
     private int damage;
     /**

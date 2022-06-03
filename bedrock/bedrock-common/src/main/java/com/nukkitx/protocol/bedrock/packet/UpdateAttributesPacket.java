@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface UpdateAttributesPacket extends BedrockPacket {
+public interface UpdateAttributesPacket extends BedrockPacket {
     private long runtimeEntityId;
     private List<AttributeData> attributes = new ObjectArrayList<>();
     private long tick;

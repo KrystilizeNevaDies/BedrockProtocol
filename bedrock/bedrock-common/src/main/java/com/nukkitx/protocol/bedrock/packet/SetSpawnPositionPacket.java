@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetSpawnPositionPacket extends BedrockPacket {
+public interface SetSpawnPositionPacket extends BedrockPacket {
     // spawnType is the valueType of spawn to set. It is either PLAYER_SPAWN or WORLD_SPAWN, and specifies
     // the behaviour of the spawn set. If WORLD_SPAWN is set, the position to which compasses will point is
     // also changed.

@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface PhotoTransferPacket extends BedrockPacket {
+public interface PhotoTransferPacket extends BedrockPacket {
     private String name;
     private byte[] data;
     private String bookId;

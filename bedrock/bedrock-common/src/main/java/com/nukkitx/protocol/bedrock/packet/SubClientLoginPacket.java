@@ -11,7 +11,7 @@ import io.netty.util.AsciiString;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SubClientLoginPacket extends BedrockPacket {
+public interface SubClientLoginPacket extends BedrockPacket {
     private AsciiString chainData;
     private AsciiString skinData;
 

@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface LevelSoundEvent1Packet extends BedrockPacket {
+public interface LevelSoundEvent1Packet extends BedrockPacket {
     private SoundEvent sound;
     private Vector3f position;
     private int extraData;

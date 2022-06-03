@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface UpdateSoftEnumPacket extends BedrockPacket {
+public interface UpdateSoftEnumPacket extends BedrockPacket {
     private CommandEnumData softEnum;
     private SoftEnumUpdateType valueType;
 

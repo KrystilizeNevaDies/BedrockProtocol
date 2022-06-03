@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface MapInfoRequestPacket extends BedrockPacket {
+public interface MapInfoRequestPacket extends BedrockPacket {
     private long uniqueMapId;
 
 

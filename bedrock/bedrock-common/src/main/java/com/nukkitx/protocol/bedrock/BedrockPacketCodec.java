@@ -34,7 +34,7 @@ public abstract class BedrockPacketCodec {
         this(protocolVersion, minecraftVersion, 10);
     }
 
-    protected void packet(int id, @NotNull BedrockPacketReader reader) {
+    protected void packet(int id, @NotNull BedrockPacket.Interpreter<? extends BedrockPacket> reader) {
         packets.put(id, reader);
     }
 

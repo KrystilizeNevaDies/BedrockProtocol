@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface MobEffectPacket extends BedrockPacket {
+public interface MobEffectPacket extends BedrockPacket {
     private long runtimeEntityId;
     private Event event;
     private int effectId;

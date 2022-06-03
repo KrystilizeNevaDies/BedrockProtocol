@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface CommandRequestPacket extends BedrockPacket {
+public interface CommandRequestPacket extends BedrockPacket {
     private String command;
     private CommandOriginData commandOriginData;
     private boolean internal;

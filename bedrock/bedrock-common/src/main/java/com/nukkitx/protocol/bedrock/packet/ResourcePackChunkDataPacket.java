@@ -12,7 +12,7 @@ import lombok.ToString;
 
 import java.util.UUID;
 
-interface ResourcePackChunkDataPacket extends BedrockPacket {
+public interface ResourcePackChunkDataPacket extends BedrockPacket {
     private UUID packId;
     private String packVersion;
     private int chunkIndex;

@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface TransferPacket extends BedrockPacket {
+public interface TransferPacket extends BedrockPacket {
     private String address;
     private int port;
 

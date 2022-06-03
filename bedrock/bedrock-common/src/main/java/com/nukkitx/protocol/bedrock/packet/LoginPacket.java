@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-interface LoginPacket extends BedrockPacket {
+public interface LoginPacket extends BedrockPacket {
     private int protocolVersion;
     private AsciiString chainData;
     private AsciiString skinData;

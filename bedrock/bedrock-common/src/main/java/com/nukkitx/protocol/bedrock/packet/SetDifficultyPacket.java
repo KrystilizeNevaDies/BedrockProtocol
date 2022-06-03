@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-interface SetDifficultyPacket extends BedrockPacket {
+public interface SetDifficultyPacket extends BedrockPacket {
     private int difficulty;
 
 

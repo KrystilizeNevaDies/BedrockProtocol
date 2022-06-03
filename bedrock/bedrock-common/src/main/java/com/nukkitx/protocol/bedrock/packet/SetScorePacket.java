@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface SetScorePacket extends BedrockPacket {
+public interface SetScorePacket extends BedrockPacket {
     private Action action;
     private List<ScoreInfo> infos = new ObjectArrayList<>();
 

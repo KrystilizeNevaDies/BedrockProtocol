@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-interface ResourcePackClientResponsePacket extends BedrockPacket {
+public interface ResourcePackClientResponsePacket extends BedrockPacket {
     private final List<String> packIds = new ObjectArrayList<>();
     private Status status;
 
