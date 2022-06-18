@@ -13,16 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface PacketViolationWarningPacket extends BedrockPacket {
-    private PacketViolationType valueType;
-    private PacketViolationSeverity severity;
-    private int packetCauseId;
-    private String context;
+    PacketViolationType valueType;
+    PacketViolationSeverity severity;
+    int packetCauseId;
+    String context;
 
 
-    @Overrid
+    record v407 implements PacketViolationWarningPacket {
 
-    public class PacketViolationWarningReader_v407 implements BedrockPacketReader<PacketViolationWarningPacket> {
-        public static final PacketViolationWarningReader_v407 INSTANCE = new PacketViolationWarningReader_v407();
 
         protected static final PacketViolationType[] TYPES = PacketViolationType.values();
         protected static final PacketViolationSeverity[] SEVERITIES = PacketViolationSeverity.values();

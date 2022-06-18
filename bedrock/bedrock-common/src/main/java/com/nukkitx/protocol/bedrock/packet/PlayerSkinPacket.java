@@ -14,15 +14,15 @@ import lombok.EqualsAndHashCode;
 import java.util.UUID;
 
 public interface PlayerSkinPacket extends BedrockPacket {
-    private UUID uuid;
-    private SerializedSkin skin;
-    private String newSkinName;
-    private String oldSkinName;
-    private boolean trustedSkin;
+    UUID uuid;
+    SerializedSkin skin;
+    String newSkinName;
+    String oldSkinName;
+    boolean trustedSkin;
 
 
-    public class PlayerSkinReader_v291 implements BedrockPacketReader<PlayerSkinPacket> {
-        public static final PlayerSkinReader_v291 INSTANCE = new PlayerSkinReader_v291();
+    record v291 implements PlayerSkinPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerSkinPacket packet) {
@@ -56,8 +56,8 @@ public interface PlayerSkinPacket extends BedrockPacket {
     }
 
 
-    public class PlayerSkinReader_v388 implements BedrockPacketReader<PlayerSkinPacket> {
-        public static final PlayerSkinReader_v388 INSTANCE = new PlayerSkinReader_v388();
+    record v388 implements PlayerSkinPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerSkinPacket packet) {
@@ -76,8 +76,8 @@ public interface PlayerSkinPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerSkinReader_v390 extends PlayerSkinReader_v388 {
-        public static final PlayerSkinReader_v390 INSTANCE = new PlayerSkinReader_v390();
+    record v390 extends PlayerSkinReader_v388 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerSkinPacket packet) {

@@ -21,13 +21,16 @@ import java.io.IOException;
  */
 interface AgentActionEventPacket extends BedrockPacket {
     String requestId();
+
     AgentActionType actionType();
+
     /**
      * @see AgentActionType for valueType specific JSON
      */
     String responseJson();
 
-    record v503(String requestId, AgentActionType actionType, String responseJson) implements AgentActionEventPacket, Codec503 {
+    record v503(String requestId, AgentActionType actionType,
+                String responseJson) implements AgentActionEventPacket, Codec503 {
         public static final Interpreter<v503> INTERPRETER = new Interpreter<>() {
             @Override
             public @NotNull v503 interpret(@NotNull BitInput input) throws IOException {
@@ -38,7 +41,7 @@ interface AgentActionEventPacket extends BedrockPacket {
             }
         };
 
-        private static final AgentActionType[] VALUES = AgentActionType.values();
+        static final AgentActionType[] VALUES = AgentActionType.values();
 
         @Override
         public void write(@NotNull BitOutput output) throws IOException {

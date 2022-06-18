@@ -13,41 +13,45 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface InventorySlotPacket extends BedrockPacket {
-    private int containerId;
-    private int slot;
-    private ItemData item;
+    int containerId;
+    int slot;
+    ItemData item;
 
 
-    public class InventorySlotReader_v291 implements BedrockPacketReader<InventorySlotPacket> {
-        public static final InventorySlotReader_v291 INSTANCE = new InventorySlotReader_v291();
+    record v291 implements InventorySlotPacket {
+
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession
+                session) {
             VarInts.writeUnsignedInt(buffer, packet.getContainerId());
             VarInts.writeUnsignedInt(buffer, packet.getSlot());
             helper.writeItem(buffer, packet.getItem(), session);
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession
+                session) {
             packet.setContainerId(VarInts.readUnsignedInt(buffer));
             packet.setSlot(VarInts.readUnsignedInt(buffer));
             packet.setItem(helper.readItem(buffer, session));
         }
     }
 
-    public class InventorySlotReader_v407 implements BedrockPacketReader<InventorySlotPacket> {
-        public static final InventorySlotReader_v407 INSTANCE = new InventorySlotReader_v407();
+    record v407 implements InventorySlotPacket {
+
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession
+                session) {
             VarInts.writeUnsignedInt(buffer, packet.getContainerId());
             VarInts.writeUnsignedInt(buffer, packet.getSlot());
             helper.writeNetItem(buffer, packet.getItem(), session);
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventorySlotPacket packet, BedrockSession
+                session) {
             packet.setContainerId(VarInts.readUnsignedInt(buffer));
             packet.setSlot(VarInts.readUnsignedInt(buffer));
             packet.setItem(helper.readNetItem(buffer, session));

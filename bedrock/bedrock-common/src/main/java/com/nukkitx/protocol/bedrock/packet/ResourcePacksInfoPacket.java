@@ -16,27 +16,27 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public interface ResourcePacksInfoPacket extends BedrockPacket {
-    private final List<Entry> behaviorPackInfos = new ObjectArrayList<>();
-    private final List<Entry> resourcePackInfos = new ObjectArrayList<>();
-    private boolean forcedToAccept;
-    private boolean scriptingEnabled;
-    private boolean forcingServerPacksEnabled;
+    final List<Entry> behaviorPackInfos = new ObjectArrayList<>();
+    final List<Entry> resourcePackInfos = new ObjectArrayList<>();
+    boolean forcedToAccept;
+    boolean scriptingEnabled;
+    boolean forcingServerPacksEnabled;
 
 
     @Value
     public static class Entry {
-        private final String packId;
-        private final String packVersion;
-        private final long packSize;
-        private final String contentKey;
-        private final String subPackName;
-        private final String contentId;
-        private final boolean scripting;
-        private final boolean raytracingCapable;
+        final String packId;
+        final String packVersion;
+        final long packSize;
+        final String contentKey;
+        final String subPackName;
+        final String contentId;
+        final boolean scripting;
+        final boolean raytracingCapable;
     }
 
-    public class ResourcePacksInfoReader_v291 implements BedrockPacketReader<ResourcePacksInfoPacket> {
-        public static final ResourcePacksInfoReader_v291 INSTANCE = new ResourcePacksInfoReader_v291();
+    record v291 implements ResourcePacksInfoPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePacksInfoPacket packet) {
@@ -74,8 +74,8 @@ public interface ResourcePacksInfoPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePacksInfoReader_v332 extends ResourcePacksInfoReader_v291 {
-        public static final ResourcePacksInfoReader_v332 INSTANCE = new ResourcePacksInfoReader_v332();
+    record v332 extends ResourcePacksInfoReader_v291 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePacksInfoPacket packet) {
@@ -114,8 +114,8 @@ public interface ResourcePacksInfoPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePacksInfoReader_v422 extends ResourcePacksInfoReader_v332 {
-        public static final ResourcePacksInfoReader_v422 INSTANCE = new ResourcePacksInfoReader_v422();
+    record v422 extends ResourcePacksInfoReader_v332 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePacksInfoPacket packet) {
@@ -166,9 +166,8 @@ public interface ResourcePacksInfoPacket extends BedrockPacket {
 
     }
 
-    public class ResourcePacksInfoReader_v448 extends ResourcePacksInfoReader_v422 {
+    record v448 extends ResourcePacksInfoReader_v422 {
 
-        public static final ResourcePacksInfoReader_v448 INSTANCE = new ResourcePacksInfoReader_v448();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePacksInfoPacket packet) {

@@ -17,14 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface PlayerEnchantOptionsPacket extends BedrockPacket {
-    private final List<EnchantOptionData> options = new ArrayList<>();
+    final List<EnchantOptionData> options = new ArrayList<>();
 
 
-    @Overrid
+    record v407 implements PlayerEnchantOptionsPacket {
 
-    public class PlayerEnchantOptionsReader_v407 implements BedrockPacketReader<PlayerEnchantOptionsPacket> {
-
-        public static final PlayerEnchantOptionsReader_v407 INSTANCE = new PlayerEnchantOptionsReader_v407();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerEnchantOptionsPacket packet) {

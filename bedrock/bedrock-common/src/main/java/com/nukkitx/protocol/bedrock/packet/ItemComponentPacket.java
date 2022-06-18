@@ -20,14 +20,11 @@ import java.util.List;
  */
 interface ItemComponentPacket extends BedrockPacket {
 
-    private final List<ComponentItemData> items = new ObjectArrayList<>();
+    final List<ComponentItemData> items = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v419 implements ItemComponentPacket {
 
-    public class ItemComponentReader_v419 implements BedrockPacketReader<ItemComponentPacket> {
-
-        public static final ItemComponentReader_v419 INSTANCE = new ItemComponentReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemComponentPacket packet) {

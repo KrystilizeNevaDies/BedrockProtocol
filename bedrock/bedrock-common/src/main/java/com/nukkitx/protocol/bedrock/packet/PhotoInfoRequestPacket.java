@@ -11,13 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface PhotoInfoRequestPacket extends BedrockPacket {
-    private long photoId;
+    long photoId;
 
 
-    @Overrid
+    record v471 implements PhotoInfoRequestPacket {
 
-    public class PhotoInfoRequestReader_v471 implements BedrockPacketReader<PhotoInfoRequestPacket> {
-        public static final PhotoInfoRequestReader_v471 INSTANCE = new PhotoInfoRequestReader_v471();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoInfoRequestPacket packet) {

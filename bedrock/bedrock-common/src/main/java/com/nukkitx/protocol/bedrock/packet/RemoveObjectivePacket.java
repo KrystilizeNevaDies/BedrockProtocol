@@ -10,11 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface RemoveObjectivePacket extends BedrockPacket {
-    private String objectiveId;
+    String objectiveId;
 
 
-    public class RemoveObjectiveReader_v291 implements BedrockPacketReader<RemoveObjectivePacket> {
-        public static final RemoveObjectiveReader_v291 INSTANCE = new RemoveObjectiveReader_v291();
+    record v291 implements RemoveObjectivePacket {
 
 
         @Override

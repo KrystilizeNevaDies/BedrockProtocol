@@ -19,10 +19,8 @@ interface TickingAreasLoadStatusPacket extends BedrockPacket {
     boolean waitingForPreload;
 
 
-    @Overrid
+    record v503 implements TickingAreasLoadStatusPacket {
 
-    public class TickingAreasLoadStatusReader_v503 implements BedrockPacketReader<TickingAreasLoadStatusPacket> {
-        public static final TickingAreasLoadStatusReader_v503 INSTANCE = new TickingAreasLoadStatusReader_v503();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, TickingAreasLoadStatusPacket packet) {

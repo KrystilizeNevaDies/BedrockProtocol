@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface RequestChunkRadiusPacket extends BedrockPacket {
-    private int radius;
+    int radius;
 
 
-    public class RequestChunkRadiusReader_v291 implements BedrockPacketReader<RequestChunkRadiusPacket> {
-        public static final RequestChunkRadiusReader_v291 INSTANCE = new RequestChunkRadiusReader_v291();
+    record v291 implements RequestChunkRadiusPacket {
 
 
         @Override

@@ -13,15 +13,12 @@ import lombok.ToString;
 
 interface PlayerStartItemCooldownPacket extends BedrockPacket {
 
-    private String itemCategory;
-    private int cooldownDuration;
+    String itemCategory;
+    int cooldownDuration;
 
 
-    @Overrid
+    record v486 implements PlayerStartItemCooldownPacket {
 
-    public class PlayerStartItemCooldownReader_v486 implements BedrockPacketReader<PlayerStartItemCooldownPacket> {
-
-        public static final PlayerStartItemCooldownReader_v486 INSTANCE = new PlayerStartItemCooldownReader_v486();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerStartItemCooldownPacket packet) {

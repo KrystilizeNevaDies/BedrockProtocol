@@ -12,15 +12,13 @@ import lombok.EqualsAndHashCode;
 
 interface SimulationTypePacket extends BedrockPacket {
 
-    private SimulationType valueType;
+    SimulationType valueType;
 
 
-    @Overrid
+    record v448 implements SimulationTypePacket {
 
-    public class SimulationTypeReader_v448 implements BedrockPacketReader<SimulationTypePacket> {
-        public static final SimulationTypeReader_v448 INSTANCE = new SimulationTypeReader_v448();
 
-        private static final SimulationType[] VALUES = SimulationType.values();
+        static final SimulationType[] VALUES = SimulationType.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SimulationTypePacket packet) {

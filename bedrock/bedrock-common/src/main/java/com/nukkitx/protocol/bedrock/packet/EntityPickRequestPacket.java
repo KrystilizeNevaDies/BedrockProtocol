@@ -10,16 +10,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface EntityPickRequestPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private int hotbarSlot;
+    long runtimeEntityId;
+    int hotbarSlot;
     /**
      * @since v465
      */
-    private boolean withData;
+    boolean withData;
 
 
-    public class EntityPickRequestReader_v291 implements BedrockPacketReader<EntityPickRequestPacket> {
-        public static final EntityPickRequestReader_v291 INSTANCE = new EntityPickRequestReader_v291();
+    record v291 implements EntityPickRequestPacket {
 
 
         @Override
@@ -35,9 +34,8 @@ public interface EntityPickRequestPacket extends BedrockPacket {
         }
     }
 
-    public class EntityPickRequestReader_v465 extends EntityPickRequestReader_v291 {
+    record v465 extends EntityPickRequestReader_v291 {
 
-        public static final EntityPickRequestReader_v465 INSTANCE = new EntityPickRequestReader_v465();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EntityPickRequestPacket packet) {

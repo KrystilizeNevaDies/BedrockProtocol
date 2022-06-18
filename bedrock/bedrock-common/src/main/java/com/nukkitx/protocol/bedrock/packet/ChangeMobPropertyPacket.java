@@ -23,10 +23,15 @@ import java.io.IOException;
  */
 interface ChangeMobPropertyPacket extends BedrockPacket {
     long uniqueEntityId();
+
     String property();
+
     boolean boolValue();
+
     String stringValue();
+
     int intValue();
+
     float floatValue();
 
     record v503(long uniqueEntityId, String property, boolean boolValue, String stringValue, int intValue,

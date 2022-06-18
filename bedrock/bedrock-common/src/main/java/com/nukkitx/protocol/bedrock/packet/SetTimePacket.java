@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetTimePacket extends BedrockPacket {
-    private int time;
+    int time;
 
 
-    public class SetTimeReader_v291 implements BedrockPacketReader<SetTimePacket> {
-        public static final SetTimeReader_v291 INSTANCE = new SetTimeReader_v291();
+    record v291 implements SetTimePacket {
 
 
         @Override

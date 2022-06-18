@@ -1,80 +1,118 @@
 package com.nukkitx.protocol.bedrock.data.inventory;
 
+import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.nbt.NbtMap;
+import com.nukkitx.network.VarInts;
 import com.nukkitx.network.util.Preconditions;
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
+import com.nukkitx.protocol.serializer.BitDataWritable;
+import com.nukkitx.protocol.serializer.PacketDataReader;
+import com.nukkitx.protocol.serializer.PacketDataWriter;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.NonFinal;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Objects;
 
-@Data
-@Immutable
-@Builder(toBuilder = true, builderClassName = "Builder")
-public final class ItemData {
-    private static final String[] EMPTY = new String[0];
-    public static final ItemData AIR = new ItemData(0, 0, 0, null, EMPTY, EMPTY, 0, 0, false, 0);
+// TODO: Figure out how to structure this interface properly
+public interface ItemData extends BitDataWritable, PacketDataWriter {
 
-    @NonFinal
-    private int id;
-    private final int damage;
-    private final int count;
-    private final NbtMap tag;
-    private final String[] canPlace;
-    private final String[] canBreak;
-    private final long blockingTicks;
-    private final int blockRuntimeId;
-    @NonFinal
-    private boolean usingNetId;
-    private int netId;
+    BedrockPacket.Interpreter<ItemData> INTERPRETER = new BedrockPacket.Interpreter<>() {
+        @Override
+        public @NotNull ItemData interpret(@NotNull BitInput input) throws IOException {
+            int id = readInt(input);
+            if (id == 0) {
+                return ItemData.from(id);
+            }
+            int damage = readInt(input);
+            if (damage == 0x7fff) {
+                damage = -1;
+            }
+            int count = readInt(input);
+            return ItemData.from(id, damage, count);
+        }
+    };
 
-    private ItemData(int id, int damage, int count, NbtMap tag, String[] canPlace, String[] canBreak, long blockingTicks, int blockRuntimeId, boolean hasNetId, int netId) {
-        Preconditions.checkArgument(count < 256, "count exceeds maximum of 255");
-        this.id = id;
-        this.damage = damage;
-        this.count = count;
-        this.tag = tag;
-        this.canPlace = canPlace == null ? EMPTY : canPlace;
-        this.canBreak = canBreak == null ? EMPTY : canBreak;
-        this.blockingTicks = blockingTicks;
-        this.blockRuntimeId = blockRuntimeId;
-        this.netId = netId;
-        this.usingNetId = hasNetId;
+    record Creative(int id, int damage, int stackSize, int networkId) implements ItemData, Damage, StackSize, NetworkId {
+        public static final BedrockPacket.Interpreter<Creative> INTERPRETER = new BedrockPacket.Interpreter<Creative>() {
+            @Override
+            public @NotNull Creative interpret(@NotNull BitInput input) throws IOException {
+                int networkId = readUnsignedInt(input);
+                int id = readInt(input);
+                int damage = readInt(input);
+                int stackSize = readInt(input);
+                return new Creative(id, damage, stackSize, networkId);
+            }
+        };
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeUnsignedInt(output, networkId());
+            writeInt(output, id());
+        }
     }
 
-    public boolean isValid() {
-        return !isNull() && id != 0;
+    int id();
+
+    interface ItemDataDS extends ItemData, Damage, StackSize {
+
+        @Override
+        default void write(@NotNull BitOutput output) throws IOException {
+            writeInt(output, id());
+            if (id() != 0) {
+                int damage = damage();
+                if (damage == -1) damage = 0x7fff;
+                writeInt(output, damage);
+                writeInt(output, stackSize());
+            }
+        }
     }
 
-    public boolean isNull() {
-        return count <= 0;
+    interface Damage extends ItemData {
+        int damage();
+    }
+    interface StackSize extends ItemData {
+        int stackSize();
+    }
+    interface NetworkId extends ItemData {
+        int networkId();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, damage, count, tag, Arrays.hashCode(canPlace), Arrays.hashCode(canBreak), blockingTicks,
-                blockRuntimeId);
+    static ItemDataDS from(int id, int damage, int stackSize) {
+        return new ItemDataDS() {
+            @Override
+            public int damage() {
+                return damage;
+            }
+
+            @Override
+            public int stackSize() {
+                return stackSize;
+            }
+
+            @Override
+            public int id() {
+                return id;
+            }
+        };
     }
 
-    public boolean equals(ItemData other, boolean checkAmount, boolean checkMetadata, boolean checkUserdata) {
-        return id == other.id &&
-                (!checkAmount || count == other.count) &&
-                (!checkMetadata || (damage == other.damage && blockRuntimeId == other.blockRuntimeId)) &&
-                (!checkUserdata || (Objects.equals(tag, other.tag) && Arrays.equals(canPlace, other.canPlace) && Arrays.equals(canBreak, other.canBreak)));
-    }
+    static ItemData from(int id) {
+        return new ItemData() {
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeInt(output, id());
+            }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof ItemData)) return false;
-        return equals((ItemData) obj, true, true, true);
-    }
-
-    public void write(@NotNull BitOutput output) {
-        // TODO write to output
+            @Override
+            public int id() {
+                return id;
+            }
+        };
     }
 }

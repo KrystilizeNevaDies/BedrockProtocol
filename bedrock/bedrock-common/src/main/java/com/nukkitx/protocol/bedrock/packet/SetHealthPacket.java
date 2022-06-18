@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetHealthPacket extends BedrockPacket {
-    private int health;
+    int health;
 
 
-    public class SetHealthReader_v291 implements BedrockPacketReader<SetHealthPacket> {
-        public static final SetHealthReader_v291 INSTANCE = new SetHealthReader_v291();
+    record v291 implements SetHealthPacket {
 
 
         @Override

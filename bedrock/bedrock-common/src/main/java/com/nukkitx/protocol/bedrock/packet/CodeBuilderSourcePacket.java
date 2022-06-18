@@ -20,11 +20,14 @@ import java.io.IOException;
 interface CodeBuilderSourcePacket extends BedrockPacket {
 
     @NotNull CodeBuilderOperationType operation();
+
     @NotNull CodeBuilderCategoryType category();
+
     @NotNull String value();
 
 
-    record v486(@NotNull CodeBuilderOperationType operation, @NotNull CodeBuilderCategoryType category, @NotNull String value) implements CodeBuilderSourcePacket {
+    record v486(@NotNull CodeBuilderOperationType operation, @NotNull CodeBuilderCategoryType category,
+                @NotNull String value) implements CodeBuilderSourcePacket {
         public static final Interpreter<v486> INTERPRETER = new Interpreter<v486>() {
             @Override
             public @NotNull v486 interpret(@NotNull BitInput input) throws IOException {
@@ -35,7 +38,6 @@ interface CodeBuilderSourcePacket extends BedrockPacket {
                 return new v486(operation, category, value);
             }
         };
-
 
 
         @Override

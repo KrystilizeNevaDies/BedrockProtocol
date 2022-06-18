@@ -25,12 +25,14 @@ interface CameraShakePacket extends BedrockPacket {
 
     /**
      * Intensity to shake the player's camera view.
+     *
      * @return shake intensity
      */
     float intensity();
 
     /**
      * Amount of time to shake the player's camera.
+     *
      * @return seconds to shake
      */
     float duration();

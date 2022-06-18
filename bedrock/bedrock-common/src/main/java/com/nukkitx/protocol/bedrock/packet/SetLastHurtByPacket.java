@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetLastHurtByPacket extends BedrockPacket {
-    private int entityTypeId;
+    int entityTypeId;
 
 
-    public class SetLastHurtByReader_v291 implements BedrockPacketReader<SetLastHurtByPacket> {
-        public static final SetLastHurtByReader_v291 INSTANCE = new SetLastHurtByReader_v291();
+    record v291 implements SetLastHurtByPacket {
 
 
         @Override

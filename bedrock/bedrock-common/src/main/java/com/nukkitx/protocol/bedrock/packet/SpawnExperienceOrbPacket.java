@@ -12,12 +12,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SpawnExperienceOrbPacket extends BedrockPacket {
-    private Vector3f position;
-    private int amount;
+    Vector3f position;
+    int amount;
 
 
-    public class SpawnExperienceOrbReader_v291 implements BedrockPacketReader<SpawnExperienceOrbPacket> {
-        public static final SpawnExperienceOrbReader_v291 INSTANCE = new SpawnExperienceOrbReader_v291();
+    record v291 implements SpawnExperienceOrbPacket {
 
 
         @Override

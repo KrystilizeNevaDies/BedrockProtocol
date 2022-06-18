@@ -15,16 +15,14 @@ import java.util.EnumSet;
 import java.util.Set;
 
 interface PlayerArmorDamagePacket extends BedrockPacket {
-    private final Set<PlayerArmorDamageFlag> flags = EnumSet.noneOf(PlayerArmorDamageFlag.class);
-    private final int[] damage = new int[4];
+    final Set<PlayerArmorDamageFlag> flags = EnumSet.noneOf(PlayerArmorDamageFlag.class);
+    final int[] damage = new int[4];
 
 
-    @Overrid
+    record v407 implements PlayerArmorDamagePacket {
 
-    public class PlayerArmorDamageReader_v407 implements BedrockPacketReader<PlayerArmorDamagePacket> {
-        public static final PlayerArmorDamageReader_v407 INSTANCE = new PlayerArmorDamageReader_v407();
 
-        private static final PlayerArmorDamageFlag[] FLAGS = PlayerArmorDamageFlag.values();
+        static final PlayerArmorDamageFlag[] FLAGS = PlayerArmorDamageFlag.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerArmorDamagePacket packet) {

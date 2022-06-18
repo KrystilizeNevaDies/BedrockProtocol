@@ -15,14 +15,13 @@ import java.util.EnumSet;
 import java.util.Set;
 
 interface EmotePacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private String emoteId;
-    private final Set<EmoteFlag> flags = EnumSet.noneOf(EmoteFlag.class);
+    long runtimeEntityId;
+    String emoteId;
+    final Set<EmoteFlag> flags = EnumSet.noneOf(EmoteFlag.class);
 
 
-    public class EmoteReader_v388 implements BedrockPacketReader<EmotePacket> {
+    record v388 implements EmotePacket {
 
-        public static final EmoteReader_v388 INSTANCE = new EmoteReader_v388();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EmotePacket packet) {

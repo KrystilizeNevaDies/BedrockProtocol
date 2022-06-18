@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetDefaultGameTypePacket extends BedrockPacket {
-    private int gamemode;
+    int gamemode;
 
 
-    public class SetDefaultGameTypeReader_v291 implements BedrockPacketReader<SetDefaultGameTypePacket> {
-        public static final SetDefaultGameTypeReader_v291 INSTANCE = new SetDefaultGameTypeReader_v291();
+    record v291 implements SetDefaultGameTypePacket {
 
 
         @Override

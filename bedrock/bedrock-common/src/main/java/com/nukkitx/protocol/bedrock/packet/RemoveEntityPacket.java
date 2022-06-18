@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface RemoveEntityPacket extends BedrockPacket {
-    private long uniqueEntityId;
+    long uniqueEntityId;
 
 
-    public class RemoveEntityReader_v291 implements BedrockPacketReader<RemoveEntityPacket> {
-        public static final RemoveEntityReader_v291 INSTANCE = new RemoveEntityReader_v291();
+    record v291 implements RemoveEntityPacket {
 
 
         @Override

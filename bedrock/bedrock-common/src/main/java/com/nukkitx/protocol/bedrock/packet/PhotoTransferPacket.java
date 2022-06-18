@@ -12,29 +12,28 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PhotoTransferPacket extends BedrockPacket {
-    private String name;
-    private byte[] data;
-    private String bookId;
+    String name;
+    byte[] data;
+    String bookId;
     /**
      * @since v465
      */
-    private PhotoType photoType;
+    PhotoType photoType;
     /**
      * @since v465
      */
-    private PhotoType sourceType;
+    PhotoType sourceType;
     /**
      * @since v465
      */
-    private long ownerId;
+    long ownerId;
     /**
      * @since v465
      */
-    private String newPhotoName;
+    String newPhotoName;
 
 
-    public class PhotoTransferReader_v291 implements BedrockPacketReader<PhotoTransferPacket> {
-        public static final PhotoTransferReader_v291 INSTANCE = new PhotoTransferReader_v291();
+    record v291 implements PhotoTransferPacket {
 
 
         @Override
@@ -56,9 +55,8 @@ public interface PhotoTransferPacket extends BedrockPacket {
         }
     }
 
-    public class PhotoTransferReader_v465 extends PhotoTransferReader_v291 {
+    record v465 extends PhotoTransferReader_v291 {
 
-        public static final PhotoTransferReader_v465 INSTANCE = new PhotoTransferReader_v465();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoTransferPacket packet) {

@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ItemFrameDropItemPacket extends BedrockPacket {
-    private Vector3i blockPosition;
+    Vector3i blockPosition;
 
 
-    public class ItemFrameDropItemReader_v291 implements BedrockPacketReader<ItemFrameDropItemPacket> {
-        public static final ItemFrameDropItemReader_v291 INSTANCE = new ItemFrameDropItemReader_v291();
+    record v291 implements ItemFrameDropItemPacket {
 
 
         @Override

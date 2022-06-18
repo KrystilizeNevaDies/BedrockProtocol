@@ -12,11 +12,10 @@ import lombok.EqualsAndHashCode;
 
 
 public interface ServerToClientHandshakePacket extends BedrockPacket {
-    private String jwt;
+    String jwt;
 
 
-    public class ServerToClientHandshakeReader_v291 implements BedrockPacketReader<ServerToClientHandshakePacket> {
-        public static final ServerToClientHandshakeReader_v291 INSTANCE = new ServerToClientHandshakeReader_v291();
+    record v291 implements ServerToClientHandshakePacket {
 
 
         @Override

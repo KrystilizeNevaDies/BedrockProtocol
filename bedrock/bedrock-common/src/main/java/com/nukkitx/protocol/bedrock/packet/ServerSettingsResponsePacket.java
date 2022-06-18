@@ -11,12 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ServerSettingsResponsePacket extends BedrockPacket {
-    private int formId;
-    private String formData;
+    int formId;
+    String formData;
 
 
-    public class ServerSettingsResponseReader_v291 implements BedrockPacketReader<ServerSettingsResponsePacket> {
-        public static final ServerSettingsResponseReader_v291 INSTANCE = new ServerSettingsResponseReader_v291();
+    record v291 implements ServerSettingsResponsePacket {
 
 
         @Override

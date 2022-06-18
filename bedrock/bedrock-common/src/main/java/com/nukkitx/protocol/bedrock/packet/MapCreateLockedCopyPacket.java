@@ -11,12 +11,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface MapCreateLockedCopyPacket extends BedrockPacket {
-    private long originalMapId;
-    private long newMapId;
+    long originalMapId;
+    long newMapId;
 
 
-    public class MapCreateLockedCopyReader_v354 implements BedrockPacketReader<MapCreateLockedCopyPacket> {
-        public static final MapCreateLockedCopyReader_v354 INSTANCE = new MapCreateLockedCopyReader_v354();
+    record v354 implements MapCreateLockedCopyPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MapCreateLockedCopyPacket packet) {

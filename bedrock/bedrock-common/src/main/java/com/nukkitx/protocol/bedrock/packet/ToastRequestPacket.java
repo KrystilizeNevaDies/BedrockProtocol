@@ -16,11 +16,11 @@ import lombok.EqualsAndHashCode;
  */
 interface ToastRequestPacket extends BedrockPacket {
 
-    private String title;
-    private String content;
+    String title;
+    String content;
 
 
-    public class ToastRequestReaderBeta implements BedrockPacketReader<ToastRequestPacket> {
+    public class ToastRequestReaderBeta implements ToastRequestPacket {
         public static final ToastRequestReaderBeta INSTANCE = new ToastRequestReaderBeta();
 
         @Override

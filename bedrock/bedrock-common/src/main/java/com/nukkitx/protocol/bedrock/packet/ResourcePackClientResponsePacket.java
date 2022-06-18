@@ -13,8 +13,8 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface ResourcePackClientResponsePacket extends BedrockPacket {
-    private final List<String> packIds = new ObjectArrayList<>();
-    private Status status;
+    final List<String> packIds = new ObjectArrayList<>();
+    Status status;
 
 
     public enum Status {
@@ -25,8 +25,7 @@ public interface ResourcePackClientResponsePacket extends BedrockPacket {
         COMPLETED
     }
 
-    public class ResourcePackClientResponseReader_v291 implements BedrockPacketReader<ResourcePackClientResponsePacket> {
-        public static final ResourcePackClientResponseReader_v291 INSTANCE = new ResourcePackClientResponseReader_v291();
+    record v291 implements ResourcePackClientResponsePacket {
 
 
         @Override

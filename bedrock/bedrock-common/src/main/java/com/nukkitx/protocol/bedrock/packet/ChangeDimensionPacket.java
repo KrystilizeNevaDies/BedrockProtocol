@@ -18,7 +18,9 @@ import java.io.IOException;
 
 public interface ChangeDimensionPacket extends BedrockPacket {
     int dimension();
+
     @NotNull Vector3f position();
+
     boolean respawn();
 
     record v291(int dimension, Vector3f position, boolean respawn) implements ChangeDimensionPacket {

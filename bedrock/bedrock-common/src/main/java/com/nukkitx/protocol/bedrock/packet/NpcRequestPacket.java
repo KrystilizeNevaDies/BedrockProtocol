@@ -12,15 +12,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface NpcRequestPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private NpcRequestType requestType;
-    private String command;
-    private int actionType;
-    private String sceneName;
+    long runtimeEntityId;
+    NpcRequestType requestType;
+    String command;
+    int actionType;
+    String sceneName;
 
 
-    public class NpcRequestReader_v291 implements BedrockPacketReader<NpcRequestPacket> {
-        public static final NpcRequestReader_v291 INSTANCE = new NpcRequestReader_v291();
+    record v291 implements NpcRequestPacket {
 
 
         @Override
@@ -40,9 +39,8 @@ public interface NpcRequestPacket extends BedrockPacket {
         }
     }
 
-    public class NpcRequestReader_v448 extends NpcRequestReader_v291 {
+    record v448 extends NpcRequestReader_v291 {
 
-        public static final NpcRequestReader_v448 INSTANCE = new NpcRequestReader_v448();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NpcRequestPacket packet) {

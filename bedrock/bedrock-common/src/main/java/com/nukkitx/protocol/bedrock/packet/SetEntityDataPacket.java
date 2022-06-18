@@ -11,13 +11,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetEntityDataPacket extends BedrockPacket {
-    private final EntityDataMap metadata = new EntityDataMap();
-    private long runtimeEntityId;
-    private long tick;
+    final EntityDataMap metadata = new EntityDataMap();
+    long runtimeEntityId;
+    long tick;
 
 
-    public class SetEntityDataReader_v291 implements BedrockPacketReader<SetEntityDataPacket> {
-        public static final SetEntityDataReader_v291 INSTANCE = new SetEntityDataReader_v291();
+    record v291 implements SetEntityDataPacket {
 
 
         @Override
@@ -33,9 +32,8 @@ public interface SetEntityDataPacket extends BedrockPacket {
         }
     }
 
-    public class SetEntityDataReader_v419 extends SetEntityDataReader_v291 {
+    record v419 extends SetEntityDataReader_v291 {
 
-        public static final SetEntityDataReader_v419 INSTANCE = new SetEntityDataReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetEntityDataPacket packet) {

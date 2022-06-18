@@ -11,12 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface TakeItemEntityPacket extends BedrockPacket {
-    private long itemRuntimeEntityId;
-    private long runtimeEntityId;
+    long itemRuntimeEntityId;
+    long runtimeEntityId;
 
 
-    public class TakeItemEntityReader_v291 implements BedrockPacketReader<TakeItemEntityPacket> {
-        public static final TakeItemEntityReader_v291 INSTANCE = new TakeItemEntityReader_v291();
+    record v291 implements TakeItemEntityPacket {
 
 
         @Override

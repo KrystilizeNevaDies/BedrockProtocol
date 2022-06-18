@@ -17,21 +17,18 @@ import java.util.List;
 
 interface UpdateSubChunkBlocksPacket extends BedrockPacket {
 
-    private int chunkX;
-    private int chunkY;
-    private int chunkZ;
+    int chunkX;
+    int chunkY;
+    int chunkZ;
 
-    private final List<BlockChangeEntry> standardBlocks = new ObjectArrayList<>();
-    private final List<BlockChangeEntry> extraBlocks = new ObjectArrayList<>();
+    final List<BlockChangeEntry> standardBlocks = new ObjectArrayList<>();
+    final List<BlockChangeEntry> extraBlocks = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v465 implements UpdateSubChunkBlocksPacket {
 
-    public class UpdateSubChunkBlocksReader_v465 implements BedrockPacketReader<UpdateSubChunkBlocksPacket> {
 
-        public static final UpdateSubChunkBlocksReader_v465 INSTANCE = new UpdateSubChunkBlocksReader_v465();
-
-        private static final BlockChangeEntry.MessageType[] VALUES = BlockChangeEntry.MessageType.values();
+        static final BlockChangeEntry.MessageType[] VALUES = BlockChangeEntry.MessageType.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateSubChunkBlocksPacket packet) {

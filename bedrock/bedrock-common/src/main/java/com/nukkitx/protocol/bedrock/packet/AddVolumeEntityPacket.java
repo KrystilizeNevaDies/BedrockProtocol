@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public interface AddVolumeEntityPacket extends BedrockPacket {
     int id();
+
     NbtMap data();
 
     record v440(int id, NbtMap data) implements AddVolumeEntityPacket, Codec440 {
@@ -49,7 +50,8 @@ public interface AddVolumeEntityPacket extends BedrockPacket {
         }
     }
 
-    record v486(int id, NbtMap data, String identifier, String instanceName, String engineVersion) implements AddVolumeEntityPacket, Codec486 {
+    record v486(int id, NbtMap data, String identifier, String instanceName,
+                String engineVersion) implements AddVolumeEntityPacket, Codec486 {
         public static final Interpreter<v486> INTERPRETER = new Interpreter<>() {
             @Override
             public @NotNull v486 interpret(@NotNull BitInput input) throws IOException {

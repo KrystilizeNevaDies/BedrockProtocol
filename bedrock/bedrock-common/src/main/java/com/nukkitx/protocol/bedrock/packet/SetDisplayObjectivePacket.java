@@ -11,15 +11,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetDisplayObjectivePacket extends BedrockPacket {
-    private String displaySlot;
-    private String objectiveId;
-    private String displayName;
-    private String criteria;
-    private int sortOrder;
+    String displaySlot;
+    String objectiveId;
+    String displayName;
+    String criteria;
+    int sortOrder;
 
 
-    public class SetDisplayObjectiveReader_v291 implements BedrockPacketReader<SetDisplayObjectivePacket> {
-        public static final SetDisplayObjectiveReader_v291 INSTANCE = new SetDisplayObjectiveReader_v291();
+    record v291 implements SetDisplayObjectivePacket {
 
 
         @Override

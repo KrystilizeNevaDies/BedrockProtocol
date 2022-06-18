@@ -114,7 +114,7 @@ public interface AvailableCommandsPacket extends BedrockPacket {
 
 // TODO: incorporate these new changes
 //
-//        public static final AvailableCommandsReader_v388 INSTANCE = new AvailableCommandsReader_v388();
+//
 //
 //
 //        @Override

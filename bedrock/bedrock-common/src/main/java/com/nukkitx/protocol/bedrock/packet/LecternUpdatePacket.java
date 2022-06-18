@@ -11,14 +11,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface LecternUpdatePacket extends BedrockPacket {
-    private int page;
-    private int totalPages;
-    private Vector3i blockPosition;
-    private boolean droppingBook;
+    int page;
+    int totalPages;
+    Vector3i blockPosition;
+    boolean droppingBook;
 
 
-    public class LecternUpdateReader_v340 implements BedrockPacketReader<LecternUpdatePacket> {
-        public static final LecternUpdateReader_v340 INSTANCE = new LecternUpdateReader_v340();
+    record v340 implements LecternUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LecternUpdatePacket packet) {
@@ -35,8 +35,8 @@ interface LecternUpdatePacket extends BedrockPacket {
         }
     }
 
-    public class LecternUpdateReader_v354 implements BedrockPacketReader<LecternUpdatePacket> {
-        public static final LecternUpdateReader_v354 INSTANCE = new LecternUpdateReader_v354();
+    record v354 implements LecternUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LecternUpdatePacket packet) {

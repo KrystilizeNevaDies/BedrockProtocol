@@ -13,11 +13,10 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface PurchaseReceiptPacket extends BedrockPacket {
-    private final List<String> receipts = new ObjectArrayList<>();
+    final List<String> receipts = new ObjectArrayList<>();
 
 
-    public class PurchaseReceiptReader_v291 implements BedrockPacketReader<PurchaseReceiptPacket> {
-        public static final PurchaseReceiptReader_v291 INSTANCE = new PurchaseReceiptReader_v291();
+    record v291 implements PurchaseReceiptPacket {
 
 
         @Override

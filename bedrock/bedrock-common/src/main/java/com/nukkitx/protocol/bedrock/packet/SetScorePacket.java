@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface SetScorePacket extends BedrockPacket {
-    private Action action;
-    private List<ScoreInfo> infos = new ObjectArrayList<>();
+    Action action;
+    List<ScoreInfo> infos = new ObjectArrayList<>();
 
 
     public enum Action {
@@ -24,8 +24,7 @@ public interface SetScorePacket extends BedrockPacket {
         REMOVE
     }
 
-    public class SetScoreReader_v291 implements BedrockPacketReader<SetScorePacket> {
-        public static final SetScoreReader_v291 INSTANCE = new SetScoreReader_v291();
+    record v291 implements SetScorePacket {
 
 
         @Override

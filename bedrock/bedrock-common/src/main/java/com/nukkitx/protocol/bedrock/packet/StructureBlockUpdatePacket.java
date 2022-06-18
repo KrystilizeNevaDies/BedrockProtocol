@@ -14,9 +14,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface StructureBlockUpdatePacket extends BedrockPacket {
-    private Vector3i blockPosition;
-    private StructureEditorData editorData;
-    private boolean powered;
+    Vector3i blockPosition;
+    StructureEditorData editorData;
+    boolean powered;
 
 
     public enum Type {
@@ -25,8 +25,8 @@ public interface StructureBlockUpdatePacket extends BedrockPacket {
         LOAD,
     }
 
-    public class StructureBlockUpdateReader_v291 implements BedrockPacketReader<StructureBlockUpdatePacket> {
-        public static final StructureBlockUpdateReader_v291 INSTANCE = new StructureBlockUpdateReader_v291();
+    record v291 implements StructureBlockUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureBlockUpdatePacket packet) {
@@ -98,8 +98,8 @@ public interface StructureBlockUpdatePacket extends BedrockPacket {
         }
     }
 
-    public class StructureBlockUpdateReader_v340 implements BedrockPacketReader<StructureBlockUpdatePacket> {
-        public static final StructureBlockUpdateReader_v340 INSTANCE = new StructureBlockUpdateReader_v340();
+    record v340 implements StructureBlockUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureBlockUpdatePacket packet) {
@@ -171,8 +171,8 @@ public interface StructureBlockUpdatePacket extends BedrockPacket {
         }
     }
 
-    public class StructureBlockUpdateReader_v361 implements BedrockPacketReader<StructureBlockUpdatePacket> {
-        public static final StructureBlockUpdateReader_v361 INSTANCE = new StructureBlockUpdateReader_v361();
+    record v361 implements StructureBlockUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureBlockUpdatePacket packet) {
@@ -209,8 +209,8 @@ public interface StructureBlockUpdatePacket extends BedrockPacket {
         }
     }
 
-    public class StructureBlockUpdateReader_v388 extends StructureBlockUpdateReader_v361 {
-        public static final StructureBlockUpdateReader_v388 INSTANCE = new StructureBlockUpdateReader_v388();
+    record v388 extends StructureBlockUpdateReader_v361 {
+
 
         @Override
         protected StructureEditorData readEditorData(ByteBuf buffer, BedrockPacketHelper helper) {

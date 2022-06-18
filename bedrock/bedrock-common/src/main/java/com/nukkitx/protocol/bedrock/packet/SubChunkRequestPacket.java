@@ -15,18 +15,16 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 interface SubChunkRequestPacket extends BedrockPacket {
-    private int dimension;
-    private Vector3i subChunkPosition;
+    int dimension;
+    Vector3i subChunkPosition;
     /**
      * @since v485
      */
-    private List<Vector3i> positionOffsets = new ObjectArrayList<>();
+    List<Vector3i> positionOffsets = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v471 implements SubChunkRequestPacket {
 
-    public class SubChunkRequestReader_v471 implements BedrockPacketReader<SubChunkRequestPacket> {
-        public static final SubChunkRequestReader_v471 INSTANCE = new SubChunkRequestReader_v471();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {
@@ -41,8 +39,8 @@ interface SubChunkRequestPacket extends BedrockPacket {
         }
     }
 
-    public class SubChunkRequestReader_v486 extends SubChunkRequestReader_v471 {
-        public static final SubChunkRequestReader_v486 INSTANCE = new SubChunkRequestReader_v486();
+    record v486 extends SubChunkRequestReader_v471 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkRequestPacket packet) {

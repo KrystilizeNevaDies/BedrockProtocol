@@ -11,11 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface UpdateBlockPropertiesPacket extends BedrockPacket {
-    private NbtMap properties;
+    NbtMap properties;
 
 
-    public class UpdateBlockPropertiesReader_v361 implements BedrockPacketReader<UpdateBlockPropertiesPacket> {
-        public static final UpdateBlockPropertiesReader_v361 INSTANCE = new UpdateBlockPropertiesReader_v361();
+    record v361 implements UpdateBlockPropertiesPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateBlockPropertiesPacket packet) {

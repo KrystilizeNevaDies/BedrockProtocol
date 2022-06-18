@@ -13,18 +13,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MobEquipmentPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private ItemData item;
-    private int inventorySlot;
-    private int hotbarSlot;
-    private int containerId;
+    long runtimeEntityId;
+    ItemData item;
+    int inventorySlot;
+    int hotbarSlot;
+    int containerId;
 
 
-    public class MobEquipmentReader_v291 implements BedrockPacketReader<MobEquipmentPacket> {
-        public static final MobEquipmentReader_v291 INSTANCE = new MobEquipmentReader_v291();
+    record v291 implements MobEquipmentPacket {
+
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MobEquipmentPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MobEquipmentPacket packet, BedrockSession
+                session) {
             VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
             helper.writeItem(buffer, packet.getItem(), session);
             buffer.writeByte(packet.getInventorySlot());
@@ -33,7 +34,8 @@ public interface MobEquipmentPacket extends BedrockPacket {
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MobEquipmentPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MobEquipmentPacket packet, BedrockSession
+                session) {
             packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
             packet.setItem(helper.readItem(buffer, session));
             packet.setInventorySlot(buffer.readUnsignedByte());

@@ -13,13 +13,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface LevelEventPacket extends BedrockPacket {
-    private LevelEventType valueType;
-    private Vector3f position;
-    private int data;
+    LevelEventType valueType;
+    Vector3f position;
+    int data;
 
 
-    public class LevelEventReader_v291 implements BedrockPacketReader<LevelEventPacket> {
-        public static final LevelEventReader_v291 INSTANCE = new LevelEventReader_v291();
+    record v291 implements LevelEventPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventPacket packet) {

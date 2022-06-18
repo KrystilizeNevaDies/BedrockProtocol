@@ -12,9 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface RespawnPacket extends BedrockPacket {
-    private Vector3f position;
-    private State state;
-    private long runtimeEntityId; // Only used server bound and pretty pointless
+    Vector3f position;
+    State state;
+    long runtimeEntityId; // Only used server bound and pretty pointless
 
 
     public enum State {
@@ -23,8 +23,7 @@ public interface RespawnPacket extends BedrockPacket {
         CLIENT_READY
     }
 
-    public class RespawnReader_v291 implements BedrockPacketReader<RespawnPacket> {
-        public static final RespawnReader_v291 INSTANCE = new RespawnReader_v291();
+    record v291 implements RespawnPacket {
 
 
         @Override
@@ -38,10 +37,10 @@ public interface RespawnPacket extends BedrockPacket {
         }
     }
 
-    public class RespawnReader_v388 implements BedrockPacketReader<RespawnPacket> {
-        public static final RespawnReader_v388 INSTANCE = new RespawnReader_v388();
+    record v388 implements RespawnPacket {
 
-        private static final RespawnPacket.State[] VALUES = RespawnPacket.State.values();
+
+        static final RespawnPacket.State[] VALUES = RespawnPacket.State.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, RespawnPacket packet) {

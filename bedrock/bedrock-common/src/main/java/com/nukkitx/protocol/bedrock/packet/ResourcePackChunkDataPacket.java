@@ -13,15 +13,15 @@ import lombok.ToString;
 import java.util.UUID;
 
 public interface ResourcePackChunkDataPacket extends BedrockPacket {
-    private UUID packId;
-    private String packVersion;
-    private int chunkIndex;
-    private long progress;
-    private byte[] data;
+    UUID packId;
+    String packVersion;
+    int chunkIndex;
+    long progress;
+    byte[] data;
 
 
-    public class ResourcePackChunkDataReader_v291 implements BedrockPacketReader<ResourcePackChunkDataPacket> {
-        public static final ResourcePackChunkDataReader_v291 INSTANCE = new ResourcePackChunkDataReader_v291();
+    record v291 implements ResourcePackChunkDataPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackChunkDataPacket packet) {
@@ -49,8 +49,8 @@ public interface ResourcePackChunkDataPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePackChunkDataReader_v388 implements BedrockPacketReader<ResourcePackChunkDataPacket> {
-        public static final ResourcePackChunkDataReader_v388 INSTANCE = new ResourcePackChunkDataReader_v388();
+    record v388 implements ResourcePackChunkDataPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackChunkDataPacket packet) {

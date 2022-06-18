@@ -10,11 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface OnScreenTextureAnimationPacket extends BedrockPacket {
-    private long effectId;
+    long effectId;
 
 
-    public class OnScreenTextureAnimationReader_v354 implements BedrockPacketReader<OnScreenTextureAnimationPacket> {
-        public static final OnScreenTextureAnimationReader_v354 INSTANCE = new OnScreenTextureAnimationReader_v354();
+    record v354 implements OnScreenTextureAnimationPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, OnScreenTextureAnimationPacket packet) {

@@ -13,13 +13,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface LabTablePacket extends BedrockPacket {
-    private LabTableType valueType;
-    private Vector3i position;
-    private LabTableReactionType reactionType;
+    LabTableType valueType;
+    Vector3i position;
+    LabTableReactionType reactionType;
 
 
-    public class LabTableReader_v291 implements BedrockPacketReader<LabTablePacket> {
-        public static final LabTableReader_v291 INSTANCE = new LabTableReader_v291();
+    record v291 implements LabTablePacket {
 
 
         @Override

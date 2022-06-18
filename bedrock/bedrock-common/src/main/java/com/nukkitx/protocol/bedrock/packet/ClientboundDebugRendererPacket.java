@@ -27,6 +27,7 @@ interface ClientboundDebugRendererPacket extends BedrockPacket {
         int id();
 
         int INVALID = 0;
+
         record Invalid() implements Action {
             public static final Interpreter<Invalid> INTERPRETER = input -> new Invalid();
 
@@ -42,6 +43,7 @@ interface ClientboundDebugRendererPacket extends BedrockPacket {
         }
 
         int CLEAR_DEBUG_MARKERS = 1;
+
         record ClearDebugMarkers() implements Action {
             public static final Interpreter<ClearDebugMarkers> INTERPRETER = input -> new ClearDebugMarkers();
 
@@ -57,6 +59,7 @@ interface ClientboundDebugRendererPacket extends BedrockPacket {
         }
 
         int ADD_DEBUG_MARKER_CUBE = 2;
+
         record AddDebugMarkerCube(@NotNull String markerText, @NotNull Vector3f markerPosition, float markerColorRed,
                                   float markerColorGreen, float markerColorBlue, float markerColorAlpha,
                                   long markerDuration) implements Action {

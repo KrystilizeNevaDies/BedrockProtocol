@@ -11,18 +11,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface RemoveVolumeEntityPacket extends BedrockPacket {
-    private int id;
+    int id;
     /**
      * @since v503
      */
-    private int dimension;
+    int dimension;
 
 
-    @Overrid
+    record v440 implements RemoveVolumeEntityPacket {
 
-    public class RemoveVolumeEntityReader_v440 implements BedrockPacketReader<RemoveVolumeEntityPacket> {
-
-        public static final RemoveVolumeEntityReader_v440 INSTANCE = new RemoveVolumeEntityReader_v440();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, RemoveVolumeEntityPacket packet) {
@@ -35,8 +32,8 @@ interface RemoveVolumeEntityPacket extends BedrockPacket {
         }
     }
 
-    public class RemoveVolumeEntityReader_v503 extends RemoveVolumeEntityReader_v440 {
-        public static final RemoveVolumeEntityReader_v503 INSTANCE = new RemoveVolumeEntityReader_v503();
+    record v503 extends RemoveVolumeEntityReader_v440 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, RemoveVolumeEntityPacket packet) {

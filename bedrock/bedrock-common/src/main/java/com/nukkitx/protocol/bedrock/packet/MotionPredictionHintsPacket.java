@@ -23,7 +23,7 @@ interface MotionPredictionHintsPacket extends BedrockPacket {
      * @param runtimeEntityId runtime ID
      * @return runtime ID
      */
-    private long runtimeEntityId;
+    long runtimeEntityId;
 
     /**
      * Motion to set onto the specified entity
@@ -31,7 +31,7 @@ interface MotionPredictionHintsPacket extends BedrockPacket {
      * @param motion motion of entity
      * @return motion of entity
      */
-    private Vector3f motion;
+    Vector3f motion;
 
     /**
      * If the entity is on the ground. (Not falling or jumping)
@@ -39,14 +39,11 @@ interface MotionPredictionHintsPacket extends BedrockPacket {
      * @param onGround is entity on the ground
      * @return is entity on the ground
      */
-    private boolean onGround;
+    boolean onGround;
 
 
-    @Overrid
+    record v419 implements MotionPredictionHintsPacket {
 
-    public class MotionPredictionHintsReader_v419 implements BedrockPacketReader<MotionPredictionHintsPacket> {
-
-        public static final MotionPredictionHintsReader_v419 INSTANCE = new MotionPredictionHintsReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MotionPredictionHintsPacket packet) {

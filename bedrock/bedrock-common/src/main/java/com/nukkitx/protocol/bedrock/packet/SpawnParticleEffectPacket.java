@@ -14,18 +14,18 @@ import lombok.EqualsAndHashCode;
 import java.util.Optional;
 
 interface SpawnParticleEffectPacket extends BedrockPacket {
-    private int dimensionId;
-    private long uniqueEntityId = -1;
-    private Vector3f position;
-    private String identifier;
+    int dimensionId;
+    long uniqueEntityId = -1;
+    Vector3f position;
+    String identifier;
     /**
      * @since v503
      */
-    private Optional<String> molangVariablesJson;
+    Optional<String> molangVariablesJson;
 
 
-    public class SpawnParticleEffectReader_v313 implements BedrockPacketReader<SpawnParticleEffectPacket> {
-        public static final SpawnParticleEffectReader_v313 INSTANCE = new SpawnParticleEffectReader_v313();
+    record v313 implements SpawnParticleEffectPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SpawnParticleEffectPacket packet) {
@@ -42,8 +42,8 @@ interface SpawnParticleEffectPacket extends BedrockPacket {
         }
     }
 
-    public class SpawnParticleEffectReader_v332 implements BedrockPacketReader<SpawnParticleEffectPacket> {
-        public static final SpawnParticleEffectReader_v332 INSTANCE = new SpawnParticleEffectReader_v332();
+    record v332 implements SpawnParticleEffectPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SpawnParticleEffectPacket packet) {

@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetLocalPlayerAsInitializedPacket extends BedrockPacket {
-    private long runtimeEntityId;
+    long runtimeEntityId;
 
 
-    public class SetLocalPlayerAsInitializedReader_v291 implements BedrockPacketReader<SetLocalPlayerAsInitializedPacket> {
-        public static final SetLocalPlayerAsInitializedReader_v291 INSTANCE = new SetLocalPlayerAsInitializedReader_v291();
+    record v291 implements SetLocalPlayerAsInitializedPacket {
 
 
         @Override

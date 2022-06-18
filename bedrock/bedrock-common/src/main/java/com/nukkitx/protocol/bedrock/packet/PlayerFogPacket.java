@@ -23,14 +23,11 @@ interface PlayerFogPacket extends BedrockPacket {
      * @param fogStack list of fog effects
      * @return list of fog effects
      */
-    private final List<String> fogStack = new ObjectArrayList<>();
+    final List<String> fogStack = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v419 implements PlayerFogPacket {
 
-    public class PlayerFogReader_v419 implements BedrockPacketReader<PlayerFogPacket> {
-
-        public static final PlayerFogReader_v419 INSTANCE = new PlayerFogReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerFogPacket packet) {

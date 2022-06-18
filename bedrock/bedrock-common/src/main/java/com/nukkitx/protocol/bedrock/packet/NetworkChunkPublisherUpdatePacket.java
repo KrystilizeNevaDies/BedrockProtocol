@@ -12,12 +12,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface NetworkChunkPublisherUpdatePacket extends BedrockPacket {
-    private Vector3i position;
-    private int radius;
+    Vector3i position;
+    int radius;
 
 
-    public class NetworkChunkPublisherUpdateReader_v313 implements BedrockPacketReader<NetworkChunkPublisherUpdatePacket> {
-        public static final NetworkChunkPublisherUpdateReader_v313 INSTANCE = new NetworkChunkPublisherUpdateReader_v313();
+    record v313 implements NetworkChunkPublisherUpdatePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NetworkChunkPublisherUpdatePacket packet) {

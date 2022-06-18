@@ -13,19 +13,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MobArmorEquipmentPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private ItemData helmet;
-    private ItemData chestplate;
-    private ItemData leggings;
-    private ItemData boots;
+    long runtimeEntityId;
+    ItemData helmet;
+    ItemData chestplate;
+    ItemData leggings;
+    ItemData boots;
 
 
-    public class MobArmorEquipmentReader_v291 implements BedrockPacketReader<MobArmorEquipmentPacket> {
-        public static final MobArmorEquipmentReader_v291 INSTANCE = new MobArmorEquipmentReader_v291();
+    record v291 implements MobArmorEquipmentPacket {
 
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket
+                packet, BedrockSession session) {
             VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
             helper.writeItem(buffer, packet.getHelmet(), session);
             helper.writeItem(buffer, packet.getChestplate(), session);
@@ -34,7 +34,8 @@ public interface MobArmorEquipmentPacket extends BedrockPacket {
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket
+                packet, BedrockSession session) {
             packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
             packet.setHelmet(helper.readItem(buffer, session));
             packet.setChestplate(helper.readItem(buffer, session));

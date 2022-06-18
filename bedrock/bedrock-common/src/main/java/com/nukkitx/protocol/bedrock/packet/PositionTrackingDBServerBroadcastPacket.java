@@ -12,9 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface PositionTrackingDBServerBroadcastPacket extends BedrockPacket {
-    private Action action;
-    private int trackingId;
-    private NbtMap tag;
+    Action action;
+    int trackingId;
+    NbtMap tag;
 
 
     @Overrid
@@ -25,20 +25,22 @@ interface PositionTrackingDBServerBroadcastPacket extends BedrockPacket {
         NOT_FOUND
     }
 
-    public class PositionTrackingDBServerBroadcastReader_v407 implements BedrockPacketReader<PositionTrackingDBServerBroadcastPacket> {
-        public static final PositionTrackingDBServerBroadcastReader_v407 INSTANCE = new PositionTrackingDBServerBroadcastReader_v407();
+    record v407 implements PositionTrackingDBServerBroadcastPacket {
+
 
         protected static final PositionTrackingDBServerBroadcastPacket.Action[] ACTIONS = PositionTrackingDBServerBroadcastPacket.Action.values();
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBServerBroadcastPacket packet) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBServerBroadcastPacket
+                packet) {
             buffer.writeByte(packet.getAction().ordinal());
             VarInts.writeInt(buffer, packet.getTrackingId());
             helper.writeTag(buffer, packet.getTag());
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBServerBroadcastPacket packet) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBServerBroadcastPacket
+                packet) {
             packet.setAction(ACTIONS[buffer.readByte()]);
             packet.setTrackingId(VarInts.readInt(buffer));
             packet.setTag(helper.readTag(buffer));

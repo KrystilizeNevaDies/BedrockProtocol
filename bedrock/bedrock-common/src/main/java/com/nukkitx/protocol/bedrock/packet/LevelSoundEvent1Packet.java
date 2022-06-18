@@ -13,15 +13,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface LevelSoundEvent1Packet extends BedrockPacket {
-    private SoundEvent sound;
-    private Vector3f position;
-    private int extraData;
-    private int pitch;
-    private boolean babySound;
-    private boolean relativeVolumeDisabled;
+    SoundEvent sound;
+    Vector3f position;
+    int extraData;
+    int pitch;
+    boolean babySound;
+    boolean relativeVolumeDisabled;
 
 
-    public class LevelSoundEvent1Reader_v291 implements BedrockPacketReader<LevelSoundEvent1Packet> {
+    public class LevelSoundEvent1Reader_v291 implements LevelSoundEvent1Packet {
         public static final LevelSoundEvent1Reader_v291 INSTANCE = new LevelSoundEvent1Reader_v291();
 
         @Override

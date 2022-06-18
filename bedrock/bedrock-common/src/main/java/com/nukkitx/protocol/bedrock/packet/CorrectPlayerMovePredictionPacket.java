@@ -1,15 +1,16 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 /**
  * Sent to the client when the server's movement prediction system does not match what the client is sending.
@@ -19,57 +20,52 @@ public interface CorrectPlayerMovePredictionPacket extends BedrockPacket {
     /**
      * Client's reported position by the server
      *
-     * @param position reported position
      * @return reported position
      */
-    private Vector3f position;
+    Vector3f position();
 
     /**
      * Difference in client and server prediction
      *
-     * @param delta position difference
      * @return position difference
      */
-    private Vector3f delta;
+    Vector3f delta();
 
     /**
      * If the client is on the ground. (Not falling or jumping)
      *
-     * @param onGround is client on the ground
      * @return is client on the ground
      */
-    private boolean onGround;
+    boolean onGround();
 
     /**
      * The tick which is being corrected by the server.
      *
-     * @param tick to be corrected
      * @return to be corrected
      */
-    private long tick;
+    long tick();
 
 
-    @Overrid
+    record v419(Vector3f position, Vector3f delta, boolean onGround,
+                long tick) implements CorrectPlayerMovePredictionPacket {
 
-    public class CorrectPlayerMovePredictionReader_v419 implements BedrockPacketReader<CorrectPlayerMovePredictionPacket> {
-
-        public static final CorrectPlayerMovePredictionReader_v419 INSTANCE = new CorrectPlayerMovePredictionReader_v419();
+        public static final Interpreter<v419> INTERPRETER = new Interpreter<v419>() {
+            @Override
+            public @NotNull v419 interpret(@NotNull BitInput input) throws IOException {
+                Vector3f position = readVector3f(input);
+                Vector3f delta = readVector3f(input);
+                boolean onGround = readBoolean(input);
+                long tick = readUnsignedLong(input);
+                return new v419(position, delta, onGround, tick);
+            }
+        };
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CorrectPlayerMovePredictionPacket packet) {
-            helper.writeVector3f(buffer, packet.getPosition());
-            helper.writeVector3f(buffer, packet.getDelta());
-            buffer.writeBoolean(packet.isOnGround());
-            VarInts.writeUnsignedLong(buffer, packet.getTick());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CorrectPlayerMovePredictionPacket packet) {
-            packet.setPosition(helper.readVector3f(buffer));
-            packet.setDelta(helper.readVector3f(buffer));
-            packet.setOnGround(buffer.readBoolean());
-            packet.setTick(VarInts.readUnsignedInt(buffer));
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeVector3f(output, position());
+            writeVector3f(output, delta());
+            writeBoolean(output, onGround());
+            writeUnsignedLong(output, tick());
         }
     }
-
 }

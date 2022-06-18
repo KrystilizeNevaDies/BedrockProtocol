@@ -13,13 +13,13 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface TextPacket extends BedrockPacket {
-    private Type valueType;
-    private boolean needsTranslation;
-    private String sourceName;
-    private String message;
-    private List<String> parameters = new ObjectArrayList<>();
-    private String xuid;
-    private String platformChatId = "";
+    Type valueType;
+    boolean needsTranslation;
+    String sourceName;
+    String message;
+    List<String> parameters = new ObjectArrayList<>();
+    String xuid;
+    String platformChatId = "";
 
 
     public enum Type {
@@ -36,8 +36,8 @@ public interface TextPacket extends BedrockPacket {
         OBJECT_WHISPER
     }
 
-    public class TextReader_v291 implements BedrockPacketReader<TextPacket> {
-        public static final TextReader_v291 INSTANCE = new TextReader_v291();
+    record v291 implements TextPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, TextPacket packet) {
@@ -100,8 +100,8 @@ public interface TextPacket extends BedrockPacket {
         }
     }
 
-    public class TextReader_v332 implements BedrockPacketReader<TextPacket> {
-        public static final TextReader_v332 INSTANCE = new TextReader_v332();
+    record v332 implements TextPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, TextPacket packet) {

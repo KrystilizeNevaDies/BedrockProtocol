@@ -11,13 +11,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetTitlePacket extends BedrockPacket {
-    private Type valueType;
-    private String text;
-    private int fadeInTime;
-    private int stayTime;
-    private int fadeOutTime;
-    private String xuid;
-    private String platformOnlineId;
+    Type valueType;
+    String text;
+    int fadeInTime;
+    int stayTime;
+    int fadeOutTime;
+    String xuid;
+    String platformOnlineId;
 
 
     public enum Type {
@@ -32,8 +32,7 @@ public interface SetTitlePacket extends BedrockPacket {
         ACTIONBAR_JSON
     }
 
-    public class SetTitleReader_v291 implements BedrockPacketReader<SetTitlePacket> {
-        public static final SetTitleReader_v291 INSTANCE = new SetTitleReader_v291();
+    record v291 implements SetTitlePacket {
 
 
         @Override
@@ -55,9 +54,8 @@ public interface SetTitlePacket extends BedrockPacket {
         }
     }
 
-    public class SetTitleReader_v448 extends SetTitleReader_v291 {
+    record v448 extends SetTitleReader_v291 {
 
-        public static final SetTitleReader_v448 INSTANCE = new SetTitleReader_v448();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SetTitlePacket packet) {

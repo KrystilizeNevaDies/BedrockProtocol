@@ -13,8 +13,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Set;
 
 public interface UpdateBlockSyncedPacket extends UpdateBlockPacket {
-    private long runtimeEntityId;
-    private BlockSyncType entityBlockSyncType;
+    long runtimeEntityId;
+    BlockSyncType entityBlockSyncType;
 
 
     public String toString() {
@@ -27,8 +27,7 @@ public interface UpdateBlockSyncedPacket extends UpdateBlockPacket {
                 ")";
     }
 
-    public class UpdateBlockSyncedReader_v291 implements BedrockPacketReader<UpdateBlockSyncedPacket> {
-        public static final UpdateBlockSyncedReader_v291 INSTANCE = new UpdateBlockSyncedReader_v291();
+    record v291 implements UpdateBlockSyncedPacket {
 
 
         @Override

@@ -13,11 +13,11 @@ interface NetworkSettingsPacket extends BedrockPacket {
     /**
      * The smallest amount of bytes that should be compressed by the client. 0-65535
      */
-    private int compressionThreshold;
+    int compressionThreshold;
 
 
-    public class NetworkSettingsReader_v388 implements BedrockPacketReader<NetworkSettingsPacket> {
-        public static final NetworkSettingsReader_v388 INSTANCE = new NetworkSettingsReader_v388();
+    record v388 implements NetworkSettingsPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NetworkSettingsPacket packet) {

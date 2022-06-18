@@ -11,12 +11,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MobEffectPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private Event event;
-    private int effectId;
-    private int amplifier;
-    private boolean particles;
-    private int duration;
+    long runtimeEntityId;
+    Event event;
+    int effectId;
+    int amplifier;
+    boolean particles;
+    int duration;
 
 
     public enum Event {
@@ -26,8 +26,7 @@ public interface MobEffectPacket extends BedrockPacket {
         REMOVE,
     }
 
-    public class MobEffectReader_v291 implements BedrockPacketReader<MobEffectPacket> {
-        public static final MobEffectReader_v291 INSTANCE = new MobEffectReader_v291();
+    record v291 implements MobEffectPacket {
 
 
         @Override

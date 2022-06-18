@@ -14,14 +14,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface EntityEventPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private EntityEventType valueType;
-    private int data;
+    long runtimeEntityId;
+    EntityEventType valueType;
+    int data;
 
 
-    public class EntityEventReader_v291 implements BedrockPacketReader<EntityEventPacket> {
-        public static final EntityEventReader_v291 INSTANCE = new EntityEventReader_v291();
-        private static final InternalLogger log = InternalLoggerFactory.getInstance(EntityEventReader_v291.class);
+    record v291 implements EntityEventPacket {
+
+        static final InternalLogger log = InternalLoggerFactory.getInstance(EntityEventReader_v291.class);
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EntityEventPacket packet) {

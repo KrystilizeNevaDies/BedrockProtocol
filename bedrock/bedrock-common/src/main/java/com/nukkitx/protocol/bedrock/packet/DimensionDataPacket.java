@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -12,7 +14,9 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -24,37 +28,21 @@ import java.util.List;
  * @since v503
  */
 interface DimensionDataPacket extends BedrockPacket {
-    private final List<DimensionDefinition> definitions = new ObjectArrayList<>();
+    DimensionDefinition[] definitions();
 
 
-    @Overrid
-
-    public class DimensionDataReader_v503 implements BedrockPacketReader<DimensionDataPacket> {
-        public static final DimensionDataReader_v503 INSTANCE = new DimensionDataReader_v503();
+    record v503(DimensionDefinition[] definitions) implements DimensionDataPacket {
+        public static final Interpreter<v503> INTERPRETER = new Interpreter<>() {
+            @Override
+            public @NotNull v503 interpret(@NotNull BitInput input) throws IOException {
+                DimensionDefinition[] definitions = readArray(input, DimensionDefinition.INTERPRETER);
+                return new v503(definitions);
+            }
+        };
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, DimensionDataPacket packet) {
-            helper.writeArray(buffer, packet.getDefinitions(), this::writeDefinition);
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, DimensionDataPacket packet) {
-            helper.readArray(buffer, packet.getDefinitions(), this::readDefinition);
-        }
-
-        protected void writeDefinition(ByteBuf buffer, BedrockPacketHelper helper, DimensionDefinition definition) {
-            helper.writeString(buffer, definition.getId());
-            VarInts.writeInt(buffer, definition.getMaximumHeight());
-            VarInts.writeInt(buffer, definition.getMinimumHeight());
-            VarInts.writeInt(buffer, definition.getGeneratorType());
-        }
-
-        protected DimensionDefinition readDefinition(ByteBuf buffer, BedrockPacketHelper helper) {
-            String id = helper.readString(buffer);
-            int maximumHeight = VarInts.readInt(buffer);
-            int minimumHeight = VarInts.readInt(buffer);
-            int generatorType = VarInts.readInt(buffer);
-            return new DimensionDefinition(id, maximumHeight, minimumHeight, generatorType);
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeArray(output, definitions());
         }
     }
 }

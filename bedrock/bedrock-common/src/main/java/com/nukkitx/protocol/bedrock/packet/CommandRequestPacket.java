@@ -1,36 +1,38 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
-import com.nukkitx.protocol.bedrock.BedrockPacketReader;
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.command.CommandOriginData;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
-import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface CommandRequestPacket extends BedrockPacket {
-    private String command;
-    private CommandOriginData commandOriginData;
-    private boolean internal;
+    String command();
+
+    CommandOriginData commandOriginData();
+
+    boolean internal();
 
 
-    public class CommandRequestReader_v291 implements BedrockPacketReader<CommandRequestPacket> {
-        public static final CommandRequestReader_v291 INSTANCE = new CommandRequestReader_v291();
+    record v291(@NotNull String command, @NotNull CommandOriginData commandOriginData,
+                boolean internal) implements CommandRequestPacket {
+        public static final Interpreter<v291> INTERPRETER = new Interpreter<v291>() {
+            @Override
+            public @NotNull CommandRequestPacket.v291 interpret(@NotNull BitInput input) throws IOException {
+                String command = readString(input);
+                CommandOriginData commandOriginData = CommandOriginData.INTERPRETER.interpret(input);
+                boolean internal = input.readBoolean();
+                return new v291(command, commandOriginData, internal);
+            }
+        };
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CommandRequestPacket packet) {
-            helper.writeString(buffer, packet.getCommand());
-            helper.writeCommandOrigin(buffer, packet.getCommandOriginData());
-            buffer.writeBoolean(packet.isInternal());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CommandRequestPacket packet) {
-            packet.setCommand(helper.readString(buffer));
-            packet.setCommandOriginData(helper.readCommandOrigin(buffer));
-            packet.setInternal(buffer.readBoolean());
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, command());
+            commandOriginData().write(output);
+            writeBoolean(output, internal());
         }
     }
 

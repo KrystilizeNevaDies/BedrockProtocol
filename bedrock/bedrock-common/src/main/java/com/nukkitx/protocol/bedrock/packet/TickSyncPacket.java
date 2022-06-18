@@ -13,13 +13,12 @@ import lombok.EqualsAndHashCode;
  * Used to maintain synchronization with a server running in authoritative mode.
  */
 interface TickSyncPacket extends BedrockPacket {
-    private long requestTimestamp;
-    private long responseTimestamp;
+    long requestTimestamp;
+    long responseTimestamp;
 
 
-    public class TickSyncReader_v388 implements BedrockPacketReader<TickSyncPacket> {
+    record v388 implements TickSyncPacket {
 
-        public static final TickSyncReader_v388 INSTANCE = new TickSyncReader_v388();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, TickSyncPacket packet) {

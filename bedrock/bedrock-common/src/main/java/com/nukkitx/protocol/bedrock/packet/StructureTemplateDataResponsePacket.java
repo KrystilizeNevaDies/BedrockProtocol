@@ -12,14 +12,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface StructureTemplateDataResponsePacket extends BedrockPacket {
-    private String name;
-    private boolean save;
-    private NbtMap tag;
-    private StructureTemplateResponseType valueType;
+    String name;
+    boolean save;
+    NbtMap tag;
+    StructureTemplateResponseType valueType;
 
 
-    public class StructureTemplateDataResponseReader_v361 implements BedrockPacketReader<StructureTemplateDataResponsePacket> {
-        public static final StructureTemplateDataResponseReader_v361 INSTANCE = new StructureTemplateDataResponseReader_v361();
+    record v361 implements StructureTemplateDataResponsePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureTemplateDataResponsePacket packet) {
@@ -45,8 +45,8 @@ interface StructureTemplateDataResponsePacket extends BedrockPacket {
         }
     }
 
-    public class StructureTemplateDataResponseReader_v388 implements BedrockPacketReader<StructureTemplateDataResponsePacket> {
-        public static final StructureTemplateDataResponseReader_v388 INSTANCE = new StructureTemplateDataResponseReader_v388();
+    record v388 implements StructureTemplateDataResponsePacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureTemplateDataResponsePacket packet) {

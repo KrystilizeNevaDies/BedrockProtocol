@@ -10,13 +10,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface SettingsCommandPacket extends BedrockPacket {
-    private String command;
-    private boolean suppressingOutput;
+    String command;
+    boolean suppressingOutput;
 
 
-    public class SettingsCommandReader_v388 implements BedrockPacketReader<SettingsCommandPacket> {
+    record v388 implements SettingsCommandPacket {
 
-        public static final SettingsCommandReader_v388 INSTANCE = new SettingsCommandReader_v388();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SettingsCommandPacket packet) {

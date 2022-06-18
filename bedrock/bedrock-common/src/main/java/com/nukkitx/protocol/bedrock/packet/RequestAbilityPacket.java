@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface RequestAbilityPacket extends BedrockPacket {
-    private int ability;
-    private AbilityType valueType;
-    private boolean boolValue;
-    private float floatValue;
+    int ability;
+    AbilityType valueType;
+    boolean boolValue;
+    float floatValue;
 
 
     @Overrid
 
-    public class RequestAbilityReaderBeta implements BedrockPacketReader<RequestAbilityPacket> {
+    public class RequestAbilityReaderBeta implements RequestAbilityPacket {
         public static final RequestAbilityReaderBeta INSTANCE = new RequestAbilityReaderBeta();
 
-        private static final AbilityType[] ABILITIES = AbilityType.values();
+        static final AbilityType[] ABILITIES = AbilityType.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, RequestAbilityPacket packet) {

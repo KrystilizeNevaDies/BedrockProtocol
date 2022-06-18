@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetEntityLinkPacket extends BedrockPacket {
-    private EntityLinkData entityLink;
+    EntityLinkData entityLink;
 
 
-    public class SetEntityLinkReader_v291 implements BedrockPacketReader<SetEntityLinkPacket> {
-        public static final SetEntityLinkReader_v291 INSTANCE = new SetEntityLinkReader_v291();
+    record v291 implements SetEntityLinkPacket {
 
 
         @Override

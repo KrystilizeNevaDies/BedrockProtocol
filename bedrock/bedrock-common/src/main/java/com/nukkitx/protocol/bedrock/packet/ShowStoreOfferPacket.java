@@ -10,12 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ShowStoreOfferPacket extends BedrockPacket {
-    private String offerId;
-    private boolean shownToAll;
+    String offerId;
+    boolean shownToAll;
 
 
-    public class ShowStoreOfferReader_v291 implements BedrockPacketReader<ShowStoreOfferPacket> {
-        public static final ShowStoreOfferReader_v291 INSTANCE = new ShowStoreOfferReader_v291();
+    record v291 implements ShowStoreOfferPacket {
 
 
         @Override

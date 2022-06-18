@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public interface BlockEntityDataPacket extends BedrockPacket {
     @NotNull Vector3i blockPosition();
+
     @NotNull NbtMap data();
 
     record v291(@NotNull Vector3i blockPosition, @NotNull NbtMap data) implements BlockEntityDataPacket, Codec291 {

@@ -15,23 +15,23 @@ public interface SetSpawnPositionPacket extends BedrockPacket {
     // spawnType is the valueType of spawn to set. It is either PLAYER_SPAWN or WORLD_SPAWN, and specifies
     // the behaviour of the spawn set. If WORLD_SPAWN is set, the position to which compasses will point is
     // also changed.
-    private Type spawnType;
+    Type spawnType;
 
     // blockPosition is the new position of the spawn that was set. If spawnType is WORLD_SPAWN, compasses will
     // point to this position. As of 1.16, blockPosition is always the position of the player.
-    private Vector3i blockPosition;
+    Vector3i blockPosition;
 
     // dimensionId is the ID of the dimension that had its spawn updated. This is specifically relevant for
     // behaviour added in 1.16 such as the respawn anchor, which allows setting the spawn in a specific
     // dimension.
-    private int dimensionId;
+    int dimensionId;
 
     // SpawnPosition is a new field added in 1.16. It holds the spawn position of the world. This spawn
     // position is {-2147483648, -2147483648, -2147483648} for a default spawn position.
-    private Vector3i spawnPosition = Vector3i.from(-2147483648, -2147483648, -2147483648);
+    Vector3i spawnPosition = Vector3i.from(-2147483648, -2147483648, -2147483648);
 
     @Deprecated
-    private boolean spawnForced;
+    boolean spawnForced;
 
 
     public enum Type {
@@ -39,8 +39,7 @@ public interface SetSpawnPositionPacket extends BedrockPacket {
         WORLD_SPAWN
     }
 
-    public class SetSpawnPositionReader_v291 implements BedrockPacketReader<SetSpawnPositionPacket> {
-        public static final SetSpawnPositionReader_v291 INSTANCE = new SetSpawnPositionReader_v291();
+    record v291 implements SetSpawnPositionPacket {
 
 
         @Override
@@ -58,8 +57,7 @@ public interface SetSpawnPositionPacket extends BedrockPacket {
         }
     }
 
-    public class SetSpawnPositionReader_v407 implements BedrockPacketReader<SetSpawnPositionPacket> {
-        public static final SetSpawnPositionReader_v407 INSTANCE = new SetSpawnPositionReader_v407();
+    record v407 implements SetSpawnPositionPacket {
 
 
         @Override

@@ -12,15 +12,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface UpdateEquipPacket extends BedrockPacket {
-    private short windowId;
-    private short windowType;
-    private int size; // Couldn't find anything on this one. Looks like it isn't used?
-    private long uniqueEntityId;
-    private NbtMap tag;
+    short windowId;
+    short windowType;
+    int size; // Couldn't find anything on this one. Looks like it isn't used?
+    long uniqueEntityId;
+    NbtMap tag;
 
 
-    public class UpdateEquipReader_v291 implements BedrockPacketReader<UpdateEquipPacket> {
-        public static final UpdateEquipReader_v291 INSTANCE = new UpdateEquipReader_v291();
+    record v291 implements UpdateEquipPacket {
 
 
         @Override

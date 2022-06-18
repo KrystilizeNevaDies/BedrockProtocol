@@ -10,12 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface TransferPacket extends BedrockPacket {
-    private String address;
-    private int port;
+    String address;
+    int port;
 
 
-    public class TransferReader_v291 implements BedrockPacketReader<TransferPacket> {
-        public static final TransferReader_v291 INSTANCE = new TransferReader_v291();
+    record v291 implements TransferPacket {
 
 
         @Override

@@ -16,13 +16,13 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface UpdateAttributesPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private List<AttributeData> attributes = new ObjectArrayList<>();
-    private long tick;
+    long runtimeEntityId;
+    List<AttributeData> attributes = new ObjectArrayList<>();
+    long tick;
 
 
-    public class UpdateAttributesReader_v291 implements BedrockPacketReader<UpdateAttributesPacket> {
-        public static final UpdateAttributesReader_v291 INSTANCE = new UpdateAttributesReader_v291();
+    record v291 implements UpdateAttributesPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateAttributesPacket packet) {
@@ -60,9 +60,8 @@ public interface UpdateAttributesPacket extends BedrockPacket {
         }
     }
 
-    public class UpdateAttributesReader_v419 extends UpdateAttributesReader_v291 {
+    record v419 extends UpdateAttributesReader_v291 {
 
-        public static final UpdateAttributesReader_v419 INSTANCE = new UpdateAttributesReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateAttributesPacket packet) {

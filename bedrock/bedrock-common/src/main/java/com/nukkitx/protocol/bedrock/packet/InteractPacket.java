@@ -12,9 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface InteractPacket extends BedrockPacket {
-    private Action action;
-    private long runtimeEntityId;
-    private Vector3f mousePosition;
+    Action action;
+    long runtimeEntityId;
+    Vector3f mousePosition;
 
 
     public enum Action {
@@ -27,10 +27,10 @@ public interface InteractPacket extends BedrockPacket {
         OPEN_INVENTORY
     }
 
-    public class InteractReader_v291 implements BedrockPacketReader<InteractPacket> {
-        public static final InteractReader_v291 INSTANCE = new InteractReader_v291();
+    record v291 implements InteractPacket {
 
-        private static final InteractPacket.Action[] ACTIONS = InteractPacket.Action.values();
+
+        static final InteractPacket.Action[] ACTIONS = InteractPacket.Action.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InteractPacket packet) {
@@ -53,10 +53,10 @@ public interface InteractPacket extends BedrockPacket {
         }
     }
 
-    public class InteractReader_v388 implements BedrockPacketReader<InteractPacket> {
-        public static final InteractReader_v388 INSTANCE = new InteractReader_v388();
+    record v388 implements InteractPacket {
 
-        private static final InteractPacket.Action[] ACTIONS = InteractPacket.Action.values();
+
+        static final InteractPacket.Action[] ACTIONS = InteractPacket.Action.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InteractPacket packet) {

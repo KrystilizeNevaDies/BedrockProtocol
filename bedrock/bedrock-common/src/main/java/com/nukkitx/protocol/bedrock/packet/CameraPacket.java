@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public interface CameraPacket extends BedrockPacket {
     long cameraUniqueEntityId();
+
     long playerUniqueEntityId();
 
     record v291(long cameraUniqueEntityId, long playerUniqueEntityId) implements CameraPacket {

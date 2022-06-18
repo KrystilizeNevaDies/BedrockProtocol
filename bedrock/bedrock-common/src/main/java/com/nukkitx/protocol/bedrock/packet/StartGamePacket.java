@@ -24,100 +24,100 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StartGamePacket extends BedrockPacket {
-    private static final InternalLogger log = InternalLoggerFactory.getInstance(StartGamePacket.class);
+    static final InternalLogger log = InternalLoggerFactory.getInstance(StartGamePacket.class);
 
-    private final List<GameRuleData<?>> gamerules = new ObjectArrayList<>();
-    private long uniqueEntityId;
-    private long runtimeEntityId;
-    private GameType playerGameType;
-    private Vector3f playerPosition;
-    private Vector2f rotation;
+    final List<GameRuleData<?>> gamerules = new ObjectArrayList<>();
+    long uniqueEntityId;
+    long runtimeEntityId;
+    GameType playerGameType;
+    Vector3f playerPosition;
+    Vector2f rotation;
     // Level settings start
-    private long seed;
-    private SpawnBiomeType spawnBiomeType = SpawnBiomeType.DEFAULT;
-    private String customBiomeName = "";
-    private int dimensionId;
-    private int generatorId;
-    private GameType levelGameType;
-    private int difficulty;
-    private Vector3i defaultSpawn;
-    private boolean achievementsDisabled;
-    private int dayCycleStopTime;
-    private int eduEditionOffers;
-    private boolean eduFeaturesEnabled;
-    private String educationProductionId = "";
-    private float rainLevel;
-    private float lightningLevel;
-    private boolean platformLockedContentConfirmed;
-    private boolean multiplayerGame;
-    private boolean broadcastingToLan;
-    private GamePublishSetting xblBroadcastMode;
-    private GamePublishSetting platformBroadcastMode;
-    private boolean commandsEnabled;
-    private boolean texturePacksRequired;
-    private final List<ExperimentData> experiments = new ObjectArrayList<>();
-    private boolean experimentsPreviouslyToggled;
-    private boolean bonusChestEnabled;
-    private boolean startingWithMap;
-    private boolean trustingPlayers;
-    private PlayerPermission defaultPlayerPermission;
-    private int serverChunkTickRange;
-    private boolean behaviorPackLocked;
-    private boolean resourcePackLocked;
-    private boolean fromLockedWorldTemplate;
-    private boolean usingMsaGamertagsOnly;
-    private boolean fromWorldTemplate;
-    private boolean worldTemplateOptionLocked;
-    private boolean onlySpawningV1Villagers;
-    private String vanillaVersion;
-    private int limitedWorldWidth;
-    private int limitedWorldHeight;
-    private boolean netherType;
+    long seed;
+    SpawnBiomeType spawnBiomeType = SpawnBiomeType.DEFAULT;
+    String customBiomeName = "";
+    int dimensionId;
+    int generatorId;
+    GameType levelGameType;
+    int difficulty;
+    Vector3i defaultSpawn;
+    boolean achievementsDisabled;
+    int dayCycleStopTime;
+    int eduEditionOffers;
+    boolean eduFeaturesEnabled;
+    String educationProductionId = "";
+    float rainLevel;
+    float lightningLevel;
+    boolean platformLockedContentConfirmed;
+    boolean multiplayerGame;
+    boolean broadcastingToLan;
+    GamePublishSetting xblBroadcastMode;
+    GamePublishSetting platformBroadcastMode;
+    boolean commandsEnabled;
+    boolean texturePacksRequired;
+    final List<ExperimentData> experiments = new ObjectArrayList<>();
+    boolean experimentsPreviouslyToggled;
+    boolean bonusChestEnabled;
+    boolean startingWithMap;
+    boolean trustingPlayers;
+    PlayerPermission defaultPlayerPermission;
+    int serverChunkTickRange;
+    boolean behaviorPackLocked;
+    boolean resourcePackLocked;
+    boolean fromLockedWorldTemplate;
+    boolean usingMsaGamertagsOnly;
+    boolean fromWorldTemplate;
+    boolean worldTemplateOptionLocked;
+    boolean onlySpawningV1Villagers;
+    String vanillaVersion;
+    int limitedWorldWidth;
+    int limitedWorldHeight;
+    boolean netherType;
     /**
      * @since v465
      */
-    private EduSharedUriResource eduSharedUriResource = EduSharedUriResource.EMPTY;
-    private boolean forceExperimentalGameplay;
+    EduSharedUriResource eduSharedUriResource = EduSharedUriResource.EMPTY;
+    boolean forceExperimentalGameplay;
     // Level settings end
-    private String levelId;
-    private String levelName;
-    private String premiumWorldTemplateId;
-    private boolean trial;
+    String levelId;
+    String levelName;
+    String premiumWorldTemplateId;
+    boolean trial;
     /**
      * @deprecated as of v428
      */
-    private AuthoritativeMovementMode authoritativeMovementMode;
+    AuthoritativeMovementMode authoritativeMovementMode;
     /**
      * @since v428
      */
-    private SyncedPlayerMovementSettings playerMovementSettings;
-    private long currentTick;
-    private int enchantmentSeed;
-    private NbtList<NbtMap> blockPalette;
-    private final List<BlockPropertyData> blockProperties = new ObjectArrayList<>();
-    private List<ItemEntry> itemEntries = new ObjectArrayList<>();
-    private String multiplayerCorrelationId;
+    SyncedPlayerMovementSettings playerMovementSettings;
+    long currentTick;
+    int enchantmentSeed;
+    NbtList<NbtMap> blockPalette;
+    final List<BlockPropertyData> blockProperties = new ObjectArrayList<>();
+    List<ItemEntry> itemEntries = new ObjectArrayList<>();
+    String multiplayerCorrelationId;
     /**
      * @since v407
      */
-    private boolean inventoriesServerAuthoritative;
+    boolean inventoriesServerAuthoritative;
     /**
      * The name of the server software.
      * Used for telemetry within the Bedrock client.
      *
      * @since v440
      */
-    private String serverEngine;
+    String serverEngine;
     /**
      * @since v475
      */
-    private long blockRegistryChecksum;
+    long blockRegistryChecksum;
 
     /**
      * @since v526
      */
-    private Object playerPropertyData;
-    private UUID worldTemplateId;
+    Object playerPropertyData;
+    UUID worldTemplateId;
 
 
     @Deprecated
@@ -132,9 +132,9 @@ public interface StartGamePacket extends BedrockPacket {
     @Value
     @AllArgsConstructor
     public static class ItemEntry {
-        private final String identifier;
-        private final short id;
-        private final boolean componentBased;
+        final String identifier;
+        final short id;
+        final boolean componentBased;
 
         public ItemEntry(String identifier, short id) {
             this.identifier = identifier;
@@ -143,8 +143,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v291 implements BedrockPacketReader<StartGamePacket> {
-        public static final StartGameReader_v291 INSTANCE = new StartGameReader_v291();
+    record v291 implements StartGamePacket {
+
 
         protected static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
 
@@ -277,8 +277,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v313 extends StartGameReader_v291 {
-        public static final StartGameReader_v313 INSTANCE = new StartGameReader_v313();
+    record v313 extends StartGameReader_v291 {
+
 
         @Override
         protected void writeLevelSettings(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -296,8 +296,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v332 extends StartGameReader_v291 { // No need to extend last version
-        public static final StartGameReader_v332 INSTANCE = new StartGameReader_v332();
+    record v332 extends StartGameReader_v291 { // No need to extend last version
+
 
         @Override
         protected void writeLevelSettings(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -368,8 +368,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v361 extends StartGameReader_v332 {
-        public static final StartGameReader_v361 INSTANCE = new StartGameReader_v361();
+    record v361 extends StartGameReader_v332 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -463,8 +463,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v388 extends StartGameReader_v361 {
-        public static final StartGameReader_v388 INSTANCE = new StartGameReader_v388();
+    record v388 extends StartGameReader_v361 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -544,11 +544,10 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v407 extends StartGameReader_v388 {
+    record v407 extends StartGameReader_v388 {
 
-        public static final StartGameReader_v407 INSTANCE = new StartGameReader_v407();
 
-        private static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
+        static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -651,9 +650,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v419 implements BedrockPacketReader<StartGamePacket> {
+    record v419 implements StartGamePacket {
 
-        public static final StartGameReader_v419 INSTANCE = new StartGameReader_v419();
 
         protected static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
         protected static final AuthoritativeMovementMode[] MOVEMENT_MODES = AuthoritativeMovementMode.values();
@@ -692,7 +690,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet, BedrockSession
+                session) {
             packet.setUniqueEntityId(VarInts.readLong(buffer));
             packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
             packet.setPlayerGameType(GameType.from(VarInts.readInt(buffer)));
@@ -831,9 +830,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v428 extends StartGameReader_v419 {
+    record v428 extends StartGameReader_v419 {
 
-        public static final StartGameReader_v428 INSTANCE = new StartGameReader_v428();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -922,9 +920,8 @@ public interface StartGamePacket extends BedrockPacket {
 
     }
 
-    public class StartGameReader_v440 extends StartGameReader_v428 {
+    record v440 extends StartGameReader_v428 {
 
-        public static final StartGameReader_v440 INSTANCE = new StartGameReader_v440();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -939,9 +936,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v465 extends StartGameReader_v440 {
+    record v465 extends StartGameReader_v440 {
 
-        public static final StartGameReader_v465 INSTANCE = new StartGameReader_v465();
 
         @Override
         protected void writeLevelSettings(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -1042,9 +1038,8 @@ public interface StartGamePacket extends BedrockPacket {
         }
     }
 
-    public class StartGameReader_v475 extends StartGameReader_v465 {
+    record v475 extends StartGameReader_v465 {
 
-        public static final StartGameReader_v475 INSTANCE = new StartGameReader_v475();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StartGamePacket packet) {
@@ -1062,8 +1057,8 @@ public interface StartGamePacket extends BedrockPacket {
     }
 
 
-    public class StartGameReader_v503 extends StartGameReader_v475 {
-        public static final StartGameReader_v503 INSTANCE = new StartGameReader_v503();
+    record v503 extends StartGameReader_v475 {
+
 
         @Override
         protected long readSeed(ByteBuf buf) {

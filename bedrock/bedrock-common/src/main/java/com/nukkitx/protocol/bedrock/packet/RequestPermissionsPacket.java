@@ -11,14 +11,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface RequestPermissionsPacket extends BedrockPacket {
-    private long uniqueEntityId;
-    private int permissions;
-    private int customPermissions;
+    long uniqueEntityId;
+    int permissions;
+    int customPermissions;
 
 
     @Overrid
 
-    public class RequestPermissionsReaderBeta implements BedrockPacketReader<RequestPermissionsPacket> {
+    public class RequestPermissionsReaderBeta implements RequestPermissionsPacket {
         public static final RequestPermissionsReaderBeta INSTANCE = new RequestPermissionsReaderBeta();
 
         @Override

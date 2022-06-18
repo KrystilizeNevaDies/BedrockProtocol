@@ -7,11 +7,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface RiderJumpPacket extends BedrockPacket {
-    private int jumpStrength;
+    int jumpStrength;
 
 
-    public class RiderJumpReader_v291 implements BedrockPacketReader<RiderJumpPacket> {
-        public static final RiderJumpReader_v291 INSTANCE = new RiderJumpReader_v291();
+    record v291 implements RiderJumpPacket {
 
 
         @Override

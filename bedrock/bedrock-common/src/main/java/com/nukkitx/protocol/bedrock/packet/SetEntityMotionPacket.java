@@ -12,12 +12,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetEntityMotionPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private Vector3f motion;
+    long runtimeEntityId;
+    Vector3f motion;
 
 
-    public class SetEntityMotionReader_v291 implements BedrockPacketReader<SetEntityMotionPacket> {
-        public static final SetEntityMotionReader_v291 INSTANCE = new SetEntityMotionReader_v291();
+    record v291 implements SetEntityMotionPacket {
 
 
         @Override

@@ -11,13 +11,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PlayerHotbarPacket extends BedrockPacket {
-    private int selectedHotbarSlot;
-    private int containerId;
-    private boolean selectHotbarSlot;
+    int selectedHotbarSlot;
+    int containerId;
+    boolean selectHotbarSlot;
 
 
-    public class PlayerHotbarReader_v291 implements BedrockPacketReader<PlayerHotbarPacket> {
-        public static final PlayerHotbarReader_v291 INSTANCE = new PlayerHotbarReader_v291();
+    record v291 implements PlayerHotbarPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerHotbarPacket packet) {

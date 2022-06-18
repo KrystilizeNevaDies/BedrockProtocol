@@ -11,16 +11,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface HurtArmorPacket extends BedrockPacket {
-    private int cause;
-    private int damage;
+    int cause;
+    int damage;
     /**
      * @since v465
      */
-    private long armorSlots;
+    long armorSlots;
 
 
-    public class HurtArmorReader_v291 implements BedrockPacketReader<HurtArmorPacket> {
-        public static final HurtArmorReader_v291 INSTANCE = new HurtArmorReader_v291();
+    record v291 implements HurtArmorPacket {
 
 
         @Override
@@ -34,8 +33,8 @@ public interface HurtArmorPacket extends BedrockPacket {
         }
     }
 
-    public class HurtArmorReader_v407 implements BedrockPacketReader<HurtArmorPacket> {
-        public static final HurtArmorReader_v407 INSTANCE = new HurtArmorReader_v407();
+    record v407 implements HurtArmorPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, HurtArmorPacket packet) {
@@ -50,9 +49,8 @@ public interface HurtArmorPacket extends BedrockPacket {
         }
     }
 
-    public class HurtArmorReader_v465 extends HurtArmorReader_v407 {
+    record v465 extends HurtArmorReader_v407 {
 
-        public static final HurtArmorReader_v465 INSTANCE = new HurtArmorReader_v465();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, HurtArmorPacket packet) {
@@ -66,7 +64,6 @@ public interface HurtArmorPacket extends BedrockPacket {
             packet.setArmorSlots(VarInts.readUnsignedLong(buffer));
         }
     }
-
 
 
 }

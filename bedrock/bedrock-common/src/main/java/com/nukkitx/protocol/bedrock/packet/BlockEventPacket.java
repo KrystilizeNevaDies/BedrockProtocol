@@ -23,7 +23,7 @@ import java.io.IOException;
  *
  * <h3>Note Block</h3>
  * <blockquote>
- *     eventType: (Instrument)
+ * eventType: (Instrument)
  *     <ul>
  *         <li>0 (Piano)</li>
  *         <li>1 (Base Drum)</li>
@@ -45,24 +45,26 @@ import java.io.IOException;
  *     eventType: 1 (Cool down)<br>
  *     data: n/a
  * </blockquote>
- *
  **/
 public interface BlockEventPacket extends BedrockPacket {
 
     /**
      * Position to execute block event.
+     *
      * @return block event position
      */
     Vector3i blockPosition();
 
     /**
      * Block event valueType to execute
+     *
      * @return block event valueType
      */
     int eventType();
 
     /**
      * Data used by event (if applicable)
+     *
      * @return data for event
      */
     int eventData();

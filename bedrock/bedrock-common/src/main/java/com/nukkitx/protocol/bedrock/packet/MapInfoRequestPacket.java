@@ -11,11 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MapInfoRequestPacket extends BedrockPacket {
-    private long uniqueMapId;
+    long uniqueMapId;
 
 
-    public class MapInfoRequestReader_v291 implements BedrockPacketReader<MapInfoRequestPacket> {
-        public static final MapInfoRequestReader_v291 INSTANCE = new MapInfoRequestReader_v291();
+    record v291 implements MapInfoRequestPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MapInfoRequestPacket packet) {

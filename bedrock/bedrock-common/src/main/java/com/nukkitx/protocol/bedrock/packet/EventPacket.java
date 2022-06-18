@@ -23,9 +23,9 @@ import static com.nukkitx.protocol.bedrock.data.event.EventDataType.*;
 import static com.nukkitx.protocol.bedrock.data.event.EventDataType.FISH_BUCKETED;
 
 public interface EventPacket extends BedrockPacket {
-    private long uniqueEntityId;
-    private byte usePlayerId;
-    private EventData eventData;
+    long uniqueEntityId;
+    byte usePlayerId;
+    EventData eventData;
 
 
     public enum Event {
@@ -49,8 +49,8 @@ public interface EventPacket extends BedrockPacket {
         BELL_BLOCK_USED
     }
 
-    public class EventReader_v291 implements BedrockPacketReader<EventPacket> {
-        public static final EventReader_v291 INSTANCE = new EventReader_v291();
+    record v291 implements EventPacket {
+
 
         protected static final EventDataType[] VALUES = EventDataType.values();
 
@@ -300,8 +300,8 @@ public interface EventPacket extends BedrockPacket {
         }
     }
 
-    public class EventReader_v332 extends EventReader_v291 {
-        public static final EventReader_v332 INSTANCE = new EventReader_v332();
+    record v332 extends EventReader_v291 {
+
 
         protected EventReader_v332() {
             super();
@@ -342,8 +342,8 @@ public interface EventPacket extends BedrockPacket {
         }
     }
 
-    public class EventReader_v340 extends EventReader_v332 {
-        public static final EventReader_v340 INSTANCE = new EventReader_v340();
+    record v340 extends EventReader_v332 {
+
 
         @Override
         protected PetDiedEventData readPetDied(ByteBuf buffer, BedrockPacketHelper helper) {
@@ -364,8 +364,8 @@ public interface EventPacket extends BedrockPacket {
         }
     }
 
-    public class EventReader_v354 extends EventReader_v340 {
-        public static final EventReader_v354 INSTANCE = new EventReader_v354();
+    record v354 extends EventReader_v340 {
+
 
         protected EventReader_v354() {
             super();
@@ -412,8 +412,8 @@ public interface EventPacket extends BedrockPacket {
         }
     }
 
-    public class EventReader_v388 extends EventReader_v354 {
-        public static final EventReader_v388 INSTANCE = new EventReader_v388();
+    record v388 extends EventReader_v354 {
+
 
         protected EventReader_v388() {
             super();
@@ -515,18 +515,19 @@ public interface EventPacket extends BedrockPacket {
         }
     }
 
-    public class EventReader_v389 extends EventReader_v388 {
-        public static final EventReader_v389 INSTANCE = new EventReader_v389();
+    record v389 extends EventReader_v388 {
+
 
         protected EventReader_v389() {
             super();
             this.readers.put(EXTRACT_HONEY, (b, h) -> ExtractHoneyEventData.INSTANCE);
-            this.writers.put(EXTRACT_HONEY, (b, h, e) -> {});
+            this.writers.put(EXTRACT_HONEY, (b, h, e) -> {
+            });
         }
     }
 
-    public class EventReader_v471 extends EventReader_v389 {
-        public static final EventReader_v471 INSTANCE = new EventReader_v471();
+    record v471 extends EventReader_v389 {
+
 
         protected EventReader_v471() {
             super();
@@ -539,9 +540,11 @@ public interface EventPacket extends BedrockPacket {
             this.readers.put(EventDataType.CODE_BUILDER_ACTION, this::readCodeBuilderAction);
             this.writers.put(EventDataType.CODE_BUILDER_ACTION, this::writeCodeBuilderAction);
             this.readers.put(EventDataType.STRIDER_RIDDEN_IN_LAVA_IN_OVERWORLD, (b, h) -> StriderRiddenInLavaInOverworldEventData.INSTANCE);
-            this.writers.put(EventDataType.STRIDER_RIDDEN_IN_LAVA_IN_OVERWORLD, (b, h, e) -> {});
+            this.writers.put(EventDataType.STRIDER_RIDDEN_IN_LAVA_IN_OVERWORLD, (b, h, e) -> {
+            });
             this.readers.put(EventDataType.SNEAK_CLOSE_TO_SCULK_SENSOR, (b, h) -> SneakCloseToSculkSensorEventData.INSTANCE);
-            this.writers.put(EventDataType.SNEAK_CLOSE_TO_SCULK_SENSOR, (b, h, e) -> {});
+            this.writers.put(EventDataType.SNEAK_CLOSE_TO_SCULK_SENSOR, (b, h, e) -> {
+            });
         }
 
         protected TargetBlockHitEventData readBlockHit(ByteBuf buffer, BedrockPacketHelper helper) {

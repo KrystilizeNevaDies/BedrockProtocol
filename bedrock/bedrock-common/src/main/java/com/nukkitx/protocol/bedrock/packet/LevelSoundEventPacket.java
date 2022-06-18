@@ -10,10 +10,8 @@ import io.netty.buffer.ByteBuf;
 interface LevelSoundEventPacket extends LevelSoundEvent2Packet {
 
 
-    @Overrid
+    record v332 implements LevelSoundEventPacket {
 
-    public class LevelSoundEventReader_v332 implements BedrockPacketReader<LevelSoundEventPacket> {
-        public static final LevelSoundEventReader_v332 INSTANCE = new LevelSoundEventReader_v332();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelSoundEventPacket packet) {
@@ -36,8 +34,8 @@ interface LevelSoundEventPacket extends LevelSoundEvent2Packet {
         }
     }
 
-    public class LevelSoundEventReader_v407 implements BedrockPacketReader<LevelSoundEventPacket> {
-        public static final LevelSoundEventReader_v407 INSTANCE = new LevelSoundEventReader_v407();
+    record v407 implements LevelSoundEventPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelSoundEventPacket packet) {
@@ -59,8 +57,6 @@ interface LevelSoundEventPacket extends LevelSoundEvent2Packet {
             packet.setRelativeVolumeDisabled(buffer.readBoolean());
         }
     }
-
-
 
 
 }

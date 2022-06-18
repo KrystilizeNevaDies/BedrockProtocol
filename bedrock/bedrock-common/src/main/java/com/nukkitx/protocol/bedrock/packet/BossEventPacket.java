@@ -33,7 +33,9 @@ public interface BossEventPacket extends BedrockPacket {
          * Creates the bossbar to the player.
          */
         int CREATE = 0;
-        record Create(String title, float healthPercentage, short darkenSky, int color, int overlay) implements Action291, Action486 {
+
+        record Create(String title, float healthPercentage, short darkenSky, int color,
+                      int overlay) implements Action291, Action486 {
             public static final Interpreter<Create> INTERPRETER = new Interpreter<>() {
                 @Override
                 public @NotNull Create interpret(@NotNull BitInput input) throws IOException {
@@ -60,10 +62,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return CREATE;
             }
         }
+
         /**
          * Registers a player to a boss fight.
          */
         int REGISTER_PLAYER = 1;
+
         record RegisterPlayer(long playerUniqueEntityId) implements Action291, Action486 {
             public static final Interpreter<RegisterPlayer> INTERPRETER = new Interpreter<RegisterPlayer>() {
                 @Override
@@ -83,10 +87,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return REGISTER_PLAYER;
             }
         }
+
         /**
          * Removes the bossbar from the client.
          */
         int REMOVE = 2;
+
         record Remove() implements Action291, Action486 {
             public static final Interpreter<Remove> INTERPRETER = new Interpreter<Remove>() {
                 @Override
@@ -105,10 +111,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return REMOVE;
             }
         }
+
         /**
          * Unregisters a player from a boss fight.
          */
         int UNREGISTER_PLAYER = 3;
+
         record UnregisterPlayer(long playerUniqueEntityId) implements Action291, Action486 {
             public static final Interpreter<UnregisterPlayer> INTERPRETER = new Interpreter<UnregisterPlayer>() {
                 @Override
@@ -128,10 +136,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return UNREGISTER_PLAYER;
             }
         }
+
         /**
          * Appears not to be implemented. Currently bar percentage only appears to change in response to the target entity's health.
          */
         int UPDATE_PERCENTAGE = 4;
+
         record UpdatePercentage(float healthPercentage) implements Action291, Action486 {
             public static final Interpreter<UpdatePercentage> INTERPRETER = new Interpreter<UpdatePercentage>() {
                 @Override
@@ -151,10 +161,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return UPDATE_PERCENTAGE;
             }
         }
+
         /**
          * Also appears to not be implemented. Title clientside sticks as the target entity's nametag, or their entity transactionType name if not set.
          */
         int UPDATE_NAME = 5;
+
         record UpdateName(String title) implements Action291, Action486 {
             public static final Interpreter<UpdateName> INTERPRETER = new Interpreter<UpdateName>() {
                 @Override
@@ -174,10 +186,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return UPDATE_NAME;
             }
         }
+
         /**
          * Darken the sky when the boss bar is shown.
          */
         int UPDATE_PROPERTIES = 6;
+
         record UpdateProperties(short darkenSky, int color, int overlay) implements Action291, Action486 {
             public static final Interpreter<UpdateProperties> INTERPRETER = new Interpreter<UpdateProperties>() {
                 @Override
@@ -201,10 +215,12 @@ public interface BossEventPacket extends BedrockPacket {
                 return UPDATE_PROPERTIES;
             }
         }
+
         /**
          * Not implemented :( Intended to alter bar appearance, but these currently produce no effect on clientside whatsoever.
          */
         int UPDATE_STYLE = 7;
+
         record UpdateStyle(int color, int overlay) implements Action291, Action486 {
             public static final Interpreter<UpdateStyle> INTERPRETER = new Interpreter<UpdateStyle>() {
                 @Override
@@ -228,6 +244,7 @@ public interface BossEventPacket extends BedrockPacket {
         }
 
         int QUERY = 8;
+
         record Query(long playerUniqueEntityId) implements Action486 {
             public static final Interpreter<Query> INTERPRETER = new Interpreter<Query>() {
                 @Override

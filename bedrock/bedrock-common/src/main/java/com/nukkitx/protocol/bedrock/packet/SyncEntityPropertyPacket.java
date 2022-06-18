@@ -11,12 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface SyncEntityPropertyPacket extends BedrockPacket {
-    private NbtMap data;
+    NbtMap data;
 
 
-    public class SyncEntityPropertyReader_v440 implements BedrockPacketReader<SyncEntityPropertyPacket> {
+    record v440 implements SyncEntityPropertyPacket {
 
-        public static final SyncEntityPropertyReader_v440 INSTANCE = new SyncEntityPropertyReader_v440();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SyncEntityPropertyPacket packet) {

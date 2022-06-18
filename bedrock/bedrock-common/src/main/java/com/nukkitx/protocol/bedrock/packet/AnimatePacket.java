@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 public interface AnimatePacket extends BedrockPacket {
     @NotNull Action action();
+
     long runtimeEntityId();
 
     interface Action {
@@ -62,6 +63,7 @@ public interface AnimatePacket extends BedrockPacket {
                 }
             };
         }
+
         static @NotNull RowingAction ROW_RIGHT(float rowingTime) {
             return new RowingAction() {
                 @Override
@@ -78,8 +80,8 @@ public interface AnimatePacket extends BedrockPacket {
     }
 
     record v291(Action action, long runtimeEntityId) implements AnimatePacket, Codec291 {
-        private static final Int2ObjectMap<Action> ACTIONS;
-        private static final Int2ObjectMap<Float2ObjectFunction<Action.RowingAction>> ROWING_ACTION_FACTORIES;
+        static final Int2ObjectMap<Action> ACTIONS;
+        static final Int2ObjectMap<Float2ObjectFunction<Action.RowingAction>> ROWING_ACTION_FACTORIES;
 
         static {
             var map = Stream.of(Action.VALUES).collect(Collectors.toMap(Action::id, a -> a));

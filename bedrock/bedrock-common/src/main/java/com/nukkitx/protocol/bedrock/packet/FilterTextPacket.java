@@ -10,13 +10,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface FilterTextPacket extends BedrockPacket {
-    private String text;
-    private boolean fromServer;
+    String text;
+    boolean fromServer;
 
 
-    public class FilterTextReader_v422 implements BedrockPacketReader<FilterTextPacket> {
+    record v422 implements FilterTextPacket {
 
-        public static final FilterTextReader_v422 INSTANCE = new FilterTextReader_v422();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, FilterTextPacket packet) {

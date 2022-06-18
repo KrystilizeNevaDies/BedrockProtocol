@@ -34,8 +34,7 @@ public interface UpdateBlockPacket extends BedrockPacket {
         PRIORITY
     }
 
-    public class UpdateBlockReader_v291 implements BedrockPacketReader<UpdateBlockPacket> {
-        public static final UpdateBlockReader_v291 INSTANCE = new UpdateBlockReader_v291();
+    record v291 implements UpdateBlockPacket {
 
 
         @Override

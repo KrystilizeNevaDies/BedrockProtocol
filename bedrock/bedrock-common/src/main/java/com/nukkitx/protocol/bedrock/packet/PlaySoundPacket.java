@@ -11,14 +11,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PlaySoundPacket extends BedrockPacket {
-    private String sound;
-    private Vector3f position;
-    private float volume;
-    private float pitch;
+    String sound;
+    Vector3f position;
+    float volume;
+    float pitch;
 
 
-    public class PlaySoundReader_v291 implements BedrockPacketReader<PlaySoundPacket> {
-        public static final PlaySoundReader_v291 INSTANCE = new PlaySoundReader_v291();
+    record v291 implements PlaySoundPacket {
 
 
         @Override

@@ -13,12 +13,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface LevelEventGenericPacket extends BedrockPacket {
-    private int eventId;
-    private NbtMap tag;
+    int eventId;
+    NbtMap tag;
 
 
-    public class LevelEventGenericReader_v361 implements BedrockPacketReader<LevelEventGenericPacket> {
-        public static final LevelEventGenericReader_v361 INSTANCE = new LevelEventGenericReader_v361();
+    record v361 implements LevelEventGenericPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventGenericPacket packet) {

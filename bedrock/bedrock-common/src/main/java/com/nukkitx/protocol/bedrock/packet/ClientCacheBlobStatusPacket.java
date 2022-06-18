@@ -21,6 +21,7 @@ import java.util.function.LongConsumer;
 interface ClientCacheBlobStatusPacket extends BedrockPacket {
 
     long[] naks();
+
     long[] arks();
 
     record v361(long[] arks, long[] naks) implements ClientCacheBlobStatusPacket {

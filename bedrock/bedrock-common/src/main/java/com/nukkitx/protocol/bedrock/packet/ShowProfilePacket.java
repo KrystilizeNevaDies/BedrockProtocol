@@ -10,11 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ShowProfilePacket extends BedrockPacket {
-    private String xuid;
+    String xuid;
 
 
-    public class ShowProfileReader_v291 implements BedrockPacketReader<ShowProfilePacket> {
-        public static final ShowProfileReader_v291 INSTANCE = new ShowProfileReader_v291();
+    record v291 implements ShowProfilePacket {
 
 
         @Override

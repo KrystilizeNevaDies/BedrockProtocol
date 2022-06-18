@@ -12,17 +12,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface LessonProgressPacket extends BedrockPacket {
-    private LessonAction action;
-    private int score;
-    private String activityId;
+    LessonAction action;
+    int score;
+    String activityId;
 
 
     @Overrid
 
-    public class LessonProgressReaderBeta implements BedrockPacketReader<LessonProgressPacket> {
+    public class LessonProgressReaderBeta implements LessonProgressPacket {
         public static final LessonProgressReaderBeta INSTANCE = new LessonProgressReaderBeta();
 
-        private static final LessonAction[] ACTIONS = LessonAction.values();
+        static final LessonAction[] ACTIONS = LessonAction.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LessonProgressPacket packet) {

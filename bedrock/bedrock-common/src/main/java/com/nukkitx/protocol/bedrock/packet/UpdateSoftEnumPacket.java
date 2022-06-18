@@ -12,12 +12,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface UpdateSoftEnumPacket extends BedrockPacket {
-    private CommandEnumData softEnum;
-    private SoftEnumUpdateType valueType;
+    CommandEnumData softEnum;
+    SoftEnumUpdateType valueType;
 
 
-    public class UpdateSoftEnumReader_v291 implements BedrockPacketReader<UpdateSoftEnumPacket> {
-        public static final UpdateSoftEnumReader_v291 INSTANCE = new UpdateSoftEnumReader_v291();
+    record v291 implements UpdateSoftEnumPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdateSoftEnumPacket packet) {

@@ -18,6 +18,7 @@ interface BiomeDefinitionListPacket extends BedrockPacket {
                 return new v313(readNBTMap(input));
             }
         };
+
         @Override
         public void write(@NotNull BitOutput output) throws IOException {
             writeNBTMap(output, definitions);

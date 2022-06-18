@@ -11,8 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ShowCreditsPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private Status status;
+    long runtimeEntityId;
+    Status status;
 
 
     public enum Status {
@@ -20,8 +20,7 @@ public interface ShowCreditsPacket extends BedrockPacket {
         END_CREDITS
     }
 
-    public class ShowCreditsReader_v291 implements BedrockPacketReader<ShowCreditsPacket> {
-        public static final ShowCreditsReader_v291 INSTANCE = new ShowCreditsReader_v291();
+    record v291 implements ShowCreditsPacket {
 
 
         @Override

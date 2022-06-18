@@ -80,7 +80,8 @@ public interface ClientboundMapItemDataPacket extends BedrockPacket {
         }
 
         record DecorationsObjectsEntitiesAndColorPatch(@NotNull DecorationsAndObjects decorationsAndObjects, int scale,
-                @NotNull TrackedEntities trackedEntities, @NotNull ColorPatch colorPatch) implements MapComponents {
+                                                       @NotNull TrackedEntities trackedEntities,
+                                                       @NotNull ColorPatch colorPatch) implements MapComponents {
             public static final Interpreter<DecorationsObjectsEntitiesAndColorPatch> INTERPRETER = new Interpreter<>() {
                 @Override
                 public @NotNull DecorationsObjectsEntitiesAndColorPatch interpret(@NotNull BitInput input) throws IOException {
@@ -160,7 +161,8 @@ public interface ClientboundMapItemDataPacket extends BedrockPacket {
         }
     }
 
-    record v291(long uniqueMapId, @NotNull MapComponents mapComponents, int dimensionId) implements ClientboundMapItemDataPacket {
+    record v291(long uniqueMapId, @NotNull MapComponents mapComponents,
+                int dimensionId) implements ClientboundMapItemDataPacket {
         public static final Interpreter<v291> INTERPRETER = new Interpreter<v291>() {
             @Override
             public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {
@@ -185,7 +187,8 @@ public interface ClientboundMapItemDataPacket extends BedrockPacket {
         }
     }
 
-    record v354(long uniqueMapId, @NotNull MapComponents mapComponents, int dimensionId, boolean isLocked) implements ClientboundMapItemDataPacket {
+    record v354(long uniqueMapId, @NotNull MapComponents mapComponents, int dimensionId,
+                boolean isLocked) implements ClientboundMapItemDataPacket {
 
         public static final Interpreter<v354> INTERPRETER = new Interpreter<v354>() {
             @Override

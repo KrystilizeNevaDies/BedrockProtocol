@@ -15,22 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface ItemStackRequestPacket extends BedrockPacket {
-    private final List<ItemStackRequest> requests = new ArrayList<>();
+    final List<ItemStackRequest> requests = new ArrayList<>();
 
 
-    @Overrid
+    record v407 implements ItemStackRequestPacket {
 
-    public class ItemStackRequestReader_v407 implements BedrockPacketReader<ItemStackRequestPacket> {
-
-        public static final ItemStackRequestReader_v407 INSTANCE = new ItemStackRequestReader_v407();
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket packet, BedrockSession
+                session) {
             helper.writeArray(buffer, packet.getRequests(), (buf, requests) -> helper.writeItemStackRequest(buffer, session, requests));
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket
+                packet, BedrockSession session) {
             helper.readArray(buffer, packet.getRequests(), buf -> helper.readItemStackRequest(buf, session));
         }
     }

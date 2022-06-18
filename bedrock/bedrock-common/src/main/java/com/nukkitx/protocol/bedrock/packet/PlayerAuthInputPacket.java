@@ -23,35 +23,37 @@ import java.util.List;
 import java.util.Set;
 
 interface PlayerAuthInputPacket extends BedrockPacket {
-    private Vector3f rotation; // head rot after motion
-    private Vector3f position;
-    private Vector2f motion;
-    private final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
-    private InputMode inputMode;
-    private ClientPlayMode playMode;
-    private Vector3f vrGazeDirection;
-    private long tick;
-    private Vector3f delta;
+    Vector3f rotation; // head rot after motion
+    Vector3f position;
+    Vector2f motion;
+    final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
+    InputMode inputMode;
+    ClientPlayMode playMode;
+    Vector3f vrGazeDirection;
+    long tick;
+    Vector3f delta;
     /**
      * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_INTERACTION} in order for this to not be null.
+     *
      * @since v428
      */
-    private ItemUseTransaction itemUseTransaction;
+    ItemUseTransaction itemUseTransaction;
     /**
      * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_STACK_REQUEST} in order for this to not be null.
+     *
      * @since v428
      */
-    private ItemStackRequest itemStackRequest;
+    ItemStackRequest itemStackRequest;
     /**
      * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_BLOCK_ACTIONS} in order for this to not be empty.
+     *
      * @since v428
      */
-    private final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+    final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
 
 
-    public class PlayerAuthInputReader_v388 implements BedrockPacketReader<PlayerAuthInputPacket> {
+    record v388 implements PlayerAuthInputPacket {
 
-        public static final PlayerAuthInputReader_v388 INSTANCE = new PlayerAuthInputReader_v388();
 
         protected static final InputMode[] INPUT_MODES = InputMode.values();
         protected static final ClientPlayMode[] CLIENT_PLAY_MODES = ClientPlayMode.values();
@@ -102,9 +104,8 @@ interface PlayerAuthInputPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerAuthInputReader_v419 extends PlayerAuthInputReader_v388 {
+    record v419 extends PlayerAuthInputReader_v388 {
 
-        public static final PlayerAuthInputReader_v419 INSTANCE = new PlayerAuthInputReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerAuthInputPacket packet) {
@@ -123,9 +124,8 @@ interface PlayerAuthInputPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerAuthInputReader_v428 extends PlayerAuthInputReader_v419 {
+    record v428 extends PlayerAuthInputReader_v419 {
 
-        public static final PlayerAuthInputReader_v428 INSTANCE = new PlayerAuthInputReader_v428();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerAuthInputPacket packet, BedrockSession session) {
@@ -238,9 +238,8 @@ interface PlayerAuthInputPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerAuthInputReader_v431 extends PlayerAuthInputReader_v428 {
+    record v431 extends PlayerAuthInputReader_v428 {
 
-        public static final PlayerAuthInputReader_v431 INSTANCE = new PlayerAuthInputReader_v431();
 
         @Override
         protected void writePlayerBlockActionData(ByteBuf buffer, BedrockPacketHelper helper, PlayerBlockActionData actionData) {

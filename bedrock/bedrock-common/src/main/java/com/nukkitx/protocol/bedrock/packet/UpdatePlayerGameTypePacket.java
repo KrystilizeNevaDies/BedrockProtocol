@@ -12,15 +12,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface UpdatePlayerGameTypePacket extends BedrockPacket {
-    private GameType gameType;
-    private long entityId;
+    GameType gameType;
+    long entityId;
 
 
-    @Overrid
+    record v407 implements UpdatePlayerGameTypePacket {
 
-    public class UpdatePlayerGameTypeReader_v407 implements BedrockPacketReader<UpdatePlayerGameTypePacket> {
-
-        public static final UpdatePlayerGameTypeReader_v407 INSTANCE = new UpdatePlayerGameTypeReader_v407();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, UpdatePlayerGameTypePacket packet) {

@@ -13,18 +13,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PlayerActionPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private PlayerActionType action;
-    private Vector3i blockPosition;
+    long runtimeEntityId;
+    PlayerActionType action;
+    Vector3i blockPosition;
     /**
      * @since v526
      */
-    private Vector3i resultPosition;
-    private int face;
+    Vector3i resultPosition;
+    int face;
 
 
-    public class PlayerActionReader_v291 implements BedrockPacketReader<PlayerActionPacket> {
-        public static final PlayerActionReader_v291 INSTANCE = new PlayerActionReader_v291();
+    record v291 implements PlayerActionPacket {
 
 
         @Override
@@ -44,7 +43,7 @@ public interface PlayerActionPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerActionReaderBeta implements BedrockPacketReader<PlayerActionPacket> {
+    public class PlayerActionReaderBeta implements PlayerActionPacket {
         public static final PlayerActionReaderBeta INSTANCE = new PlayerActionReaderBeta();
 
         @Override

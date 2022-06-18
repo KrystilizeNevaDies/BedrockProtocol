@@ -14,15 +14,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MovePlayerPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private Vector3f position;
-    private Vector3f rotation;
-    private Mode mode;
-    private boolean onGround;
-    private long ridingRuntimeEntityId;
-    private TeleportationCause teleportationCause;
-    private int entityType;
-    private long tick;
+    long runtimeEntityId;
+    Vector3f position;
+    Vector3f rotation;
+    Mode mode;
+    boolean onGround;
+    long ridingRuntimeEntityId;
+    TeleportationCause teleportationCause;
+    int entityType;
+    long tick;
 
 
     public enum Mode {
@@ -39,9 +39,9 @@ public interface MovePlayerPacket extends BedrockPacket {
         COMMAND,
         BEHAVIOR;
 
-        private static final InternalLogger log = InternalLoggerFactory.getInstance(TeleportationCause.class);
+        static final InternalLogger log = InternalLoggerFactory.getInstance(TeleportationCause.class);
 
-        private static final TeleportationCause[] VALUES = values();
+        static final TeleportationCause[] VALUES = values();
 
         public static TeleportationCause byId(int id) {
             if (id >= 0 && id < VALUES.length) {
@@ -52,8 +52,7 @@ public interface MovePlayerPacket extends BedrockPacket {
         }
     }
 
-    public class MovePlayerReader_v291 implements BedrockPacketReader<MovePlayerPacket> {
-        public static final MovePlayerReader_v291 INSTANCE = new MovePlayerReader_v291();
+    record v291 implements MovePlayerPacket {
 
 
         @Override
@@ -85,9 +84,8 @@ public interface MovePlayerPacket extends BedrockPacket {
         }
     }
 
-    public class MovePlayerReader_v419 extends MovePlayerReader_v291 {
+    record v419 extends MovePlayerReader_v291 {
 
-        public static final MovePlayerReader_v419 INSTANCE = new MovePlayerReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MovePlayerPacket packet) {

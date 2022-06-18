@@ -10,12 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface StopSoundPacket extends BedrockPacket {
-    private String soundName;
-    private boolean stoppingAllSound;
+    String soundName;
+    boolean stoppingAllSound;
 
 
-    public class StopSoundReader_v291 implements BedrockPacketReader<StopSoundPacket> {
-        public static final StopSoundReader_v291 INSTANCE = new StopSoundReader_v291();
+    record v291 implements StopSoundPacket {
 
 
         @Override

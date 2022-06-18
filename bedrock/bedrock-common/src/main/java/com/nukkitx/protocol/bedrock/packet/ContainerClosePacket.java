@@ -1,47 +1,48 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface ContainerClosePacket extends BedrockPacket {
-    private byte id;
-    private boolean unknownBool0;
+    byte id();
 
+    record v291(byte id) implements ContainerClosePacket {
+        public static final Interpreter<v291> INTERPRETER = new Interpreter<v291>() {
+            @Override
+            public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {
+                byte id = readByte(input);
+                return new v291(id);
+            }
+        };
 
-    public class ContainerCloseReader_v291 implements BedrockPacketReader<ContainerClosePacket> {
-        public static final ContainerCloseReader_v291 INSTANCE = new ContainerCloseReader_v291();
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerClosePacket packet) {
-            buffer.writeByte(packet.getId());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerClosePacket packet) {
-            packet.setId(buffer.readByte());
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeByte(output, id());
         }
     }
 
-    public class ContainerCloseReader_v419 implements BedrockPacketReader<ContainerClosePacket> {
-
-        public static final ContainerCloseReader_v419 INSTANCE = new ContainerCloseReader_v419();
+    record v419(byte id, boolean unknown) implements ContainerClosePacket {
+        public static final Interpreter<v419> INTERPRETER = new Interpreter<v419>() {
+            @Override
+            public @NotNull v419 interpret(@NotNull BitInput input) throws IOException {
+                byte id = readByte(input);
+                boolean unknown = readBoolean(input);
+                return new v419(id, unknown);
+            }
+        };
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerClosePacket packet) {
-            buffer.writeByte(packet.getId());
-            buffer.writeBoolean(packet.isUnknownBool0());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ContainerClosePacket packet) {
-            packet.setId(buffer.readByte());
-            packet.setUnknownBool0(buffer.readBoolean());
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeByte(output, id());
+            writeBoolean(output, unknown());
         }
     }
 

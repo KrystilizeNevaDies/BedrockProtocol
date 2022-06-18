@@ -10,12 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface NetworkStackLatencyPacket extends BedrockPacket {
-    private long timestamp;
-    private boolean fromServer;
+    long timestamp;
+    boolean fromServer;
 
 
-    public class NetworkStackLatencyReader_v291 implements BedrockPacketReader<NetworkStackLatencyPacket> {
-        public static final NetworkStackLatencyReader_v291 INSTANCE = new NetworkStackLatencyReader_v291();
+    record v291 implements NetworkStackLatencyPacket {
 
 
         @Override
@@ -29,8 +28,8 @@ public interface NetworkStackLatencyPacket extends BedrockPacket {
         }
     }
 
-    public class NetworkStackLatencyReader_v332 implements BedrockPacketReader<NetworkStackLatencyPacket> {
-        public static final NetworkStackLatencyReader_v332 INSTANCE = new NetworkStackLatencyReader_v332();
+    record v332 implements NetworkStackLatencyPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NetworkStackLatencyPacket packet) {

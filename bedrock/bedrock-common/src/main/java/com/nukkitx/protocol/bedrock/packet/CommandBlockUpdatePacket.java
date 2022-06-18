@@ -35,60 +35,60 @@ public interface CommandBlockUpdatePacket extends BedrockPacket {
 //     boolean executingOnFirstTick();
 
 
-   interface Target extends BitDataWritable, PacketDataWriter {
+    interface Target extends BitDataWritable, PacketDataWriter {
 
-       boolean isBlock();
+        boolean isBlock();
 
-       Interpreter<Target> INTERPRETER = new Interpreter<Target>() {
+        Interpreter<Target> INTERPRETER = new Interpreter<Target>() {
 
-           @Override
-           public @NotNull Target interpret(@NotNull BitInput input) throws IOException {
-               boolean isBlock = readBoolean(input);
-               if (isBlock)
-                   return Block.INTERPRETER.interpret(input);
-               return Minecart.INTERPRETER.interpret(input);
-           }
-       };
+            @Override
+            public @NotNull Target interpret(@NotNull BitInput input) throws IOException {
+                boolean isBlock = readBoolean(input);
+                if (isBlock)
+                    return Block.INTERPRETER.interpret(input);
+                return Minecart.INTERPRETER.interpret(input);
+            }
+        };
 
-       record Block(@NotNull Vector3i pos, CommandBlockMode mode, boolean isRedstoneMode,
-                    boolean isConditional) implements Target {
-           public static final Interpreter<Block> INTERPRETER = new Interpreter<Block>() {
-               @Override
-               public @NotNull Block interpret(@NotNull BitInput input) throws IOException {
-                   Vector3i pos = readBlockPosition(input);
-                   CommandBlockMode mode = CommandBlockMode.values()[readByte(input)];
-                   boolean isRedstoneMode = readBoolean(input);
-                   boolean isConditional = readBoolean(input);
-                   return new Block(pos, mode, isRedstoneMode, isConditional);
-               }
-           };
+        record Block(@NotNull Vector3i pos, CommandBlockMode mode, boolean isRedstoneMode,
+                     boolean isConditional) implements Target {
+            public static final Interpreter<Block> INTERPRETER = new Interpreter<Block>() {
+                @Override
+                public @NotNull Block interpret(@NotNull BitInput input) throws IOException {
+                    Vector3i pos = readBlockPosition(input);
+                    CommandBlockMode mode = CommandBlockMode.values()[readByte(input)];
+                    boolean isRedstoneMode = readBoolean(input);
+                    boolean isConditional = readBoolean(input);
+                    return new Block(pos, mode, isRedstoneMode, isConditional);
+                }
+            };
 
-           @Override
-           public void write(@NotNull BitOutput output) throws IOException {
-               writeBlockPosition(output, pos());
-               writeByte(output, (byte) mode().ordinal());
-               writeBoolean(output, isRedstoneMode());
-               writeBoolean(output, isConditional());
-           }
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeBlockPosition(output, pos());
+                writeByte(output, (byte) mode().ordinal());
+                writeBoolean(output, isRedstoneMode());
+                writeBoolean(output, isConditional());
+            }
 
-           @Override
-           public boolean isBlock() {
-               return true;
-           }
-       }
+            @Override
+            public boolean isBlock() {
+                return true;
+            }
+        }
 
-       record Minecart(long minecartRuntimeEntityId) implements Target {
-           @Override
-           public void write(@NotNull BitOutput output) throws IOException {
-               writeUnsignedLong(output, minecartRuntimeEntityId());
-           }
+        record Minecart(long minecartRuntimeEntityId) implements Target {
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeUnsignedLong(output, minecartRuntimeEntityId());
+            }
 
-           @Override
-           public boolean isBlock() {
+            @Override
+            public boolean isBlock() {
                 return false;
-           }
-       }
-   }
+            }
+        }
+    }
 
     record v291(@NotNull Target target, String command, String lastOutput, String name,
                 boolean isOutputTracked) implements CommandBlockUpdatePacket {

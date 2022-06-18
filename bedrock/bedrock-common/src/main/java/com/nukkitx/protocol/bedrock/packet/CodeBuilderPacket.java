@@ -16,6 +16,7 @@ import java.io.IOException;
 
 interface CodeBuilderPacket extends BedrockPacket {
     String url();
+
     boolean opening();
 
 

@@ -15,14 +15,12 @@ import java.util.List;
 import java.util.UUID;
 
 interface EmoteListPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private final List<UUID> pieceIds = new ObjectArrayList<>();
+    long runtimeEntityId;
+    final List<UUID> pieceIds = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v407 implements EmoteListPacket {
 
-    public class EmoteListReader_v407 implements BedrockPacketReader<EmoteListPacket> {
-        public static final EmoteListReader_v407 INSTANCE = new EmoteListReader_v407();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EmoteListPacket packet) {

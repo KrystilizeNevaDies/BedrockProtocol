@@ -15,6 +15,7 @@ public interface BookEditPacket extends BedrockPacket {
         int actionId();
 
         int REPLACE_PAGE = 0;
+
         record ReplacePage(int pageNumber, @NotNull String text,
                            @NotNull String photoName) implements Action {
 
@@ -32,6 +33,7 @@ public interface BookEditPacket extends BedrockPacket {
         }
 
         int ADD_PAGE = 1;
+
         record AddPage(int pageNumber, @NotNull String text,
                        @NotNull String photoName) implements Action {
             @Override
@@ -48,6 +50,7 @@ public interface BookEditPacket extends BedrockPacket {
         }
 
         int DELETE_PAGE = 2;
+
         record DeletePage(int pageNumber) implements Action {
             @Override
             public void write(@NotNull BitOutput output) throws IOException {
@@ -61,6 +64,7 @@ public interface BookEditPacket extends BedrockPacket {
         }
 
         int SWAP_PAGES = 3;
+
         record SwapPages(int pageA, int pageB) implements Action {
             @Override
             public void write(@NotNull BitOutput output) throws IOException {
@@ -75,6 +79,7 @@ public interface BookEditPacket extends BedrockPacket {
         }
 
         int SIGN_BOOK = 4;
+
         record SignBook(@NotNull String title, @NotNull String author,
                         @NotNull String xuid) implements Action {
             @Override

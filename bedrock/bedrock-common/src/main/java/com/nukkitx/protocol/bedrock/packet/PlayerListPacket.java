@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PlayerListPacket extends BedrockPacket {
-    private final List<Entry> entries = new ObjectArrayList<>();
-    private Action action;
+    final List<Entry> entries = new ObjectArrayList<>();
+    Action action;
 
 
     public enum Action {
@@ -31,20 +31,19 @@ public interface PlayerListPacket extends BedrockPacket {
     @Data
     @EqualsAndHashCode(doNotUseGetters = true)
     public final static class Entry {
-        private final UUID uuid;
-        private long entityId;
-        private String name;
-        private String xuid;
-        private String platformChatId;
-        private int buildPlatform;
-        private SerializedSkin skin;
-        private boolean teacher;
-        private boolean host;
-        private boolean trustedSkin;
+        final UUID uuid;
+        long entityId;
+        String name;
+        String xuid;
+        String platformChatId;
+        int buildPlatform;
+        SerializedSkin skin;
+        boolean teacher;
+        boolean host;
+        boolean trustedSkin;
     }
 
-    public class PlayerListReader_v291 implements BedrockPacketReader<PlayerListPacket> {
-        public static final PlayerListReader_v291 INSTANCE = new PlayerListReader_v291();
+    record v291 implements PlayerListPacket {
 
 
         @Override
@@ -98,8 +97,8 @@ public interface PlayerListPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerListReader_v388 implements BedrockPacketReader<PlayerListPacket> {
-        public static final PlayerListReader_v388 INSTANCE = new PlayerListReader_v388();
+    record v388 implements PlayerListPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerListPacket packet) {
@@ -146,8 +145,8 @@ public interface PlayerListPacket extends BedrockPacket {
         }
     }
 
-    public class PlayerListReader_v390 implements BedrockPacketReader<PlayerListPacket> {
-        public static final PlayerListReader_v390 INSTANCE = new PlayerListReader_v390();
+    record v390 implements PlayerListPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerListPacket packet) {

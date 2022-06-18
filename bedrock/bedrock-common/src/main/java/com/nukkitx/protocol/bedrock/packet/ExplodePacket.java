@@ -16,13 +16,12 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface ExplodePacket extends BedrockPacket {
-    private final List<Vector3i> records = new ObjectArrayList<>();
-    private Vector3f position;
-    private float radius;
+    final List<Vector3i> records = new ObjectArrayList<>();
+    Vector3f position;
+    float radius;
 
 
-    public class ExplodeReader_v291 implements BedrockPacketReader<ExplodePacket> {
-        public static final ExplodeReader_v291 INSTANCE = new ExplodeReader_v291();
+    record v291 implements ExplodePacket {
 
 
         @Override

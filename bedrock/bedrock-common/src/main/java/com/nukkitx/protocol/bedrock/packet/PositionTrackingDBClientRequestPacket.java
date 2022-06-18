@@ -11,8 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface PositionTrackingDBClientRequestPacket extends BedrockPacket {
-    private Action action;
-    private int trackingId;
+    Action action;
+    int trackingId;
 
 
     @Overrid
@@ -21,8 +21,8 @@ interface PositionTrackingDBClientRequestPacket extends BedrockPacket {
         QUERY
     }
 
-    public class PositionTrackingDBClientRequestReader_v407 implements BedrockPacketReader<PositionTrackingDBClientRequestPacket> {
-        public static final PositionTrackingDBClientRequestReader_v407 INSTANCE = new PositionTrackingDBClientRequestReader_v407();
+    record v407 implements PositionTrackingDBClientRequestPacket {
+
 
         protected static final PositionTrackingDBClientRequestPacket.Action[] ACTIONS = PositionTrackingDBClientRequestPacket.Action.values();
 
@@ -33,7 +33,8 @@ interface PositionTrackingDBClientRequestPacket extends BedrockPacket {
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBClientRequestPacket packet) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PositionTrackingDBClientRequestPacket
+                packet) {
             packet.setAction(ACTIONS[buffer.readByte()]);
             packet.setTrackingId(VarInts.readInt(buffer));
         }

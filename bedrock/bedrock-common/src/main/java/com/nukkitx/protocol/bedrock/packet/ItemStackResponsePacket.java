@@ -21,7 +21,7 @@ import java.util.List;
  * should be in sync with the server again.
  */
 interface ItemStackResponsePacket extends BedrockPacket {
-    private final List<Response> entries = new ArrayList<>();
+    final List<Response> entries = new ArrayList<>();
 
 
     @Overrid
@@ -40,6 +40,7 @@ interface ItemStackResponsePacket extends BedrockPacket {
          * success specifies if the request with the requestId below was successful. If this is the case, the
          * containers below will have information on what slots ended up changing. If not, the container info
          * will be empty.
+         *
          * @deprecated as of v419
          */
         @ToString.Exclude
@@ -111,6 +112,7 @@ interface ItemStackResponsePacket extends BedrockPacket {
 
         /**
          * Holds the final custom name of a renamed item, if relevant.
+         *
          * @since v422
          */
         @NonNull String customName;
@@ -121,9 +123,8 @@ interface ItemStackResponsePacket extends BedrockPacket {
         int durabilityCorrection;
     }
 
-    public class ItemStackResponseReader_v407 implements BedrockPacketReader<ItemStackResponsePacket> {
+    record v407 implements ItemStackResponsePacket {
 
-        public static final ItemStackResponseReader_v407 INSTANCE = new ItemStackResponseReader_v407();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
@@ -174,7 +175,8 @@ interface ItemStackResponsePacket extends BedrockPacket {
                     0);
         }
 
-        protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry itemEntry) {
+        protected void writeItemEntry(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket.ItemEntry
+                itemEntry) {
             buffer.writeByte(itemEntry.getSlot());
             buffer.writeByte(itemEntry.getHotbarSlot());
             buffer.writeByte(itemEntry.getCount());
@@ -182,9 +184,8 @@ interface ItemStackResponsePacket extends BedrockPacket {
         }
     }
 
-    public class ItemStackResponseReader_v419 extends ItemStackResponseReader_v407 {
+    record v419 extends ItemStackResponseReader_v407 {
 
-        public static final ItemStackResponseReader_v419 INSTANCE = new ItemStackResponseReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackResponsePacket packet) {
@@ -227,9 +228,8 @@ interface ItemStackResponsePacket extends BedrockPacket {
 
     }
 
-    public class ItemStackResponseReader_v422 extends ItemStackResponseReader_v419 {
+    record v422 extends ItemStackResponseReader_v419 {
 
-        public static final ItemStackResponseReader_v422 INSTANCE = new ItemStackResponseReader_v422();
 
         @Override
         protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
@@ -249,9 +249,8 @@ interface ItemStackResponsePacket extends BedrockPacket {
         }
     }
 
-    public class ItemStackResponseReader_v428 extends ItemStackResponseReader_v422 {
+    record v428 extends ItemStackResponseReader_v422 {
 
-        public static final ItemStackResponseReader_v428 INSTANCE = new ItemStackResponseReader_v428();
 
         @Override
         protected ItemStackResponsePacket.ItemEntry readItemEntry(ByteBuf buffer, BedrockPacketHelper helper) {
@@ -270,7 +269,6 @@ interface ItemStackResponsePacket extends BedrockPacket {
             VarInts.writeInt(buffer, itemEntry.getDurabilityCorrection());
         }
     }
-
 
 
 }

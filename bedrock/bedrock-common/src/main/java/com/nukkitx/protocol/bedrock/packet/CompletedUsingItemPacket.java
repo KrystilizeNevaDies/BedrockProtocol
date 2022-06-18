@@ -1,36 +1,35 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
-import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.data.inventory.ItemUseType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 interface CompletedUsingItemPacket extends BedrockPacket {
-    private int itemId;
-    private ItemUseType valueType;
+    short itemId();
+
+    ItemUseType valueType();
 
 
-    public class CompletedUsingItemReader_v388 implements BedrockPacketReader<CompletedUsingItemPacket> {
-
-        public static final CompletedUsingItemReader_v388 INSTANCE = new CompletedUsingItemReader_v388();
-
-        private static final ItemUseType[] VALUES = ItemUseType.values();
+    record v388(short itemId, ItemUseType valueType) implements CompletedUsingItemPacket {
+        public static final Interpreter<v388> INTERPRETER = new Interpreter<v388>() {
+            @Override
+            public @NotNull v388 interpret(@NotNull BitInput input) throws IOException {
+                short itemId = readShortLE(input);
+                ItemUseType type = ItemUseType.values()[readIntLE(input) + 1]; // Enum starts at -1
+                return new v388(itemId, type);
+            }
+        };
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CompletedUsingItemPacket packet) {
-            buffer.writeShortLE(packet.getItemId());
-            buffer.writeIntLE(packet.getType().ordinal() - 1); // Enum starts at -1
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CompletedUsingItemPacket packet) {
-            packet.setItemId(buffer.readUnsignedShortLE());
-            packet.setType(VALUES[buffer.readIntLE() + 1]); // Enum starts at -1
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeShortLE(output, itemId());
+            writeIntLE(output, valueType().ordinal() - 1); // Enum starts at -1
         }
     }
 

@@ -17,24 +17,23 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public interface ResourcePackStackPacket extends BedrockPacket {
-    private boolean forcedToAccept;
-    private final List<Entry> behaviorPacks = new ObjectArrayList<>();
-    private final List<Entry> resourcePacks = new ObjectArrayList<>();
-    private String gameVersion;
-    private final List<ExperimentData> experiments = new ObjectArrayList<>();
-    private boolean experimentsPreviouslyToggled;
-
+    boolean forcedToAccept;
+    final List<Entry> behaviorPacks = new ObjectArrayList<>();
+    final List<Entry> resourcePacks = new ObjectArrayList<>();
+    String gameVersion;
+    final List<ExperimentData> experiments = new ObjectArrayList<>();
+    boolean experimentsPreviouslyToggled;
 
 
     @Value
     public static class Entry {
-        private final String packId;
-        private final String packVersion;
-        private final String subPackName;
+        final String packId;
+        final String packVersion;
+        final String subPackName;
     }
 
-    public class ResourcePackStackReader_v291 implements BedrockPacketReader<ResourcePackStackPacket> {
-        public static final ResourcePackStackReader_v291 INSTANCE = new ResourcePackStackReader_v291();
+    record v292 implements ResourcePackStackPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackStackPacket packet) {
@@ -66,10 +65,10 @@ public interface ResourcePackStackPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePackStackReader_v313 extends ResourcePackStackReader_v291 {
-        public static final ResourcePackStackReader_v313 INSTANCE = new ResourcePackStackReader_v313();
+    record v313 extends ResourcePackStackReader_v291 {
 
-        private static final ExperimentData LEGACY_EXPERIMENT_DATA = new ExperimentData("legacy_experiment", true);
+
+        static final ExperimentData LEGACY_EXPERIMENT_DATA = new ExperimentData("legacy_experiment", true);
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackStackPacket packet) {
@@ -88,8 +87,8 @@ public interface ResourcePackStackPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePackStackReader_v388 extends ResourcePackStackReader_v313 {
-        public static final ResourcePackStackReader_v388 INSTANCE = new ResourcePackStackReader_v388();
+    record v388 extends ResourcePackStackReader_v313 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackStackPacket packet) {
@@ -106,9 +105,8 @@ public interface ResourcePackStackPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePackStackReader_v419 extends ResourcePackStackReader_v291 {
+    record v419 extends ResourcePackStackReader_v291 {
 
-        public static final ResourcePackStackReader_v419 INSTANCE = new ResourcePackStackReader_v419();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackStackPacket packet) {

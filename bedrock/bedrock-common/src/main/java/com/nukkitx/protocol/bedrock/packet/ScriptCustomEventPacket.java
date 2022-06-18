@@ -10,12 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ScriptCustomEventPacket extends BedrockPacket {
-    private String eventName;
-    private String data;
+    String eventName;
+    String data;
 
 
-    public class ScriptCustomEventReader_v291 implements BedrockPacketReader<ScriptCustomEventPacket> {
-        public static final ScriptCustomEventReader_v291 INSTANCE = new ScriptCustomEventReader_v291();
+    record v291 implements ScriptCustomEventPacket {
 
 
         @Override

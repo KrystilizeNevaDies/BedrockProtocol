@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
@@ -10,27 +12,26 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 interface EduUriResourcePacket extends BedrockPacket {
-    private EduSharedUriResource eduSharedUriResource;
+    EduSharedUriResource eduSharedUriResource();
 
 
-    @Overrid
-
-    public class EduUriResourceReader_v465 implements BedrockPacketReader<EduUriResourcePacket> {
-
-        public static final EduUriResourceReader_v465 INSTANCE = new EduUriResourceReader_v465();
-
+    record v465(EduSharedUriResource eduSharedUriResource) implements EduUriResourcePacket {
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EduUriResourcePacket packet) {
-            helper.writeString(buffer, packet.getEduSharedUriResource().getButtonName());
-            helper.writeString(buffer, packet.getEduSharedUriResource().getLinkUri());
+        public void write(@NotNull BitOutput output) throws IOException {
+            eduSharedUriResource().write(output);
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EduUriResourcePacket packet) {
-            packet.setEduSharedUriResource(new EduSharedUriResource(helper.readString(buffer), helper.readString(buffer)));
-        }
+        public static final Interpreter<v465> INTERPRETER = new Interpreter<v465>() {
+            @Override
+            public @NotNull v465 interpret(@NotNull BitInput input) throws IOException {
+                EduSharedUriResource eduSharedUriResource = EduSharedUriResource.INTERPRETER.interpret(input);
+                return new v465(eduSharedUriResource);
+            }
+        };
     }
-
 }

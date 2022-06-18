@@ -15,12 +15,19 @@ import java.util.Map;
 public interface AddEntityPacket extends BedrockPacket {
 
     long uniqueEntityId();
+
     long runtimeEntityId();
+
     @NotNull Vector3f position();
+
     @NotNull Vector3f motion();
+
     @NotNull Vector3f rotation();
+
     @NotNull AttributeData[] attributes();
+
     @NotNull Map<EntityData.Type<?>, EntityData> metadata();
+
     @NotNull EntityLinkData[] entityLinks();
 
     interface EntityTypeByInt {

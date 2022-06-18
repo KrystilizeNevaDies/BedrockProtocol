@@ -14,18 +14,18 @@ import lombok.EqualsAndHashCode;
 import java.util.UUID;
 
 public interface ResourcePackDataInfoPacket extends BedrockPacket {
-    private UUID packId;
-    private String packVersion;
-    private long maxChunkSize;
-    private long chunkCount;
-    private long compressedPackSize;
-    private byte[] hash;
-    private boolean premium;
-    private ResourcePackType valueType;
+    UUID packId;
+    String packVersion;
+    long maxChunkSize;
+    long chunkCount;
+    long compressedPackSize;
+    byte[] hash;
+    boolean premium;
+    ResourcePackType valueType;
 
 
-    public class ResourcePackDataInfoReader_v291 implements BedrockPacketReader<ResourcePackDataInfoPacket> {
-        public static final ResourcePackDataInfoReader_v291 INSTANCE = new ResourcePackDataInfoReader_v291();
+    record v291 implements ResourcePackDataInfoPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackDataInfoPacket packet) {
@@ -55,8 +55,8 @@ public interface ResourcePackDataInfoPacket extends BedrockPacket {
         }
     }
 
-    public class ResourcePackDataInfoReader_v361 implements BedrockPacketReader<ResourcePackDataInfoPacket> {
-        public static final ResourcePackDataInfoReader_v361 INSTANCE = new ResourcePackDataInfoReader_v361();
+    record v361 implements ResourcePackDataInfoPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ResourcePackDataInfoPacket packet) {

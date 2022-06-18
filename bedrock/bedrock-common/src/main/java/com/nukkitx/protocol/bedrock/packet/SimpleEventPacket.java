@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SimpleEventPacket extends BedrockPacket {
-    private SimpleEventType event;
+    SimpleEventType event;
 
 
-    public class SimpleEventReader_v291 implements BedrockPacketReader<SimpleEventPacket> {
-        public static final SimpleEventReader_v291 INSTANCE = new SimpleEventReader_v291();
+    record v291 implements SimpleEventPacket {
 
 
         @Override

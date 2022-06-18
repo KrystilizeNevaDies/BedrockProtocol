@@ -12,12 +12,12 @@ import lombok.EqualsAndHashCode;
 
 interface NpcDialoguePacket extends BedrockPacket {
 
-    private long uniqueEntityId;
-    private Action action;
-    private String dialogue;
-    private String sceneName;
-    private String npcName;
-    private String actionJson;
+    long uniqueEntityId;
+    Action action;
+    String dialogue;
+    String sceneName;
+    String npcName;
+    String actionJson;
 
 
     @Overrid
@@ -27,10 +27,10 @@ interface NpcDialoguePacket extends BedrockPacket {
         CLOSE
     }
 
-    public class NpcDialogueReader_v448 implements BedrockPacketReader<NpcDialoguePacket> {
-        public static final NpcDialogueReader_v448 INSTANCE = new NpcDialogueReader_v448();
+    record v448 implements NpcDialoguePacket {
 
-        private static final NpcDialoguePacket.Action[] VALUES = NpcDialoguePacket.Action.values();
+
+        static final NpcDialoguePacket.Action[] VALUES = NpcDialoguePacket.Action.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NpcDialoguePacket packet) {

@@ -13,13 +13,12 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 public interface LoginPacket extends BedrockPacket {
-    private int protocolVersion;
-    private AsciiString chainData;
-    private AsciiString skinData;
+    int protocolVersion;
+    AsciiString chainData;
+    AsciiString skinData;
 
 
-    public class LoginReader_v291 implements BedrockPacketReader<LoginPacket> {
-        public static final LoginReader_v291 INSTANCE = new LoginReader_v291();
+    record v291 implements LoginPacket {
 
 
         @Override

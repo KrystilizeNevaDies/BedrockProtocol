@@ -18,20 +18,17 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 interface SubChunkPacket extends BedrockPacket {
-    private int dimension;
-    private boolean cacheEnabled;
+    int dimension;
+    boolean cacheEnabled;
     /**
      * @since v485
      */
-    private Vector3i centerPosition;
-    private List<SubChunkData> subChunks = new ObjectArrayList<>();
+    Vector3i centerPosition;
+    List<SubChunkData> subChunks = new ObjectArrayList<>();
 
 
-    @Overrid
+    record v471 implements SubChunkPacket {
 
-    public class SubChunkReader_v471 implements BedrockPacketReader<SubChunkPacket> {
-
-        public static final SubChunkReader_v471 INSTANCE = new SubChunkReader_v471();
 
         protected static final int HEIGHT_MAP_LENGTH = 256;
 
@@ -49,7 +46,8 @@ interface SubChunkPacket extends BedrockPacket {
             packet.getSubChunks().add(subChunk);
         }
 
-        protected void serializeSubChunk(ByteBuf buffer, BedrockPacketHelper helper, SubChunkPacket packet, SubChunkData subChunk) {
+        protected void serializeSubChunk(ByteBuf buffer, BedrockPacketHelper helper, SubChunkPacket
+                packet, SubChunkData subChunk) {
             helper.writeVector3i(buffer, subChunk.getPosition());
             helper.writeByteArray(buffer, subChunk.getData());
             VarInts.writeInt(buffer, subChunk.getResult().ordinal());
@@ -72,8 +70,8 @@ interface SubChunkPacket extends BedrockPacket {
         }
     }
 
-    public class SubChunkReader_v475 extends SubChunkReader_v471 {
-        public static final SubChunkReader_v475 INSTANCE = new SubChunkReader_v475();
+    record v475 extends SubChunkReader_v471 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkPacket packet) {
@@ -120,8 +118,8 @@ interface SubChunkPacket extends BedrockPacket {
         }
     }
 
-    public class SubChunkReader_v486 extends SubChunkReader_v475 {
-        public static final SubChunkReader_v486 INSTANCE = new SubChunkReader_v486();
+    record v486 extends SubChunkReader_v475 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, SubChunkPacket packet) {

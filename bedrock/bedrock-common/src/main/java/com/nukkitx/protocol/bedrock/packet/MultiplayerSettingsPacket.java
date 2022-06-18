@@ -12,14 +12,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface MultiplayerSettingsPacket extends BedrockPacket {
-    private MultiplayerMode mode;
+    MultiplayerMode mode;
 
 
-    public class MultiplayerSettingsReader_v388 implements BedrockPacketReader<MultiplayerSettingsPacket> {
+    record v388 implements MultiplayerSettingsPacket {
 
-        public static final MultiplayerSettingsReader_v388 INSTANCE = new MultiplayerSettingsReader_v388();
 
-        private static final MultiplayerMode[] VALUES = MultiplayerMode.values();
+        static final MultiplayerMode[] VALUES = MultiplayerMode.values();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MultiplayerSettingsPacket packet) {

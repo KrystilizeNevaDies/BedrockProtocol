@@ -13,14 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface StructureTemplateDataRequestPacket extends BedrockPacket {
-    private String name;
-    private Vector3i position;
-    private StructureSettings settings;
-    private StructureTemplateRequestOperation operation;
+    String name;
+    Vector3i position;
+    StructureSettings settings;
+    StructureTemplateRequestOperation operation;
 
 
-    public class StructureTemplateDataRequestReader_v361 implements BedrockPacketReader<StructureTemplateDataRequestPacket> {
-        public static final StructureTemplateDataRequestReader_v361 INSTANCE = new StructureTemplateDataRequestReader_v361();
+    record v361 implements StructureTemplateDataRequestPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, StructureTemplateDataRequestPacket packet) {

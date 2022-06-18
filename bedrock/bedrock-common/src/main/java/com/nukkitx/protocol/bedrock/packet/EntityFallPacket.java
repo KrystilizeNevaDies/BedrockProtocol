@@ -11,13 +11,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface EntityFallPacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private float fallDistance;
-    private boolean inVoid;
+    long runtimeEntityId;
+    float fallDistance;
+    boolean inVoid;
 
 
-    public class EntityFallReader_v291 implements BedrockPacketReader<EntityFallPacket> {
-        public static final EntityFallReader_v291 INSTANCE = new EntityFallReader_v291();
+    record v291 implements EntityFallPacket {
 
 
         @Override

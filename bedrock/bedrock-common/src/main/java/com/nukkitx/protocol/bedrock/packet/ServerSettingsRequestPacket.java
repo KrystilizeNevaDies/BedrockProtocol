@@ -12,8 +12,7 @@ import lombok.EqualsAndHashCode;
 public interface ServerSettingsRequestPacket extends BedrockPacket {
 
 
-    public class ServerSettingsRequestReader_v291 implements BedrockPacketReader<ServerSettingsRequestPacket> {
-        public static final ServerSettingsRequestReader_v291 INSTANCE = new ServerSettingsRequestReader_v291();
+    record v291 implements ServerSettingsRequestPacket {
 
 
         @Override

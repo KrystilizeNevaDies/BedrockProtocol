@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PlayStatusPacket extends BedrockPacket {
-    private Status status;
+    Status status;
 
 
     public enum Status {
@@ -53,8 +53,7 @@ public interface PlayStatusPacket extends BedrockPacket {
         FAILED_SERVER_FULL_SUB_CLIENT
     }
 
-    public class PlayStatusReader_v291 implements BedrockPacketReader<PlayStatusPacket> {
-        public static final PlayStatusReader_v291 INSTANCE = new PlayStatusReader_v291();
+    record v291 implements PlayStatusPacket {
 
 
         @Override

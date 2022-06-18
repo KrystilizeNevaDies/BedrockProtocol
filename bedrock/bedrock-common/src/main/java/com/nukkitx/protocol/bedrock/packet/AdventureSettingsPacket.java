@@ -29,8 +29,11 @@ import static com.nukkitx.protocol.bedrock.data.AdventureSetting.DEFAULT_LEVEL_P
 
 public interface AdventureSettingsPacket extends BedrockPacket {
     CommandPermission commandPermission();
+
     PlayerPermission playerPermission();
+
     Set<AdventureSetting> settings();
+
     long uniqueEntityId();
 
     record v291(CommandPermission commandPermission, PlayerPermission playerPermission, Set<AdventureSetting> settings,
@@ -72,17 +75,17 @@ public interface AdventureSettingsPacket extends BedrockPacket {
             writeLongLE(output, uniqueEntityId);
         }
 
-        private static final CommandPermission[] COMMAND_PERMISSIONS = CommandPermission.values();
+        static final CommandPermission[] COMMAND_PERMISSIONS = CommandPermission.values();
 
-        private static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
-        private static final AdventureSetting[] FLAGS_1 = {WORLD_IMMUTABLE, NO_PVM, NO_MVP, null, SHOW_NAME_TAGS, AUTO_JUMP, MAY_FLY, NO_CLIP, WORLD_BUILDER, FLYING, MUTED};
+        static final PlayerPermission[] PLAYER_PERMISSIONS = PlayerPermission.values();
+        static final AdventureSetting[] FLAGS_1 = {WORLD_IMMUTABLE, NO_PVM, NO_MVP, null, SHOW_NAME_TAGS, AUTO_JUMP, MAY_FLY, NO_CLIP, WORLD_BUILDER, FLYING, MUTED};
 
-        private static final AdventureSetting[] FLAGS_2 = {MINE, DOORS_AND_SWITCHES, OPEN_CONTAINERS, ATTACK_PLAYERS, ATTACK_MOBS, OPERATOR, null, TELEPORT, BUILD, DEFAULT_LEVEL_PERMISSIONS};
-        private static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_1 = new Object2IntOpenHashMap<>();
+        static final AdventureSetting[] FLAGS_2 = {MINE, DOORS_AND_SWITCHES, OPEN_CONTAINERS, ATTACK_PLAYERS, ATTACK_MOBS, OPERATOR, null, TELEPORT, BUILD, DEFAULT_LEVEL_PERMISSIONS};
+        static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_1 = new Object2IntOpenHashMap<>();
 
-        private static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_2 = new Object2IntOpenHashMap<>();
+        static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_2 = new Object2IntOpenHashMap<>();
 
-        private static void readFlags(int flags, AdventureSetting[] mappings, Consumer<AdventureSetting> applyTo) {
+        static void readFlags(int flags, AdventureSetting[] mappings, Consumer<AdventureSetting> applyTo) {
             for (int i = 0; i < mappings.length; i++) {
                 AdventureSetting setting = mappings[i];
                 if (setting != null && (flags & (1 << i)) != 0) {

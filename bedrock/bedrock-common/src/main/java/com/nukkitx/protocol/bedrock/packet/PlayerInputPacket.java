@@ -11,13 +11,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface PlayerInputPacket extends BedrockPacket {
-    private Vector2f inputMotion;
-    private boolean jumping;
-    private boolean sneaking;
+    Vector2f inputMotion;
+    boolean jumping;
+    boolean sneaking;
 
 
-    public class PlayerInputReader_v291 implements BedrockPacketReader<PlayerInputPacket> {
-        public static final PlayerInputReader_v291 INSTANCE = new PlayerInputReader_v291();
+    record v291 implements PlayerInputPacket {
 
 
         @Override

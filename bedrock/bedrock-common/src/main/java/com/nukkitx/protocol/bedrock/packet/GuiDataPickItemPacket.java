@@ -10,13 +10,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface GuiDataPickItemPacket extends BedrockPacket {
-    private String description;
-    private String itemEffects;
-    private int hotbarSlot;
+    String description;
+    String itemEffects;
+    int hotbarSlot;
 
 
-    public class GuiDataPickItemReader_v291 implements BedrockPacketReader<GuiDataPickItemPacket> {
-        public static final GuiDataPickItemReader_v291 INSTANCE = new GuiDataPickItemReader_v291();
+    record v291 implements GuiDataPickItemPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, GuiDataPickItemPacket packet) {

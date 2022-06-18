@@ -11,12 +11,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ModalFormResponsePacket extends BedrockPacket {
-    private int formId;
-    private String formData;
+    int formId;
+    String formData;
 
 
-    public class ModalFormResponseReader_v291 implements BedrockPacketReader<ModalFormResponsePacket> {
-        public static final ModalFormResponseReader_v291 INSTANCE = new ModalFormResponseReader_v291();
+    record v291 implements ModalFormResponsePacket {
 
 
         @Override

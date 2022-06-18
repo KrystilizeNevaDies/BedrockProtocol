@@ -21,24 +21,24 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 public interface InventoryTransactionPacket extends BedrockPacket {
-    private int legacyRequestId;
-    private final List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
-    private final List<InventoryActionData> actions = new ObjectArrayList<>();
-    private TransactionType transactionType;
-    private int actionType;
-    private long runtimeEntityId;
-    private Vector3i blockPosition;
-    private int blockFace;
-    private int hotbarSlot;
-    private ItemData itemInHand;
-    private Vector3f playerPosition;
-    private Vector3f clickPosition;
-    private Vector3f headPosition;
+    int legacyRequestId;
+    final List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
+    final List<InventoryActionData> actions = new ObjectArrayList<>();
+    TransactionType transactionType;
+    int actionType;
+    long runtimeEntityId;
+    Vector3i blockPosition;
+    int blockFace;
+    int hotbarSlot;
+    ItemData itemInHand;
+    Vector3f playerPosition;
+    Vector3f clickPosition;
+    Vector3f headPosition;
     /**
      * @since v407
      * @deprecated v431
      */
-    private boolean usingNetIds;
+    boolean usingNetIds;
     /**
      * Runtime ID of block being picked.
      * ItemUseInventoryTransaction only
@@ -46,15 +46,15 @@ public interface InventoryTransactionPacket extends BedrockPacket {
      * @param blockRuntimeId runtime ID of block
      * @return runtime ID of block
      */
-    private int blockRuntimeId;
+    int blockRuntimeId;
 
 
-    public class InventoryTransactionReader_v291 implements BedrockPacketReader<InventoryTransactionPacket> {
-        public static final InventoryTransactionReader_v291 INSTANCE = new InventoryTransactionReader_v291();
+    record v291 implements InventoryTransactionPacket {
 
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             TransactionType transactionType = packet.getTransactionType();
             VarInts.writeUnsignedInt(buffer, transactionType.ordinal());
 
@@ -74,7 +74,8 @@ public interface InventoryTransactionPacket extends BedrockPacket {
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             TransactionType transactionType = TransactionType.values()[VarInts.readUnsignedInt(buffer)];
             packet.setTransactionType(transactionType);
 
@@ -93,7 +94,8 @@ public interface InventoryTransactionPacket extends BedrockPacket {
             }
         }
 
-        public void readItemUseOnEntity(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void readItemUseOnEntity(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
             packet.setActionType(VarInts.readUnsignedInt(buffer));
             packet.setHotbarSlot(VarInts.readInt(buffer));
@@ -102,7 +104,8 @@ public interface InventoryTransactionPacket extends BedrockPacket {
             packet.setClickPosition(helper.readVector3f(buffer));
         }
 
-        public void writeItemUseOnEntity(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void writeItemUseOnEntity(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
             VarInts.writeUnsignedInt(buffer, packet.getActionType());
             VarInts.writeInt(buffer, packet.getHotbarSlot());
@@ -111,14 +114,16 @@ public interface InventoryTransactionPacket extends BedrockPacket {
             helper.writeVector3f(buffer, packet.getClickPosition());
         }
 
-        public void readItemRelease(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void readItemRelease(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             packet.setActionType(VarInts.readUnsignedInt(buffer));
             packet.setHotbarSlot(VarInts.readInt(buffer));
             packet.setItemInHand(helper.readItem(buffer, session));
             packet.setHeadPosition(helper.readVector3f(buffer));
         }
 
-        public void writeItemRelease(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {
+        public void writeItemRelease(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket
+                packet, BedrockSession session) {
             VarInts.writeUnsignedInt(buffer, packet.getActionType());
             VarInts.writeInt(buffer, packet.getHotbarSlot());
             helper.writeItem(buffer, packet.getItemInHand(), session);
@@ -126,8 +131,8 @@ public interface InventoryTransactionPacket extends BedrockPacket {
         }
     }
 
-    public class InventoryTransactionReader_v407 extends InventoryTransactionReader_v291 {
-        public static final InventoryTransactionReader_v407 INSTANCE = new InventoryTransactionReader_v407();
+    record v407 extends InventoryTransactionReader_v291 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryTransactionPacket packet, BedrockSession session) {

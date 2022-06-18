@@ -12,12 +12,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SubClientLoginPacket extends BedrockPacket {
-    private AsciiString chainData;
-    private AsciiString skinData;
+    AsciiString chainData;
+    AsciiString skinData;
 
 
-    public class SubClientLoginReader_v291 implements BedrockPacketReader<SubClientLoginPacket> {
-        public static final SubClientLoginReader_v291 INSTANCE = new SubClientLoginReader_v291();
+    record v291 implements SubClientLoginPacket {
 
 
         @Override

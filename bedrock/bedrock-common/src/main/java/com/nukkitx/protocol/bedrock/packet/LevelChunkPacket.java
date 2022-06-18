@@ -14,24 +14,24 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 interface LevelChunkPacket extends BedrockPacket {
-    private int chunkX;
-    private int chunkZ;
-    private int subChunksLength;
-    private boolean cachingEnabled;
+    int chunkX;
+    int chunkZ;
+    int subChunksLength;
+    boolean cachingEnabled;
     /**
      * @since v471
      */
-    private boolean requestSubChunks;
+    boolean requestSubChunks;
     /**
      * @since v485
      */
-    private int subChunkLimit;
-    private final LongList blobIds = new LongArrayList();
-    private byte[] data;
+    int subChunkLimit;
+    final LongList blobIds = new LongArrayList();
+    byte[] data;
 
 
-    public class FullChunkDataReader_v291 implements BedrockPacketReader<LevelChunkPacket> {
-        public static final FullChunkDataReader_v291 INSTANCE = new FullChunkDataReader_v291();
+    record v291 implements LevelChunkPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
@@ -48,8 +48,8 @@ interface LevelChunkPacket extends BedrockPacket {
         }
     }
 
-    public class LevelChunkReader_v361 implements BedrockPacketReader<LevelChunkPacket> {
-        public static final LevelChunkReader_v361 INSTANCE = new LevelChunkReader_v361();
+    record v361 implements LevelChunkPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
@@ -88,8 +88,8 @@ interface LevelChunkPacket extends BedrockPacket {
         }
     }
 
-    public class LevelChunkReader_v486 extends LevelChunkReader_v361 {
-        public static final LevelChunkReader_v486 INSTANCE = new LevelChunkReader_v486();
+    record v486 extends LevelChunkReader_v361 {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {

@@ -18,6 +18,7 @@ import java.io.IOException;
 interface AnvilDamagePacket extends BedrockPacket {
 
     byte damage();
+
     @NotNull Vector3i position();
 
     record v388(byte damage, @NotNull Vector3i position) implements AnvilDamagePacket, Codec388 {

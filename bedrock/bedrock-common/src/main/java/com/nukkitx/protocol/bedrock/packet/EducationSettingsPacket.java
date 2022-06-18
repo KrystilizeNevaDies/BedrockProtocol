@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
@@ -9,110 +11,131 @@ import com.nukkitx.protocol.util.OptionalBoolean;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.Optional;
 
 interface EducationSettingsPacket extends BedrockPacket {
-    private String codeBuilderUri;
-    private String codeBuilderTitle;
-    private boolean canResizeCodeBuilder;
-    /**
-     * @since v465
-     */
-    private boolean disableLegacyTitle;
-    /**
-     * @since v465
-     */
-    private String postProcessFilter;
-    /**
-     * @since v465
-     */
-    private String screenshotBorderPath;
-    private OptionalBoolean entityCapabilities;
-    private Optional<String> overrideUri;
-    private boolean quizAttached;
-    private OptionalBoolean externalLinkSettings;
+//    String codeBuilderUri();
+//    String codeBuilderTitle();
+//    boolean canResizeCodeBuilder();
+//    /**
+//     * @since v465
+//     */
+//    boolean disableLegacyTitle();
+//    /**
+//     * @since v465
+//     */
+//    String postProcessFilter();
+//    /**
+//     * @since v465
+//     */
+//    String screenshotBorderPath();
+//    OptionalBoolean entityCapabilities();
+//    Optional<String> overrideUri();
+//    boolean quizAttached();
+//    OptionalBoolean externalLinkSettings();
 
 
-    public class EducationSettingsReader_v388 implements BedrockPacketReader<EducationSettingsPacket> {
-
-        public static final EducationSettingsReader_v388 INSTANCE = new EducationSettingsReader_v388();
-
+    record v388(String codeBuilderUri, boolean quizAttached) implements EducationSettingsPacket {
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            helper.writeString(buffer, packet.getCodeBuilderUri());
-            buffer.writeBoolean(packet.isQuizAttached());
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, codeBuilderUri());
+            writeBoolean(output, quizAttached());
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            packet.setCodeBuilderUri(helper.readString(buffer));
-            packet.setQuizAttached(buffer.readBoolean());
-        }
+        public static final Interpreter<v388> INTERPRETER = new Interpreter<v388>() {
+            @Override
+            public @NotNull v388 interpret(@NotNull BitInput input) throws IOException {
+                String codeBuilderUri = readString(input);
+                boolean quizAttached = readBoolean(input);
+                return new v388(codeBuilderUri, quizAttached);
+            }
+        };
     }
 
-    public class EducationSettingsReader_v407 extends EducationSettingsReader_v388 {
-
-        public static final EducationSettingsReader_v407 INSTANCE = new EducationSettingsReader_v407();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            helper.writeString(buffer, packet.getCodeBuilderUri());
-            helper.writeString(buffer, packet.getCodeBuilderTitle());
-            buffer.writeBoolean(packet.isCanResizeCodeBuilder());
-            helper.writeOptional(buffer, Optional::isPresent, packet.getOverrideUri(),
-                    (byteBuf, optional) -> helper.writeString(byteBuf, optional.get()));
-            buffer.writeBoolean(packet.isQuizAttached());
-        }
+    // TODO: Decide what to do with Nullable values
+    record v407(String codeBuilderUri, String codeBuilderTitle, boolean canResizeCodeBuilder,
+                @Nullable String overrideUri, boolean quizAttached) implements EducationSettingsPacket {
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            packet.setCodeBuilderUri(helper.readString(buffer));
-            packet.setCodeBuilderTitle(helper.readString(buffer));
-            packet.setCanResizeCodeBuilder(buffer.readBoolean());
-            packet.setOverrideUri(helper.readOptional(buffer, Optional.empty(), byteBuf -> Optional.of(helper.readString(byteBuf))));
-            packet.setQuizAttached(buffer.readBoolean());
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, codeBuilderUri());
+            writeString(output, codeBuilderTitle());
+            writeBoolean(output, canResizeCodeBuilder());
+            if (overrideUri() == null) {
+                writeBoolean(output, false);
+            } else {
+                writeBoolean(output, true);
+                writeString(output, overrideUri());
+            }
+            writeBoolean(output, quizAttached());
         }
+
+        public static final Interpreter<v407> INTERPRETER = new Interpreter<v407>() {
+            @Override
+            public @NotNull v407 interpret(@NotNull BitInput input) throws IOException {
+                String codeBuilderUri = readString(input);
+                String codeBuilderTitle = readString(input);
+                boolean canResizeCodeBuilder = readBoolean(input);
+                String overrideUriValue = readBoolean(input) ? readString(input) : null;
+                boolean quizAttached = readBoolean(input);
+                return new v407(codeBuilderUri, codeBuilderTitle, canResizeCodeBuilder, overrideUriValue, quizAttached);
+            }
+        };
     }
 
-    public class EducationSettingsReader_v465 extends EducationSettingsReader_v407 {
-
-        public static final EducationSettingsReader_v465 INSTANCE = new EducationSettingsReader_v465();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            helper.writeString(buffer, packet.getCodeBuilderUri());
-            helper.writeString(buffer, packet.getCodeBuilderTitle());
-            buffer.writeBoolean(packet.isCanResizeCodeBuilder());
-            buffer.writeBoolean(packet.isDisableLegacyTitle());
-            helper.writeString(buffer, packet.getPostProcessFilter());
-            helper.writeString(buffer, packet.getScreenshotBorderPath());
-            helper.writeOptional(buffer, OptionalBoolean::isPresent, packet.getEntityCapabilities(),
-                    (byteBuf, optional) -> byteBuf.writeBoolean(optional.getAsBoolean()));
-            helper.writeOptional(buffer, Optional::isPresent, packet.getOverrideUri(),
-                    (byteBuf, optional) -> helper.writeString(byteBuf, optional.get()));
-            buffer.writeBoolean(packet.isQuizAttached());
-            helper.writeOptional(buffer, OptionalBoolean::isPresent, packet.getExternalLinkSettings(),
-                    (byteBuf, optional) -> byteBuf.writeBoolean(optional.getAsBoolean()));
-        }
+    record v465(String codeBuilderUri, String codeBuilderTitle, boolean canResizeCodeBuilder,
+                boolean isDisableLegacyTitle, String postProcessFilter, String screenshotBorderPath,
+                OptionalBoolean entityCapabilities, @Nullable String overrideUri, boolean quizAttached,
+                OptionalBoolean externalLinkSettings) implements EducationSettingsPacket {
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EducationSettingsPacket packet) {
-            packet.setCodeBuilderUri(helper.readString(buffer));
-            packet.setCodeBuilderTitle(helper.readString(buffer));
-            packet.setCanResizeCodeBuilder(buffer.readBoolean());
-            packet.setDisableLegacyTitle(buffer.readBoolean());
-            packet.setPostProcessFilter(helper.readString(buffer));
-            packet.setScreenshotBorderPath(helper.readString(buffer));
-            packet.setEntityCapabilities(helper.readOptional(buffer, OptionalBoolean.empty(),
-                    byteBuf -> OptionalBoolean.of(buffer.readBoolean())));
-            packet.setOverrideUri(helper.readOptional(buffer, Optional.empty(), byteBuf -> Optional.of(helper.readString(byteBuf))));
-            packet.setQuizAttached(buffer.readBoolean());
-            packet.setExternalLinkSettings(helper.readOptional(buffer, OptionalBoolean.empty(),
-                    byteBuf -> OptionalBoolean.of(buffer.readBoolean())));
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeString(output, codeBuilderUri());
+            writeString(output, codeBuilderTitle());
+            writeBoolean(output, canResizeCodeBuilder());
+            writeBoolean(output, isDisableLegacyTitle());
+            writeString(output, postProcessFilter());
+            writeString(output, screenshotBorderPath());
+            if (entityCapabilities().isPresent()) {
+                writeBoolean(output, true);
+                writeBoolean(output, entityCapabilities().getAsBoolean());
+            } else {
+                writeBoolean(output, false);
+            }
+            if (overrideUri() == null) {
+                writeBoolean(output, false);
+            } else {
+                writeBoolean(output, true);
+                writeString(output, overrideUri());
+            }
+            writeBoolean(output, quizAttached());
+            if (externalLinkSettings().isPresent()) {
+                writeBoolean(output, true);
+                writeBoolean(output, externalLinkSettings().getAsBoolean());
+            } else {
+                writeBoolean(output, false);
+            }
         }
+
+        public static final Interpreter<v465> INTERPRETER = new Interpreter<v465>() {
+            @Override
+            public @NotNull v465 interpret(@NotNull BitInput input) throws IOException {
+                String codeBuilderUri = readString(input);
+                String codeBuilderTitle = readString(input);
+                boolean canResizeCodeBuilder = readBoolean(input);
+                boolean isDisableLegacyTitle = readBoolean(input);
+                String postProcessFilter = readString(input);
+                String screenshotBorderPath = readString(input);
+                OptionalBoolean entityCapabilities = readBoolean(input) ? OptionalBoolean.of(readBoolean(input)) : OptionalBoolean.empty();
+                String overrideUriValue = readBoolean(input) ? readString(input) : null;
+                boolean quizAttached = readBoolean(input);
+                OptionalBoolean externalLinkSettings = readBoolean(input) ? OptionalBoolean.of(readBoolean(input)) : OptionalBoolean.empty();
+                return new v465(codeBuilderUri, codeBuilderTitle, canResizeCodeBuilder, isDisableLegacyTitle, postProcessFilter, screenshotBorderPath, entityCapabilities, overrideUriValue, quizAttached, externalLinkSettings);
+            }
+        };
     }
-
-
-
 }

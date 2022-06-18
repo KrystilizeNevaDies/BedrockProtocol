@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -11,6 +13,9 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 
 /**
@@ -21,40 +26,22 @@ import lombok.EqualsAndHashCode;
 interface CreativeContentPacket extends BedrockPacket {
     /**
      * Item entries for the creative menu. Each item must have a unique ID for the net ID manager
-     *
-     * @see ItemData#fromNet
      */
-    private ItemData[] contents;
+    ItemData[] contents();
 
 
-    @Overrid
-
-    public class CreativeContentReader_v407 implements BedrockPacketReader<CreativeContentPacket> {
-
-        public static final CreativeContentReader_v407 INSTANCE = new CreativeContentReader_v407();
-
-        private static final ItemData[] EMPTY = new ItemData[0];
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CreativeContentPacket packet, BedrockSession session) {
-            helper.writeArray(buffer, packet.getContents(), session, this::writeCreativeItem);
-        }
+    record v407(ItemData.Creative[] contents) implements CreativeContentPacket {
+        public static final Interpreter<v407> INTERPRETER = new Interpreter<v407>() {
+            @Override
+            public @NotNull v407 interpret(@NotNull BitInput input) throws IOException {
+                ItemData.Creative[] contents = readArray(input, ItemData.Creative.INTERPRETER);
+                return new v407(contents);
+            }
+        };
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, CreativeContentPacket packet, BedrockSession session) {
-            packet.setContents(helper.readArray(buffer, EMPTY, session, this::readCreativeItem));
-        }
-
-        protected ItemData readCreativeItem(ByteBuf buffer, BedrockPacketHelper helper, BedrockSession session) {
-            int netId = VarInts.readUnsignedInt(buffer);
-            ItemData item = helper.readItemInstance(buffer, session);
-            item.setNetId(netId);
-            return item;
-        }
-
-        protected void writeCreativeItem(ByteBuf buffer, BedrockPacketHelper helper, BedrockSession session, ItemData item) {
-            VarInts.writeUnsignedInt(buffer, item.getNetId());
-            helper.writeItemInstance(buffer, item, session);
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeArray(output, contents());
         }
     }
 }

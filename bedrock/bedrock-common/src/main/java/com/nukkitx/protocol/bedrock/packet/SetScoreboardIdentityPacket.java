@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SetScoreboardIdentityPacket extends BedrockPacket {
-    private final List<Entry> entries = new ObjectArrayList<>();
-    private Action action;
+    final List<Entry> entries = new ObjectArrayList<>();
+    Action action;
 
 
     public enum Action {
@@ -27,12 +27,11 @@ public interface SetScoreboardIdentityPacket extends BedrockPacket {
 
     @Value
     public static class Entry {
-        private final long scoreboardId;
-        private final UUID uuid;
+        final long scoreboardId;
+        final UUID uuid;
     }
 
-    public class SetScoreboardIdentityReader_v291 implements BedrockPacketReader<SetScoreboardIdentityPacket> {
-        public static final SetScoreboardIdentityReader_v291 INSTANCE = new SetScoreboardIdentityReader_v291();
+    record v291 implements SetScoreboardIdentityPacket {
 
 
         @Override

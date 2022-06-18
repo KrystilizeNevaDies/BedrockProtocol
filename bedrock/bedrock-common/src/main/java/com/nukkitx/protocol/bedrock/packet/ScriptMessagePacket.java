@@ -12,15 +12,12 @@ import lombok.ToString;
 
 interface ScriptMessagePacket extends BedrockPacket {
 
-    private String channel;
-    private String message;
+    String channel;
+    String message;
 
 
-    @Overrid
+    record v486 implements ScriptMessagePacket {
 
-    public class ScriptMessageReader_v486 implements BedrockPacketReader<ScriptMessagePacket> {
-
-        public static final ScriptMessageReader_v486 INSTANCE = new ScriptMessageReader_v486();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ScriptMessagePacket packet) {

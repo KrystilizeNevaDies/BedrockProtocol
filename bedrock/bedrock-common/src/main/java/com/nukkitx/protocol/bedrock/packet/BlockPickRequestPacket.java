@@ -17,10 +17,13 @@ import java.io.IOException;
 
 public interface BlockPickRequestPacket extends BedrockPacket {
     @NotNull Vector3i blockPosition();
+
     boolean addUserData();
+
     byte hotbarSlot();
 
-    record v291(@NotNull Vector3i blockPosition, boolean addUserData, byte hotbarSlot) implements BlockPickRequestPacket, Codec291 {
+    record v291(@NotNull Vector3i blockPosition, boolean addUserData,
+                byte hotbarSlot) implements BlockPickRequestPacket, Codec291 {
         public static final Interpreter<v291> INTERPRETER = new Interpreter<v291>() {
             @Override
             public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {

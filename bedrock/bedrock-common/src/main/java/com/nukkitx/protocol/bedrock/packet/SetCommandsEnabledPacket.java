@@ -10,11 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetCommandsEnabledPacket extends BedrockPacket {
-    private boolean commandsEnabled;
+    boolean commandsEnabled;
 
 
-    public class SetCommandsEnabledReader_v291 implements BedrockPacketReader<SetCommandsEnabledPacket> {
-        public static final SetCommandsEnabledReader_v291 INSTANCE = new SetCommandsEnabledReader_v291();
+    record v291 implements SetCommandsEnabledPacket {
 
 
         @Override

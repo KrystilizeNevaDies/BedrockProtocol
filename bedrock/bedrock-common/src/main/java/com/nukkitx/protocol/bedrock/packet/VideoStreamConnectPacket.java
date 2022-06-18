@@ -10,11 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 interface VideoStreamConnectPacket extends BedrockPacket {
-    private String address;
-    private float screenshotFrequency;
-    private Action action;
-    private int width;
-    private int height;
+    String address;
+    float screenshotFrequency;
+    Action action;
+    int width;
+    int height;
 
 
     public enum Action {
@@ -22,8 +22,8 @@ interface VideoStreamConnectPacket extends BedrockPacket {
         CLOSE
     }
 
-    public class VideoStreamConnectReader_v340 implements BedrockPacketReader<VideoStreamConnectPacket> {
-        public static final VideoStreamConnectReader_v340 INSTANCE = new VideoStreamConnectReader_v340();
+    record v340 implements VideoStreamConnectPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, VideoStreamConnectPacket packet) {
@@ -40,8 +40,8 @@ interface VideoStreamConnectPacket extends BedrockPacket {
         }
     }
 
-    public class VideoStreamConnectReader_v361 implements BedrockPacketReader<VideoStreamConnectPacket> {
-        public static final VideoStreamConnectReader_v361 INSTANCE = new VideoStreamConnectReader_v361();
+    record v361 implements VideoStreamConnectPacket {
+
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, VideoStreamConnectPacket packet) {

@@ -16,21 +16,21 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public interface MoveEntityDeltaPacket extends BedrockPacket {
-    private long runtimeEntityId;
+    long runtimeEntityId;
 
-    private final Set<Flag> flags = EnumSet.noneOf(Flag.class);
+    final Set<Flag> flags = EnumSet.noneOf(Flag.class);
 
-    private int deltaX;
-    private int deltaY;
-    private int deltaZ;
+    int deltaX;
+    int deltaY;
+    int deltaZ;
 
-    private float x;
-    private float y;
-    private float z;
+    float x;
+    float y;
+    float z;
 
-    private float pitch;
-    private float yaw;
-    private float headYaw;
+    float pitch;
+    float yaw;
+    float headYaw;
 
 
     public String toString() {
@@ -52,7 +52,7 @@ public interface MoveEntityDeltaPacket extends BedrockPacket {
         FORCE_MOVE_LOCAL_ENTITY
     }
 
-    public class MoveEntityDeltaReader_v291 implements BedrockPacketReader<MoveEntityDeltaPacket> {
+    record v291 implements MoveEntityDeltaPacket {
         protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_DELTA_X =
                 (buffer, helper, packet) -> packet.setDeltaX(VarInts.readInt(buffer));
         protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_DELTA_Y =
@@ -83,7 +83,6 @@ public interface MoveEntityDeltaPacket extends BedrockPacket {
 
         protected static final MoveEntityDeltaPacket.Flag[] FLAGS = MoveEntityDeltaPacket.Flag.values();
 
-        public static final MoveEntityDeltaReader_v291 INSTANCE = new MoveEntityDeltaReader_v291();
 
         protected final EnumMap<Flag, TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket>> readers = new EnumMap<>(MoveEntityDeltaPacket.Flag.class);
         protected final EnumMap<MoveEntityDeltaPacket.Flag, TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket>> writers = new EnumMap<>(MoveEntityDeltaPacket.Flag.class);
@@ -146,9 +145,8 @@ public interface MoveEntityDeltaPacket extends BedrockPacket {
         }
     }
 
-    public class MoveEntityDeltaReader_v388 extends MoveEntityDeltaReader_v291 {
+    record v388 extends MoveEntityDeltaReader_v291 {
 
-        public static final MoveEntityDeltaReader_v388 INSTANCE = new MoveEntityDeltaReader_v388();
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityDeltaPacket packet) {
@@ -192,7 +190,7 @@ public interface MoveEntityDeltaPacket extends BedrockPacket {
         }
     }
 
-    public class MoveEntityDeltaReader_v419 extends MoveEntityDeltaReader_v388 {
+    record v419 extends MoveEntityDeltaReader_v388 {
 
         protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_X =
                 (buffer, helper, packet) -> packet.setX(buffer.readFloatLE());
@@ -208,7 +206,6 @@ public interface MoveEntityDeltaPacket extends BedrockPacket {
         protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_Z =
                 (buffer, helper, packet) -> buffer.writeFloatLE(packet.getZ());
 
-        public static final MoveEntityDeltaReader_v419 INSTANCE = new MoveEntityDeltaReader_v419();
 
         protected MoveEntityDeltaReader_v419() {
             super();

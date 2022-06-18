@@ -13,21 +13,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface UpdateTradePacket extends BedrockPacket {
-    private int containerId;
-    private ContainerType containerType;
-    private int size; // Hardcoded to 0
-    private int tradeTier;
-    private long traderUniqueEntityId;
-    private long playerUniqueEntityId;
-    private String displayName;
-    private NbtMap offers;
-    private boolean newTradingUi;
-    private boolean recipeAddedOnUpdate;
-    private boolean usingEconomyTrade;
+    int containerId;
+    ContainerType containerType;
+    int size; // Hardcoded to 0
+    int tradeTier;
+    long traderUniqueEntityId;
+    long playerUniqueEntityId;
+    String displayName;
+    NbtMap offers;
+    boolean newTradingUi;
+    boolean recipeAddedOnUpdate;
+    boolean usingEconomyTrade;
 
 
-    public class UpdateTradeReader_v291 implements BedrockPacketReader<UpdateTradePacket> {
-        public static final UpdateTradeReader_v291 INSTANCE = new UpdateTradeReader_v291();
+    record v291 implements UpdateTradePacket {
 
 
         @Override
@@ -57,8 +56,7 @@ public interface UpdateTradePacket extends BedrockPacket {
         }
     }
 
-    public class UpdateTradeReader_v313 implements BedrockPacketReader<UpdateTradePacket> {
-        public static final UpdateTradeReader_v313 INSTANCE = new UpdateTradeReader_v313();
+    record v313 implements UpdateTradePacket {
 
 
         @Override
@@ -90,8 +88,7 @@ public interface UpdateTradePacket extends BedrockPacket {
         }
     }
 
-    public class UpdateTradeReader_v354 implements BedrockPacketReader<UpdateTradePacket> {
-        public static final UpdateTradeReader_v354 INSTANCE = new UpdateTradeReader_v354();
+    record v354 implements UpdateTradePacket {
 
 
         @Override

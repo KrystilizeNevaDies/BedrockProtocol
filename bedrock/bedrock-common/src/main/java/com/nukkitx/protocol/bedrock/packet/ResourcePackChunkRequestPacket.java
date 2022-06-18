@@ -12,13 +12,12 @@ import lombok.EqualsAndHashCode;
 import java.util.UUID;
 
 public interface ResourcePackChunkRequestPacket extends BedrockPacket {
-    private UUID packId;
-    private String packVersion;
-    private int chunkIndex;
+    UUID packId;
+    String packVersion;
+    int chunkIndex;
 
 
-    public class ResourcePackChunkRequestReader_v291 implements BedrockPacketReader<ResourcePackChunkRequestPacket> {
-        public static final ResourcePackChunkRequestReader_v291 INSTANCE = new ResourcePackChunkRequestReader_v291();
+    record v291 implements ResourcePackChunkRequestPacket {
 
 
         @Override

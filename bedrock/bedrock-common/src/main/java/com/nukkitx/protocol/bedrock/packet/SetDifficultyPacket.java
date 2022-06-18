@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface SetDifficultyPacket extends BedrockPacket {
-    private int difficulty;
+    int difficulty;
 
 
-    public class SetDifficultyReader_v291 implements BedrockPacketReader<SetDifficultyPacket> {
-        public static final SetDifficultyReader_v291 INSTANCE = new SetDifficultyReader_v291();
+    record v291 implements SetDifficultyPacket {
 
 
         @Override

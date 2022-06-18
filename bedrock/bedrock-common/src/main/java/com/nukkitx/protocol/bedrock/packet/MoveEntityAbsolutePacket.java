@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MoveEntityAbsolutePacket extends BedrockPacket {
-    private long runtimeEntityId;
-    private Vector3f position;
-    private Vector3f rotation;
-    private boolean onGround;
-    private boolean teleported;
+    long runtimeEntityId;
+    Vector3f position;
+    Vector3f rotation;
+    boolean onGround;
+    boolean teleported;
 
 
-    public class MoveEntityAbsoluteReader_v291 implements BedrockPacketReader<MoveEntityAbsolutePacket> {
-        public static final MoveEntityAbsoluteReader_v291 INSTANCE = new MoveEntityAbsoluteReader_v291();
+    record v291 implements MoveEntityAbsolutePacket {
 
-        private static final int FLAG_ON_GROUND = 0x1;
-        private static final int FLAG_TELEPORTED = 0x2;
+
+        static final int FLAG_ON_GROUND = 0x1;
+        static final int FLAG_TELEPORTED = 0x2;
 
         @Override
         public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityAbsolutePacket packet) {
