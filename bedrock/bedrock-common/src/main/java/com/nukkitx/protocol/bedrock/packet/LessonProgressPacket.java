@@ -10,32 +10,20 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import java.io.IOException;
 
 interface LessonProgressPacket extends BedrockPacket {
-    LessonAction action;
-    int score;
-    String activityId;
+    LessonAction action();
+    int score();
+    String activityId();
 
 
-    @Overrid
+    record Beta(@AsInt LessonAction action, int score, String activityId) implements LessonProgressPacket {
+        public static final Interpreter<Beta> INTERPRETER = Interpreter.generate(Beta.class);
+        private static final Deferer<Beta> DEFERER = Deferer.generate(Beta.class);
 
-    public class LessonProgressReaderBeta implements LessonProgressPacket {
-        public static final LessonProgressReaderBeta INSTANCE = new LessonProgressReaderBeta();
-
-        static final LessonAction[] ACTIONS = LessonAction.values();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LessonProgressPacket packet) {
-            VarInts.writeInt(buffer, packet.getAction().ordinal());
-            VarInts.writeInt(buffer, packet.getScore());
-            helper.writeString(buffer, packet.getActivityId());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LessonProgressPacket packet) {
-            packet.setAction(ACTIONS[VarInts.readInt(buffer)]);
-            packet.setScore(VarInts.readInt(buffer));
-            packet.setActivityId(helper.readString(buffer));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 

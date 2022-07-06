@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -11,34 +13,37 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 interface PacketViolationWarningPacket extends BedrockPacket {
-    PacketViolationType valueType;
-    PacketViolationSeverity severity;
-    int packetCauseId;
-    String context;
+    int typeId();
+    int severityId();
+    int causeId();
+    String context();
 
 
-    record v407 implements PacketViolationWarningPacket {
+    /**
+     * For some reason, typeId and severityId is decremented before being sent and incremented when being received.
+     * Probably a bedrock bug.
+     *
+     * So if you are using the constructor with the direct ints, make sure to decrement the id before sending.
+     * e.g. if you want type with id 0, you would set -1 in the constructor.
+     */
+    record v407(int typeId, int severityId, int causeId, String context) implements PacketViolationWarningPacket {
 
-
-        protected static final PacketViolationType[] TYPES = PacketViolationType.values();
-        protected static final PacketViolationSeverity[] SEVERITIES = PacketViolationSeverity.values();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PacketViolationWarningPacket packet) {
-            VarInts.writeInt(buffer, packet.getType().ordinal() - 1);
-            VarInts.writeInt(buffer, packet.getSeverity().ordinal() - 1);
-            VarInts.writeInt(buffer, packet.getPacketCauseId());
-            helper.writeString(buffer, packet.getContext());
+        public v407(PacketViolationType type, PacketViolationSeverity severity, int causeId,
+                    String context) {
+            this(type.ordinal() - 1, severity.ordinal() - 1, causeId, context); // see here, the offset
         }
 
+        public static final Interpreter<v407> INTERPRETER = Interpreter.generate(v407.class);
+        public static final Deferer<v407> DEFERER = Deferer.generate(v407.class);
+
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PacketViolationWarningPacket packet) {
-            packet.setType(TYPES[VarInts.readInt(buffer) + 1]);
-            packet.setSeverity(SEVERITIES[VarInts.readInt(buffer) + 1]);
-            packet.setPacketCauseId(VarInts.readInt(buffer));
-            packet.setContext(helper.readString(buffer));
+        public void write(@NotNull BitOutput writer) throws IOException {
+            DEFERER.defer(writer, this);
         }
     }
 

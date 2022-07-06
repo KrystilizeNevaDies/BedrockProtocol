@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
@@ -11,38 +12,26 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface LevelSoundEvent1Packet extends BedrockPacket {
-    SoundEvent sound;
-    Vector3f position;
-    int extraData;
-    int pitch;
-    boolean babySound;
-    boolean relativeVolumeDisabled;
+    SoundEvent sound();
+    Vector3f position();
+    int data();
+    int pitch();
+    boolean isBabySound();
+    boolean isRelativeVolumeDisabled();
 
 
-    public class LevelSoundEvent1Reader_v291 implements LevelSoundEvent1Packet {
-        public static final LevelSoundEvent1Reader_v291 INSTANCE = new LevelSoundEvent1Reader_v291();
+    record v291(SoundEvent sound, Vector3f position, int data, int pitch, boolean isBabySound,
+                boolean isRelativeVolumeDisabled) implements LevelSoundEvent1Packet {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelSoundEvent1Packet packet) {
-            buffer.writeByte(helper.getSoundEventId(packet.getSound()));
-            helper.writeVector3f(buffer, packet.getPosition());
-            VarInts.writeInt(buffer, packet.getExtraData());
-            VarInts.writeInt(buffer, packet.getPitch());
-            buffer.writeBoolean(packet.isBabySound());
-            buffer.writeBoolean(packet.isRelativeVolumeDisabled());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelSoundEvent1Packet packet) {
-            packet.setSound(helper.getSoundEvent(buffer.readUnsignedByte()));
-            packet.setPosition(helper.readVector3f(buffer));
-            packet.setExtraData(VarInts.readInt(buffer));
-            packet.setPitch(VarInts.readInt(buffer));
-            packet.setBabySound(buffer.readBoolean());
-            packet.setRelativeVolumeDisabled(buffer.readBoolean());
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

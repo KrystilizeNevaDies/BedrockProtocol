@@ -1,5 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -12,33 +14,33 @@ import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface EntityEventPacket extends BedrockPacket {
-    long runtimeEntityId;
-    EntityEventType valueType;
-    int data;
+    long runtimeEntityId();
+    EntityEventType entityEventType();
+    int data();
 
 
-    record v291 implements EntityEventPacket {
-
-        static final InternalLogger log = InternalLoggerFactory.getInstance(EntityEventReader_v291.class);
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EntityEventPacket packet) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-            buffer.writeByte(helper.getEntityEventId(packet.getType()));
-            VarInts.writeInt(buffer, packet.getData());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EntityEventPacket packet) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            int event = buffer.readUnsignedByte();
-            packet.setType(helper.getEntityEvent(event));
-            packet.setData(VarInts.readInt(buffer));
-            if (packet.getType() == null) {
-                log.debug("Unknown EntityEvent {} in packet {}", event, packet);
+    record v291(long runtimeEntityId, EntityEventType entityEventType, int data) implements EntityEventPacket {
+        public static final Interpreter<v291> INTERPRETER = new Interpreter<v291>() {
+            @Override
+            public @NotNull v291 interpret(@NotNull BitInput input) throws IOException {
+                long runtimeEntityId = readUnsignedLong(input);
+                int entityEventTypeId = readUnsignedByte(input);
+                EntityEventType entityEventType = EntityEventType.from(entityEventTypeId);
+                int data = readInt(input);
+                return new v291(runtimeEntityId, entityEventType, data);
             }
+        };
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeUnsignedLong(output, runtimeEntityId());
+            writeByte(output, (byte) entityEventType().id());
+            writeInt(output, data());
         }
     }
 

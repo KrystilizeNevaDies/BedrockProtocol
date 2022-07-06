@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.math.vector.Vector3i;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -11,29 +12,22 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface LabTablePacket extends BedrockPacket {
-    LabTableType valueType;
-    Vector3i position;
-    LabTableReactionType reactionType;
+    LabTableType type();
+    Vector3i position();
+    LabTableReactionType reactionType();
 
 
-    record v291 implements LabTablePacket {
+    record v291(LabTableType type, Vector3i position, LabTableReactionType reactionType) implements LabTablePacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LabTablePacket packet) {
-            buffer.writeByte(packet.getType().ordinal());
-            helper.writeVector3i(buffer, packet.getPosition());
-            buffer.writeByte(packet.getReactionType().ordinal());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LabTablePacket packet) {
-            packet.setType(LabTableType.values()[buffer.readUnsignedByte()]);
-            packet.setPosition(helper.readVector3i(buffer));
-            packet.setReactionType(LabTableReactionType.values()[buffer.readUnsignedByte()]);
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

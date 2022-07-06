@@ -1,223 +1,216 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
-import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockPacketType;
-import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import com.nukkitx.protocol.bedrock.util.TriConsumer;
+import com.nukkitx.protocol.serializer.BitDataWritable;
+import com.nukkitx.protocol.serializer.PacketDataWriter;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 public interface MoveEntityDeltaPacket extends BedrockPacket {
-    long runtimeEntityId;
 
-    final Set<Flag> flags = EnumSet.noneOf(Flag.class);
+    long runtimeEntityId();
+    Flag[] flags();
 
-    int deltaX;
-    int deltaY;
-    int deltaZ;
+    interface Flag extends BitDataWritable, PacketDataWriter {
 
-    float x;
-    float y;
-    float z;
+        interface Codec291 extends Flag { }
+        interface Codec388 extends Flag { }
+        interface Codec419 extends Flag { }
 
-    float pitch;
-    float yaw;
-    float headYaw;
-
-
-    public String toString() {
-        return "MoveEntityDeltaPacket(runtimeEntityId=" + runtimeEntityId +
-                ", flags=" + flags + ", delta=(" + deltaX + ", " + deltaY + ", " + deltaZ +
-                "), position=(" + x + ", " + y + ", " + z +
-                "), rotation=(" + pitch + ", " + yaw + ", " + headYaw + "))";
-    }
-
-    public enum Flag {
-        HAS_X,
-        HAS_Y,
-        HAS_Z,
-        HAS_PITCH,
-        HAS_YAW,
-        HAS_HEAD_YAW,
-        ON_GROUND,
-        TELEPORTING,
-        FORCE_MOVE_LOCAL_ENTITY
-    }
-
-    record v291 implements MoveEntityDeltaPacket {
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_DELTA_X =
-                (buffer, helper, packet) -> packet.setDeltaX(VarInts.readInt(buffer));
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_DELTA_Y =
-                (buffer, helper, packet) -> packet.setDeltaY(VarInts.readInt(buffer));
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_DELTA_Z =
-                (buffer, helper, packet) -> packet.setDeltaZ(VarInts.readInt(buffer));
-
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_PITCH =
-                (buffer, helper, packet) -> packet.setPitch(helper.readByteAngle(buffer));
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_YAW =
-                (buffer, helper, packet) -> packet.setYaw(helper.readByteAngle(buffer));
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_HEAD_YAW =
-                (buffer, helper, packet) -> packet.setHeadYaw(helper.readByteAngle(buffer));
-
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_DELTA_X =
-                (buffer, helper, packet) -> VarInts.writeInt(buffer, packet.getDeltaX());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_DELTA_Y =
-                (buffer, helper, packet) -> VarInts.writeInt(buffer, packet.getDeltaY());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_DELTA_Z =
-                (buffer, helper, packet) -> VarInts.writeInt(buffer, packet.getDeltaZ());
-
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_PITCH =
-                (buffer, helper, packet) -> helper.writeByteAngle(buffer, packet.getPitch());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_YAW =
-                (buffer, helper, packet) -> helper.writeByteAngle(buffer, packet.getYaw());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_HEAD_YAW =
-                (buffer, helper, packet) -> helper.writeByteAngle(buffer, packet.getHeadYaw());
-
-        protected static final MoveEntityDeltaPacket.Flag[] FLAGS = MoveEntityDeltaPacket.Flag.values();
-
-
-        protected final EnumMap<Flag, TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket>> readers = new EnumMap<>(MoveEntityDeltaPacket.Flag.class);
-        protected final EnumMap<MoveEntityDeltaPacket.Flag, TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket>> writers = new EnumMap<>(MoveEntityDeltaPacket.Flag.class);
-
-        protected MoveEntityDeltaReader_v291() {
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_X, READER_DELTA_X);
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_Y, READER_DELTA_Y);
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_Z, READER_DELTA_Z);
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_PITCH, READER_PITCH);
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_YAW, READER_YAW);
-            this.readers.put(MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW, READER_HEAD_YAW);
-
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_X, WRITER_DELTA_X);
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_Y, WRITER_DELTA_Y);
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_Z, WRITER_DELTA_Z);
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_PITCH, WRITER_PITCH);
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_YAW, WRITER_YAW);
-            this.writers.put(MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW, WRITER_HEAD_YAW);
-        }
+        int id();
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityDeltaPacket packet) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-
-            int flagsIndex = buffer.writerIndex();
-            buffer.writeByte(0); // flags
-
-            int flags = 0;
-            for (MoveEntityDeltaPacket.Flag flag : packet.getFlags()) {
-                flags |= 1 << flag.ordinal();
-
-                TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> writer = this.writers.get(flag);
-                if (writer != null) {
-                    writer.accept(buffer, helper, packet);
-                }
-            }
-
-            // Go back to flags and set them
-            int currentIndex = buffer.writerIndex();
-            buffer.writerIndex(flagsIndex);
-            buffer.writeByte(flags);
-            buffer.writerIndex(currentIndex);
+        default void write(@NotNull BitOutput output) throws IOException {
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityDeltaPacket packet) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            int flags = buffer.readUnsignedByte();
-            Set<MoveEntityDeltaPacket.Flag> flagSet = packet.getFlags();
-
-            for (MoveEntityDeltaPacket.Flag flag : FLAGS) {
-                if ((flags & (1 << flag.ordinal())) != 0) {
-                    flagSet.add(flag);
-                    TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> reader = this.readers.get(flag);
-                    if (reader != null) {
-                        reader.accept(buffer, helper, packet);
-                    }
-                }
+        int DELTA_X = 0;
+        record DeltaX(int x) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_X;
             }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeInt(output, x());
+            }
+        }
+        record DeltaX419(@LE float value) implements Codec419 {
+            public int id() {
+                return DELTA_X;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeFloatLE(output, value());
+            }
+        }
+        int DELTA_Y = 1;
+        record DeltaY(int y) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_Y;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeInt(output, y());
+            }
+        }
+
+        record DeltaY419(@LE float y) implements Codec419 {
+            @Override
+            public int id() {
+                return DELTA_Y;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeFloatLE(output, y());
+            }
+        }
+        int DELTA_Z = 2;
+        record DeltaZ(int z) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_Z;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeInt(output, z());
+            }
+        }
+        record DeltaZ419(@LE float z) implements Codec419 {
+            @Override
+            public int id() {
+                return DELTA_Z;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeFloatLE(output, z());
+            }
+        }
+        
+        int DELTA_PITCH = 3;
+        record DeltaPitch(@ByteAngle float pitch) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_PITCH;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeByteAngle(output, pitch());
+            }
+        }
+        int DELTA_YAW = 4;
+        record DeltaYaw(@ByteAngle float yaw) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_YAW;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeByteAngle(output, yaw());
+            }
+        }
+        int DELTA_HEAD_YAW = 5;
+        record DeltaHeadYaw(float headYaw) implements Codec291, Codec388 {
+            @Override
+            public int id() {
+                return DELTA_HEAD_YAW;
+            }
+
+            @Override
+            public void write(@NotNull BitOutput output) throws IOException {
+                writeByteAngle(output, headYaw());
+            }
+        }
+        int ON_GROUND = 6;
+        record OnGround() implements Codec291, Codec388, Codec419 {
+            @Override
+            public int id() {
+                return ON_GROUND;
+            }
+
+            public static final OnGround INSTANCE = new OnGround();
+        }
+        int TELEPORTING = 7;
+        record Teleporting() implements Codec291, Codec388, Codec419 {
+            @Override
+            public int id() {
+                return TELEPORTING;
+            }
+
+            public static final Teleporting INSTANCE = new Teleporting();
+        }
+        int FORCE_MOVE_LOCAL_ENTITY = 8;
+        record ForceMoveLocalEntity() implements Codec291, Codec388, Codec419 {
+            @Override
+            public int id() {
+                return FORCE_MOVE_LOCAL_ENTITY;
+            }
+
+            public static final ForceMoveLocalEntity INSTANCE = new ForceMoveLocalEntity();
         }
     }
 
-    record v388 extends MoveEntityDeltaReader_v291 {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityDeltaPacket packet) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-
-            int flagsIndex = buffer.writerIndex();
-            buffer.writeShortLE(0); // flags
-
-            int flags = 0;
-            for (Flag flag : packet.getFlags()) {
-                flags |= 1 << flag.ordinal();
-
-                TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> writer = this.writers.get(flag);
-                if (writer != null) {
-                    writer.accept(buffer, helper, packet);
-                }
-            }
-
-            // Go back to flags and set them
-            int currentIndex = buffer.writerIndex();
-            buffer.writerIndex(flagsIndex);
-            buffer.writeShortLE(flags);
-            buffer.writerIndex(currentIndex);
+    record v291(@Unsigned long runtimeEntityId, @AsByte int flagMask, Flag.Codec291[] flags) implements MoveEntityDeltaPacket {
+        public v291(long runtimeEntityId, Collection<Flag.Codec291> flags) {
+            this(runtimeEntityId, flagMask(flags), uniqueOrderedFlags(flags));
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityDeltaPacket packet) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            int flags = buffer.readUnsignedShortLE();
-            Set<Flag> flagSet = packet.getFlags();
-
-            for (Flag flag : FLAGS) {
-                if ((flags & (1 << flag.ordinal())) != 0) {
-                    flagSet.add(flag);
-                    TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> reader = this.readers.get(flag);
-                    if (reader != null) {
-                        reader.accept(buffer, helper, packet);
-                    }
-                }
+        private static int flagMask(Collection<? extends Flag> flags) {
+            int mask = 0;
+            for (Flag flag : flags) {
+                mask |= 1 << flag.id();
             }
+            return mask;
+        }
+
+        private static <F extends Flag> F[] uniqueOrderedFlags(Collection<F> flags) {
+            //noinspection unchecked
+            return (F[]) flags.stream()
+                    .distinct()
+                    .sorted(Comparator.comparingInt(Flag::id))
+                    .toArray();
+        }
+
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
-    record v419 extends MoveEntityDeltaReader_v388 {
+    record v388(@Unsigned long runtimeEntityId, @AsShort @LE int flagmask, Flag.Codec388[] flags) implements MoveEntityDeltaPacket {
+        public static final Interpreter<v388> INTERPRETER = Interpreter.generate(v388.class);
+        public static final Deferer<v388> DEFERER = Deferer.generate(v388.class);
 
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_X =
-                (buffer, helper, packet) -> packet.setX(buffer.readFloatLE());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_Y =
-                (buffer, helper, packet) -> packet.setY(buffer.readFloatLE());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> READER_Z =
-                (buffer, helper, packet) -> packet.setZ(buffer.readFloatLE());
-
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_X =
-                (buffer, helper, packet) -> buffer.writeFloatLE(packet.getX());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_Y =
-                (buffer, helper, packet) -> buffer.writeFloatLE(packet.getY());
-        protected static final TriConsumer<ByteBuf, BedrockPacketHelper, MoveEntityDeltaPacket> WRITER_Z =
-                (buffer, helper, packet) -> buffer.writeFloatLE(packet.getZ());
-
-
-        protected MoveEntityDeltaReader_v419() {
-            super();
-
-            this.readers.put(Flag.HAS_X, READER_X);
-            this.readers.put(Flag.HAS_Y, READER_Y);
-            this.readers.put(Flag.HAS_Z, READER_Z);
-
-            this.writers.put(Flag.HAS_X, WRITER_X);
-            this.writers.put(Flag.HAS_Y, WRITER_Y);
-            this.writers.put(Flag.HAS_Z, WRITER_Z);
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
+    record v419(@Unsigned long runtimeEntityId, @AsShort @LE int flagmask, Flag.Codec419[] flags) implements MoveEntityDeltaPacket {
+        public static final Interpreter<v419> INTERPRETER = Interpreter.generate(v419.class);
+        public static final Deferer<v419> DEFERER = Deferer.generate(v419.class);
+
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
+        }
+    }
 }

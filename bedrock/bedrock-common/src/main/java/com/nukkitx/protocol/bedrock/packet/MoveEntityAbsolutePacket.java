@@ -11,43 +11,28 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.EnumSet;
+
 public interface MoveEntityAbsolutePacket extends BedrockPacket {
-    long runtimeEntityId;
-    Vector3f position;
-    Vector3f rotation;
-    boolean onGround;
-    boolean teleported;
+//    long runtimeEntityId;
+//    Vector3f position;
+//    Vector3f rotation;
+//    boolean onGround;
+//    boolean teleported;
 
 
-    record v291 implements MoveEntityAbsolutePacket {
-
+    record v291(@Unsigned long runtimeEntityId, byte flags, Vector3f position,
+                @ByteRotation Vector3f rotation) implements MoveEntityAbsolutePacket {
 
         static final int FLAG_ON_GROUND = 0x1;
         static final int FLAG_TELEPORTED = 0x2;
 
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityAbsolutePacket packet) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-            int flags = 0;
-            if (packet.isOnGround()) {
-                flags |= FLAG_ON_GROUND;
-            }
-            if (packet.isTeleported()) {
-                flags |= FLAG_TELEPORTED;
-            }
-            buffer.writeByte(flags);
-            helper.writeVector3f(buffer, packet.getPosition());
-            helper.writeByteRotation(buffer, packet.getRotation());
-        }
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MoveEntityAbsolutePacket packet) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            int flags = buffer.readUnsignedByte();
-            packet.setOnGround((flags & FLAG_ON_GROUND) != 0);
-            packet.setTeleported((flags & FLAG_TELEPORTED) != 0);
-            packet.setPosition(helper.readVector3f(buffer));
-            packet.setRotation(helper.readByteRotation(buffer));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws java.io.IOException {
+            DEFERER.defer(output, this);
         }
     }
 }

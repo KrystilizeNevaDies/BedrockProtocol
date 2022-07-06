@@ -13,34 +13,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface MobArmorEquipmentPacket extends BedrockPacket {
-    long runtimeEntityId;
-    ItemData helmet;
-    ItemData chestplate;
-    ItemData leggings;
-    ItemData boots;
+    long runtimeEntityId();
+    ItemData helmet();
+    ItemData chestplate();
+    ItemData leggings();
+    ItemData boots();
 
 
-    record v291 implements MobArmorEquipmentPacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket
-                packet, BedrockSession session) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-            helper.writeItem(buffer, packet.getHelmet(), session);
-            helper.writeItem(buffer, packet.getChestplate(), session);
-            helper.writeItem(buffer, packet.getLeggings(), session);
-            helper.writeItem(buffer, packet.getBoots(), session);
-        }
+    record v291(@Unsigned long runtimeEntityId, ItemData helmet, ItemData chestplate, ItemData leggings,
+                ItemData boots) implements MobArmorEquipmentPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MobArmorEquipmentPacket
-                packet, BedrockSession session) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            packet.setHelmet(helper.readItem(buffer, session));
-            packet.setChestplate(helper.readItem(buffer, session));
-            packet.setLeggings(helper.readItem(buffer, session));
-            packet.setBoots(helper.readItem(buffer, session));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws java.io.IOException {
+            DEFERER.defer(output, this);
         }
     }
 

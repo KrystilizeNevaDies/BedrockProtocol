@@ -1,151 +1,115 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import com.nukkitx.protocol.serializer.BitData;
+import com.nukkitx.protocol.serializer.BitDataWritable;
+import com.nukkitx.protocol.serializer.PacketDataWriter;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
 
 interface LevelChunkPacket extends BedrockPacket {
-    int chunkX;
-    int chunkZ;
-    int subChunksLength;
-    boolean cachingEnabled;
-    /**
-     * @since v471
-     */
-    boolean requestSubChunks;
-    /**
-     * @since v485
-     */
-    int subChunkLimit;
-    final LongList blobIds = new LongArrayList();
-    byte[] data;
+//    int chunkX;
+//    int chunkZ;
+//    int subChunksLength;
+//    boolean cachingEnabled;
+//    /**
+//     * @since v471
+//     */
+//    boolean requestSubChunks;
+//    /**
+//     * @since v485
+//     */
+//    int subChunkLimit;
+//    final LongList blobIds = new LongArrayList();
+//    byte[] data;
 
 
-    record v291 implements LevelChunkPacket {
+    record v291(int chunkX, int chunkZ, byte[] data) implements LevelChunkPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            VarInts.writeInt(buffer, packet.getChunkX());
-            VarInts.writeInt(buffer, packet.getChunkZ());
-            helper.writeByteArray(buffer, packet.getData());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            packet.setChunkX(VarInts.readInt(buffer));
-            packet.setChunkZ(VarInts.readInt(buffer));
-            packet.setData(helper.readByteArray(buffer));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
-    record v361 implements LevelChunkPacket {
+    record Caching(@LE long[] blobId) implements BitDataWritable, PacketDataWriter {
+        public static final Interpreter<Caching> INTERPRETER = Interpreter.generate(Caching.class);
+        private static final Deferer<Caching> DEFERER = Deferer.generate(Caching.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            VarInts.writeInt(buffer, packet.getChunkX());
-            VarInts.writeInt(buffer, packet.getChunkZ());
-            VarInts.writeUnsignedInt(buffer, packet.getSubChunksLength());
-            buffer.writeBoolean(packet.isCachingEnabled());
-            if (packet.isCachingEnabled()) {
-                LongList blobIds = packet.getBlobIds();
-                VarInts.writeUnsignedInt(buffer, blobIds.size());
-
-                for (long blobId : blobIds) {
-                    buffer.writeLongLE(blobId);
-                }
-            }
-
-            helper.writeByteArray(buffer, packet.getData());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            packet.setChunkX(VarInts.readInt(buffer));
-            packet.setChunkZ(VarInts.readInt(buffer));
-            packet.setSubChunksLength(VarInts.readUnsignedInt(buffer));
-            packet.setCachingEnabled(buffer.readBoolean());
-
-            if (packet.isCachingEnabled()) {
-                LongList blobIds = packet.getBlobIds();
-                int length = VarInts.readUnsignedInt(buffer);
-
-                for (int i = 0; i < length; i++) {
-                    blobIds.add(buffer.readLongLE());
-                }
-            }
-            packet.setData(helper.readByteArray(buffer));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
-    record v486 extends LevelChunkReader_v361 {
-
+    record v361(int chunkX, int chunkZ, @Unsigned int subChunksLength, @Nullable Caching caching,
+                byte[] data) implements LevelChunkPacket {
 
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            VarInts.writeInt(buffer, packet.getChunkX());
-            VarInts.writeInt(buffer, packet.getChunkZ());
-
-            if (!packet.isRequestSubChunks()) {
-                VarInts.writeUnsignedInt(buffer, packet.getSubChunksLength());
-            } else if (packet.getSubChunkLimit() < 0) {
-                VarInts.writeUnsignedInt(buffer, -1);
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeInt(output, chunkX());
+            writeInt(output, chunkZ());
+            writeUnsignedInt(output, subChunksLength());
+            if (caching() != null) {
+                writeBoolean(output, true);
+                caching().write(output);
             } else {
-                VarInts.writeUnsignedInt(buffer, -2);
-                buffer.writeShortLE(packet.getSubChunkLimit());
+                writeBoolean(output, false);
             }
+            writeByteArray(output, data());
+        }
+    }
 
-            buffer.writeBoolean(packet.isCachingEnabled());
-            if (packet.isCachingEnabled()) {
-                LongList blobIds = packet.getBlobIds();
-                VarInts.writeUnsignedInt(buffer, blobIds.size());
+    record v486(int chunkX, int chunkZ, Action action, @Nullable Caching caching,
+                byte[] data) implements LevelChunkPacket {
 
-                for (long blobId : blobIds) {
-                    buffer.writeLongLE(blobId);
-                }
+        @Override
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeInt(output, chunkX());
+            writeInt(output, chunkZ());
+            action().write(output);
+            if (caching() != null) {
+                writeBoolean(output, true);
+                caching().write(output);
+            } else {
+                writeBoolean(output, false);
             }
-
-            helper.writeByteArray(buffer, packet.getData());
+            writeByteArray(output, data());
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelChunkPacket packet) {
-            packet.setChunkX(VarInts.readInt(buffer));
-            packet.setChunkZ(VarInts.readInt(buffer));
-
-            int subChunksCount = VarInts.readUnsignedInt(buffer);
-            if (subChunksCount >= 0) {
-                packet.setSubChunksLength(subChunksCount);
-            } else {
-                packet.setRequestSubChunks(true);
-                if (subChunksCount == -1) {
-                    packet.setSubChunkLimit(subChunksCount);
-                } else if (subChunksCount == -2) {
-                    packet.setSubChunkLimit(buffer.readUnsignedShortLE());
+        interface Action extends BitDataWritable, PacketDataWriter {
+            record RequestSubChunks(@LE short subChunkLimit) implements Action {
+                @Override
+                public void write(@NotNull BitOutput output) throws IOException {
+                    if (subChunkLimit < 0) {
+                        writeUnsignedInt(output, -1);
+                    } else {
+                        writeUnsignedInt(output, -2);
+                        writeShortLE(output, subChunkLimit);
+                    }
                 }
             }
 
-            packet.setCachingEnabled(buffer.readBoolean());
-
-            if (packet.isCachingEnabled()) {
-                LongList blobIds = packet.getBlobIds();
-                int length = VarInts.readUnsignedInt(buffer);
-
-                for (int i = 0; i < length; i++) {
-                    blobIds.add(buffer.readLongLE());
+            record SubChunkLength(int subChunkLength) implements Action {
+                @Override
+                public void write(@NotNull BitOutput output) throws IOException {
+                    writeUnsignedInt(output, subChunkLength);
                 }
             }
-            packet.setData(helper.readByteArray(buffer));
         }
     }
 

@@ -13,28 +13,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface LevelEventPacket extends BedrockPacket {
-    LevelEventType valueType;
-    Vector3f position;
-    int data;
+    LevelEventType type();
+    Vector3f position();
+    int data();
 
 
-    record v291 implements LevelEventPacket {
+    record v291(@AsInt LevelEventType type, Vector3f position, int data) implements LevelEventPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventPacket packet) {
-            VarInts.writeInt(buffer, helper.getLevelEventId(packet.getType()));
-            helper.writeVector3f(buffer, packet.getPosition());
-            VarInts.writeInt(buffer, packet.getData());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventPacket packet) {
-            int eventId = VarInts.readInt(buffer);
-            packet.setType(helper.getLevelEvent(eventId));
-            packet.setPosition(helper.readVector3f(buffer));
-            packet.setData(VarInts.readInt(buffer));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws java.io.IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

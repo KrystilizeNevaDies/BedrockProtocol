@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -10,72 +11,50 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface PhotoTransferPacket extends BedrockPacket {
-    String name;
-    byte[] data;
-    String bookId;
-    /**
-     * @since v465
-     */
-    PhotoType photoType;
-    /**
-     * @since v465
-     */
-    PhotoType sourceType;
-    /**
-     * @since v465
-     */
-    long ownerId;
-    /**
-     * @since v465
-     */
-    String newPhotoName;
+//    String name;
+//    byte[] data;
+//    String bookId;
+//    /**
+//     * @since v465
+//     */
+//    PhotoType photoType;
+//    /**
+//     * @since v465
+//     */
+//    PhotoType sourceType;
+//    /**
+//     * @since v465
+//     */
+//    long ownerId;
+//    /**
+//     * @since v465
+//     */
+//    String newPhotoName;
 
 
-    record v291 implements PhotoTransferPacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoTransferPacket packet) {
-            helper.writeString(buffer, packet.getName());
-            byte[] data = packet.getData();
-            VarInts.writeUnsignedInt(buffer, data.length);
-            buffer.writeBytes(data);
-            helper.writeString(buffer, packet.getBookId());
-        }
+    record v291(String name, byte[] data, String bookId) implements PhotoTransferPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoTransferPacket packet) {
-            packet.setName(helper.readString(buffer));
-            byte[] data = new byte[VarInts.readUnsignedInt(buffer)];
-            buffer.readBytes(data);
-            packet.setData(data);
-            packet.setBookId(helper.readString(buffer));
+        public void write(@NotNull BitOutput writer) throws IOException {
+            DEFERER.defer(writer, this);
         }
     }
 
-    record v465 extends PhotoTransferReader_v291 {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoTransferPacket packet) {
-            super.serialize(buffer, helper, packet);
-            buffer.writeByte(packet.getPhotoType().ordinal());
-            buffer.writeByte(packet.getSourceType().ordinal());
-            buffer.writeLongLE(packet.getOwnerId());
-            helper.writeString(buffer, packet.getNewPhotoName());
-        }
+    record v465(String name, byte[] data, String bookId, @AsByte int photoType, @AsByte int sourceType,
+                @LE long ownerId, String newPhotoName) implements PhotoTransferPacket {
+        public static final Interpreter<v465> INTERPRETER = Interpreter.generate(v465.class);
+        public static final Deferer<v465> DEFERER = Deferer.generate(v465.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PhotoTransferPacket packet) {
-            super.deserialize(buffer, helper, packet);
-            packet.setPhotoType(PhotoType.from(buffer.readByte()));
-            packet.setSourceType(PhotoType.from(buffer.readByte()));
-            packet.setOwnerId(buffer.readLongLE());
-            packet.setNewPhotoName(helper.readString(buffer));
+        public void write(@NotNull BitOutput writer) throws IOException {
+            DEFERER.defer(writer, this);
         }
     }
-
-
 }

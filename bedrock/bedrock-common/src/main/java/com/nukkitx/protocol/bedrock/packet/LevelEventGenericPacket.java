@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.nbt.NbtType;
 import com.nukkitx.network.VarInts;
@@ -11,26 +12,21 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 interface LevelEventGenericPacket extends BedrockPacket {
-    int eventId;
-    NbtMap tag;
+    int eventId();
+    NbtMap tag();
 
 
-    record v361 implements LevelEventGenericPacket {
+    record v361(int eventId, NbtMap tag) implements LevelEventGenericPacket {
+        public static final Interpreter<v361> INTERPRETER = Interpreter.generate(v361.class);
+        private static final Deferer<v361> DEFERER = Deferer.generate(v361.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventGenericPacket packet) {
-            VarInts.writeInt(buffer, packet.getEventId());
-            helper.writeTagValue(buffer, packet.getTag());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LevelEventGenericPacket packet) {
-            packet.setEventId(VarInts.readInt(buffer));
-            packet.setTag(helper.readTagValue(buffer, NbtType.COMPOUND));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

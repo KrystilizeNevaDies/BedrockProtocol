@@ -3,8 +3,10 @@ package com.nukkitx.protocol.bedrock.protocol;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.MinecraftPacket;
+import com.nukkitx.protocol.bedrock.BedrockPacketGenerator;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.BedrockPacketWriter;
+import com.nukkitx.protocol.bedrock.packet.EntityFallPacket;
 import com.nukkitx.protocol.serializer.BitDataWritable;
 import com.nukkitx.protocol.serializer.PacketDataReader;
 import com.nukkitx.protocol.serializer.PacketDataWriter;
@@ -17,10 +19,30 @@ public interface BedrockPacket extends MinecraftPacket, BedrockPacketReader, Bed
      * Packet interpreters interpret input bits and compile output bits.
      */
     interface Interpreter<P> extends BedrockPacketReader, PacketDataReader.IOExceptionFunction<P> {
+        static <R extends Record> Interpreter<R> generate(Class<R> recordClass) {
+            //noinspection unchecked
+            return (Interpreter<R>) new BedrockPacketGenerator(recordClass).interpreter();
+        }
+
         @NotNull P interpret(@NotNull BitInput input) throws IOException;
 
         default P apply(@NotNull BitInput input) throws IOException {
             return interpret(input);
+        }
+    }
+
+    interface Deferer<P> extends BedrockPacketWriter, PacketDataWriter.IOExceptionWriter<P> {
+
+        static <R extends Record> Deferer<R> generate(Class<R> recordClass) {
+            //noinspection unchecked
+            return (Deferer<R>) new BedrockPacketGenerator(recordClass).deferer();
+        }
+
+        void defer(@NotNull BitOutput output, @NotNull P value) throws IOException;
+
+        @Override
+        default void apply(@NotNull BitOutput output, @NotNull P value) throws IOException {
+            defer(output, value);
         }
     }
 

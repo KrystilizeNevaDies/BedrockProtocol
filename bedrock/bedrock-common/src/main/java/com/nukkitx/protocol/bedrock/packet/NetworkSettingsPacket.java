@@ -13,20 +13,16 @@ interface NetworkSettingsPacket extends BedrockPacket {
     /**
      * The smallest amount of bytes that should be compressed by the client. 0-65535
      */
-    int compressionThreshold;
+    int compressionThreshold();
 
 
-    record v388 implements NetworkSettingsPacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NetworkSettingsPacket packet) {
-            buffer.writeShortLE(packet.getCompressionThreshold());
-        }
+    record v388(@AsShort @LE int compressionThreshold) implements NetworkSettingsPacket {
+        public static final Interpreter<v388> INTERPRETER = Interpreter.generate(v388.class);
+        public static final Deferer<v388> DEFERER = Deferer.generate(v388.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, NetworkSettingsPacket packet) {
-            packet.setCompressionThreshold(buffer.readUnsignedShortLE());
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput writer) throws java.io.IOException {
+            DEFERER.defer(writer, this);
         }
     }
 

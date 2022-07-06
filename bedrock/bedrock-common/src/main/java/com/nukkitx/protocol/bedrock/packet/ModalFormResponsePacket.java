@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -9,26 +10,22 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface ModalFormResponsePacket extends BedrockPacket {
-    int formId;
-    String formData;
+    int formId();
+    String formData();
 
 
-    record v291 implements ModalFormResponsePacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ModalFormResponsePacket packet) {
-            VarInts.writeUnsignedInt(buffer, packet.getFormId());
-            helper.writeString(buffer, packet.getFormData());
-        }
+    record v291(@Unsigned int formId, String formData) implements ModalFormResponsePacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ModalFormResponsePacket packet) {
-            packet.setFormId(VarInts.readUnsignedInt(buffer));
-            packet.setFormData(helper.readString(buffer));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

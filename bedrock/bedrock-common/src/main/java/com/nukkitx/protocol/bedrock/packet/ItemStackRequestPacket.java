@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.BedrockSession;
@@ -10,27 +11,22 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 interface ItemStackRequestPacket extends BedrockPacket {
-    final List<ItemStackRequest> requests = new ArrayList<>();
+    ItemStackRequest[] requests();
 
 
-    record v407 implements ItemStackRequestPacket {
+    record v407(ItemStackRequest[] requests) implements ItemStackRequestPacket {
+        public static final Interpreter<v407> INTERPRETER = Interpreter.generate(v407.class);
+        private static final Deferer<v407> DEFERER = Deferer.generate(v407.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket packet, BedrockSession
-                session) {
-            helper.writeArray(buffer, packet.getRequests(), (buf, requests) -> helper.writeItemStackRequest(buffer, session, requests));
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemStackRequestPacket
-                packet, BedrockSession session) {
-            helper.readArray(buffer, packet.getRequests(), buf -> helper.readItemStackRequest(buf, session));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 

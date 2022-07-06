@@ -18,41 +18,56 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 interface PlayerAuthInputPacket extends BedrockPacket {
-    Vector3f rotation; // head rot after motion
-    Vector3f position;
-    Vector2f motion;
-    final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
-    InputMode inputMode;
-    ClientPlayMode playMode;
-    Vector3f vrGazeDirection;
-    long tick;
-    Vector3f delta;
-    /**
-     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_INTERACTION} in order for this to not be null.
-     *
-     * @since v428
-     */
-    ItemUseTransaction itemUseTransaction;
-    /**
-     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_STACK_REQUEST} in order for this to not be null.
-     *
-     * @since v428
-     */
-    ItemStackRequest itemStackRequest;
-    /**
-     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_BLOCK_ACTIONS} in order for this to not be empty.
-     *
-     * @since v428
-     */
-    final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+//    Vector3f rotation; // head rot after motion
+//    Vector3f position;
+//    Vector2f motion;
+//    final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
+//    InputMode inputMode;
+//    ClientPlayMode playMode;
+//    Vector3f vrGazeDirection;
+//    long tick;
+//    Vector3f delta;
+//    /**
+//     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_INTERACTION} in order for this to not be null.
+//     *
+//     * @since v428
+//     */
+//    ItemUseTransaction itemUseTransaction;
+//    /**
+//     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_ITEM_STACK_REQUEST} in order for this to not be null.
+//     *
+//     * @since v428
+//     */
+//    ItemStackRequest itemStackRequest;
+//    /**
+//     * {@link #inputData} must contain {@link PlayerAuthInputData#PERFORM_BLOCK_ACTIONS} in order for this to not be empty.
+//     *
+//     * @since v428
+//     */
+//    final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
 
 
-    record v388 implements PlayerAuthInputPacket {
+    record v388(@LE float rotationX, @LE float rotationY, Vector3f position, @LE float motionX, @LE float rotationZ,
+                @Unsigned long flag, @Unsigned int inputMode, @Unsigned int playMode) implements PlayerAuthInputPacket {
+
+        public v388(Vector3f rotation, Vector3f position, Vector3f motion, Collection<PlayerAuthInputData> inputData,
+                    InputMode inputMode, ClientPlayMode playMode) {
+            this(rotation.getX(), rotation.getY(), position, motion.getX(), rotation.getZ(), flag(inputData), 0, 0);
+        }
+
+        private static int flag(Collection<PlayerAuthInputData> inputData) {
+            int flag = 0;
+            for (PlayerAuthInputData data : inputData) {
+                flag |= (1L << data.ordinal());
+            }
+            return flag;
+        }
 
 
         protected static final InputMode[] INPUT_MODES = InputMode.values();

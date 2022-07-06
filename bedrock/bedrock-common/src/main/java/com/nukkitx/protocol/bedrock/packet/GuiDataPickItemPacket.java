@@ -1,35 +1,28 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface GuiDataPickItemPacket extends BedrockPacket {
-    String description;
-    String itemEffects;
-    int hotbarSlot;
+    String description();
+    String itemEffects();
+    int hotbarSlot();
 
 
-    record v291 implements GuiDataPickItemPacket {
+    record v291(String description, String itemEffects, int hotbarSlot) implements GuiDataPickItemPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, GuiDataPickItemPacket packet) {
-            helper.writeString(buffer, packet.getDescription());
-            helper.writeString(buffer, packet.getItemEffects());
-            buffer.writeIntLE(packet.getHotbarSlot());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, GuiDataPickItemPacket packet) {
-            packet.setDescription(helper.readString(buffer));
-            packet.setItemEffects(helper.readString(buffer));
-            packet.setHotbarSlot(buffer.readIntLE());
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 

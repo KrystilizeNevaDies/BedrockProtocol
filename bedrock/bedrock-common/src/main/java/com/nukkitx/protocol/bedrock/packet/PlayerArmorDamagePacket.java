@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -10,46 +11,46 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 interface PlayerArmorDamagePacket extends BedrockPacket {
-    final Set<PlayerArmorDamageFlag> flags = EnumSet.noneOf(PlayerArmorDamageFlag.class);
-    final int[] damage = new int[4];
+//    final Set<PlayerArmorDamageFlag> flags = EnumSet.noneOf(PlayerArmorDamageFlag.class);
+//    final int[] damage = new int[4];
 
 
-    record v407 implements PlayerArmorDamagePacket {
-
-
-        static final PlayerArmorDamageFlag[] FLAGS = PlayerArmorDamageFlag.values();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerArmorDamagePacket packet) {
-            int flags = 0;
-            for (PlayerArmorDamageFlag flag : packet.getFlags()) {
-                flags |= 1 << flag.ordinal();
-            }
-            buffer.writeByte(flags);
-
-            int[] damage = packet.getDamage();
-
-            for (PlayerArmorDamageFlag flag : packet.getFlags()) {
-                int value = damage[flag.ordinal()];
-                VarInts.writeInt(buffer, value);
-            }
+    record v407(@AsByte int flags, int[] damages) implements PlayerArmorDamagePacket {
+        public v407(Map<PlayerArmorDamageFlag, Integer> damages) {
+            this(flags(damages.keySet()), damages(damages));
         }
 
+        private static int flags(Collection<PlayerArmorDamageFlag> flags) {
+            int flagBits = 0;
+            for (PlayerArmorDamageFlag flag : flags) {
+                flagBits |= flag.ordinal();
+            }
+            return flagBits;
+        }
+
+        private static int[] damages(Map<PlayerArmorDamageFlag, Integer> damages) {
+            int[] damage = new int[4];
+            for (PlayerArmorDamageFlag flag : PlayerArmorDamageFlag.values()) {
+                damage[flag.ordinal()] = damages.getOrDefault(flag, 0);
+            }
+            return damage;
+        }
+
+
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, PlayerArmorDamagePacket packet) {
-            int flagsVal = buffer.readUnsignedByte();
-            Set<PlayerArmorDamageFlag> flags = packet.getFlags();
-            int[] damage = packet.getDamage();
+        public void write(@NotNull BitOutput output) throws IOException {
+            writeByte(output, (byte) flags());
             for (int i = 0; i < 4; i++) {
-                if ((flagsVal & (1 << i)) != 0) {
-                    flags.add(FLAGS[i]);
-                    damage[i] = VarInts.readInt(buffer);
-                }
+                writeInt(output, damages()[i]);
             }
         }
     }

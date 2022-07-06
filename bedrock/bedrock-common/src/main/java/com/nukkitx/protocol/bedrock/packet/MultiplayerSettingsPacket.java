@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -11,23 +12,22 @@ import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.IOException;
+
 interface MultiplayerSettingsPacket extends BedrockPacket {
-    MultiplayerMode mode;
+    int modeId();
 
 
-    record v388 implements MultiplayerSettingsPacket {
-
-
-        static final MultiplayerMode[] VALUES = MultiplayerMode.values();
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, MultiplayerSettingsPacket packet) {
-            VarInts.writeInt(buffer, packet.getMode().ordinal());
+    record v388(int modeId) implements MultiplayerSettingsPacket {
+        public v388(MultiplayerMode mode) {
+            this(mode.id());
         }
+        public static final Interpreter<v388> INTERPRETER = Interpreter.generate(v388.class);
+        public static final Deferer<v388> DEFERER = Deferer.generate(v388.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, MultiplayerSettingsPacket packet) {
-            packet.setMode(VALUES[VarInts.readInt(buffer)]);
+        public void write(@org.jetbrains.annotations.NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 

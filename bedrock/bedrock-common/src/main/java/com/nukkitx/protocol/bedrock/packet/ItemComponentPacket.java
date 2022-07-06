@@ -1,6 +1,7 @@
 package com.nukkitx.protocol.bedrock.packet;
 
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -12,7 +13,9 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,28 +23,15 @@ import java.util.List;
  */
 interface ItemComponentPacket extends BedrockPacket {
 
-    final List<ComponentItemData> items = new ObjectArrayList<>();
+    ComponentItemData[] items();
 
 
-    record v419 implements ItemComponentPacket {
+    record v419(ComponentItemData[] items) implements ItemComponentPacket {
+        public static final Interpreter<v419> INTERPRETER = Interpreter.generate(v419.class);
+        private static final Deferer<v419> DEFERER = Deferer.generate(v419.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ItemComponentPacket packet) {
-            helper.writeArray(buffer, packet.getItems(), (buf, packetHelper, item) -> {
-                packetHelper.writeString(buf, item.getName());
-                packetHelper.writeTag(buf, item.getData());
-            });
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ItemComponentPacket packet) {
-            helper.readArray(buffer, packet.getItems(), (buf, packetHelper) -> {
-                String name = packetHelper.readString(buf);
-                NbtMap data = packetHelper.readTag(buf);
-
-                return new ComponentItemData(name, data);
-            });
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 

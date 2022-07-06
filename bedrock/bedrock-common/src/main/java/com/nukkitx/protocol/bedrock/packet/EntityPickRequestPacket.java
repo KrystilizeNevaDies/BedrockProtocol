@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
@@ -8,47 +9,30 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public interface EntityPickRequestPacket extends BedrockPacket {
-    long runtimeEntityId;
-    int hotbarSlot;
-    /**
-     * @since v465
-     */
-    boolean withData;
+    long runtimeEntityId();
+    int hotbarSlot();
 
 
-    record v291 implements EntityPickRequestPacket {
-
-
+    record v291(long runtimeEntityId, @AsByte int hotbarSlot) implements EntityPickRequestPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
         @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EntityPickRequestPacket packet) {
-            buffer.writeLongLE(packet.getRuntimeEntityId());
-            buffer.writeByte(packet.getHotbarSlot());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EntityPickRequestPacket packet) {
-            packet.setRuntimeEntityId(buffer.readLongLE());
-            packet.setHotbarSlot(buffer.readUnsignedByte());
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
-    record v465 extends EntityPickRequestReader_v291 {
+    record v465(long runtimeEntityId, @AsByte int hotbarSlot, boolean data) implements EntityPickRequestPacket {
+        public static final Interpreter<v465> INTERPRETER = Interpreter.generate(v465.class);
+        private static final Deferer<v465> DEFERER = Deferer.generate(v465.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EntityPickRequestPacket packet) {
-            super.serialize(buffer, helper, packet);
-            buffer.writeBoolean(packet.isWithData());
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EntityPickRequestPacket packet) {
-            super.deserialize(buffer, helper, packet);
-            packet.setWithData(buffer.readBoolean());
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
-
 }

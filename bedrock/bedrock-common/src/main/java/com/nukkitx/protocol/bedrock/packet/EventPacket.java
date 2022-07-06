@@ -23,12 +23,12 @@ import static com.nukkitx.protocol.bedrock.data.event.EventDataType.*;
 import static com.nukkitx.protocol.bedrock.data.event.EventDataType.FISH_BUCKETED;
 
 public interface EventPacket extends BedrockPacket {
-    long uniqueEntityId;
-    byte usePlayerId;
-    EventData eventData;
+    long uniqueEntityId();
+    byte usePlayerId();
+    EventData eventData();
 
 
-    public enum Event {
+    enum Event {
         ACHIEVEMENT_AWARDED,
         ENTITY_INTERACT,
         PORTAL_BUILT,

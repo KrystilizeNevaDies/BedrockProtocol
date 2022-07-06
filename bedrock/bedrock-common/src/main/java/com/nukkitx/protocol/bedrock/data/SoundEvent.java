@@ -1,5 +1,8 @@
 package com.nukkitx.protocol.bedrock.data;
 
+import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
+
+// TODO: Refactor this to correctly fit each protocol with protocol-specific sound-event interfaces
 public enum SoundEvent {
     ITEM_USE_ON,
     HIT,
@@ -434,5 +437,10 @@ public enum SoundEvent {
     ITEM_THROWN,
     RECORD_5,
     CONVERT_TO_FROG,
-    UNDEFINED
+    UNDEFINED,
+    ;
+
+    public interface Codec291 extends BedrockPacket.Codec291 { }
+    public interface Codec332 extends BedrockPacket.Codec332 { }
+    public interface Codec407 extends BedrockPacket.Codec407 { }
 }

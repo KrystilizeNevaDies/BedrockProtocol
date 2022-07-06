@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.network.VarInts;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
@@ -12,48 +13,31 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface InventoryContentPacket extends BedrockPacket {
-    List<ItemData> contents = new ObjectArrayList<>();
-    int containerId;
+    int containerId();
+    ItemData[] contents();
 
 
-    record v291 implements InventoryContentPacket {
+    record v291(@Unsigned int containerId, ItemData[] contents) implements InventoryContentPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryContentPacket packet, BedrockSession
-                session) {
-            VarInts.writeUnsignedInt(buffer, packet.getContainerId());
-            helper.writeArray(buffer, packet.getContents(), (buf, item) -> helper.writeItem(buf, item, session));
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryContentPacket
-                packet, BedrockSession session) {
-            packet.setContainerId(VarInts.readUnsignedInt(buffer));
-            helper.readArray(buffer, packet.getContents(), buf -> helper.readItem(buf, session));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
 
-    record v407 implements InventoryContentPacket {
+    record v407(@Unsigned int containerId, @NetItem ItemData[] contents) implements InventoryContentPacket {
+        public static final Interpreter<v407> INTERPRETER = Interpreter.generate(v407.class);
+        private static final Deferer<v407> DEFERER = Deferer.generate(v407.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryContentPacket packet, BedrockSession
-                session) {
-            VarInts.writeUnsignedInt(buffer, packet.getContainerId());
-            helper.writeArray(buffer, packet.getContents(), (buf, item) -> helper.writeNetItem(buf, item, session));
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, InventoryContentPacket
-                packet, BedrockSession session) {
-            packet.setContainerId(VarInts.readUnsignedInt(buffer));
-            helper.readArray(buffer, packet.getContents(), buf -> helper.readNetItem(buf, session));
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

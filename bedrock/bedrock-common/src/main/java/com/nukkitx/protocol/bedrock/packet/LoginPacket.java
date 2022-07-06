@@ -13,35 +13,24 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 public interface LoginPacket extends BedrockPacket {
-    int protocolVersion;
-    AsciiString chainData;
-    AsciiString skinData;
+    int protocolVersion();
+    int unknown();
+    AsciiString chainData();
+    AsciiString skinData();
 
 
-    record v291 implements LoginPacket {
+    record v291(int protocolVersion, @Unsigned int unknown, AsciiString chainData,
+                AsciiString skinData) implements LoginPacket {
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, LoginPacket packet) {
-            buffer.writeInt(packet.getProtocolVersion());
-
-            AsciiString chainData = packet.getChainData();
-            AsciiString skinData = packet.getSkinData();
-
-            VarInts.writeUnsignedInt(buffer, chainData.length() + skinData.length() + 8);
-
-            helper.writeLEAsciiString(buffer, chainData);
-            helper.writeLEAsciiString(buffer, skinData);
+        public v291(int protocolVersion, AsciiString chainData, AsciiString skinData) {
+            this(protocolVersion, chainData.length() + skinData.length() + 8, chainData, skinData);
         }
 
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, LoginPacket packet) {
-            packet.setProtocolVersion(buffer.readInt());
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-            ByteBuf jwt = buffer.readSlice(VarInts.readUnsignedInt(buffer)); // Get the JWT.
-            packet.setChainData(helper.readLEAsciiString(jwt));
-            packet.setSkinData(helper.readLEAsciiString(jwt));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws java.io.IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

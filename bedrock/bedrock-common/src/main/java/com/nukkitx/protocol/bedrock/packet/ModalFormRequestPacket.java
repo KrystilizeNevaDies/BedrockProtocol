@@ -11,24 +11,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface ModalFormRequestPacket extends BedrockPacket {
-    int formId;
-    String formData;
+    int formId();
+    String formData();
 
 
-    record v291 implements ModalFormRequestPacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ModalFormRequestPacket packet) {
-            VarInts.writeUnsignedInt(buffer, packet.getFormId());
-            helper.writeString(buffer, packet.getFormData());
-        }
+    record v291(@Unsigned int formId, String formData) implements ModalFormRequestPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ModalFormRequestPacket packet) {
-            packet.setFormId(VarInts.readUnsignedInt(buffer));
-            packet.setFormData(helper.readString(buffer));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput output) throws java.io.IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

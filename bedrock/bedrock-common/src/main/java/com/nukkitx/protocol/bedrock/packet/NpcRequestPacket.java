@@ -12,46 +12,32 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 public interface NpcRequestPacket extends BedrockPacket {
-    long runtimeEntityId;
-    NpcRequestType requestType;
-    String command;
-    int actionType;
-    String sceneName;
+//    long runtimeEntityId;
+//    NpcRequestType requestType;
+//    String command;
+//    int actionType;
+//    String sceneName;
 
 
-    record v291 implements NpcRequestPacket {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NpcRequestPacket packet) {
-            VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
-            buffer.writeByte(packet.getRequestType().ordinal());
-            helper.writeString(buffer, packet.getCommand());
-            buffer.writeByte(packet.getActionType());
-        }
+    record v291(@Unsigned long runtimeEntityId, @AsByte int requestType, String command,
+                @AsByte int actionType) implements NpcRequestPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        public static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, NpcRequestPacket packet) {
-            packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-            packet.setRequestType(NpcRequestType.values()[buffer.readUnsignedByte()]);
-            packet.setCommand(helper.readString(buffer));
-            packet.setActionType(buffer.readUnsignedByte());
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput writer) throws java.io.IOException {
+            DEFERER.defer(writer, this);
         }
     }
 
-    record v448 extends NpcRequestReader_v291 {
-
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, NpcRequestPacket packet) {
-            super.serialize(buffer, helper, packet);
-            helper.writeString(buffer, packet.getSceneName());
-        }
+    record v448(@Unsigned long runtimeEntityId, @AsByte int requestType, String command,
+                @AsByte int actionType, String sceneName) implements NpcRequestPacket {
+        public static final Interpreter<v448> INTERPRETER = Interpreter.generate(v448.class);
+        public static final Deferer<v448> DEFERER = Deferer.generate(v448.class);
 
         @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, NpcRequestPacket packet) {
-            super.deserialize(buffer, helper, packet);
-            packet.setSceneName(helper.readString(buffer));
+        public void write(@org.jetbrains.annotations.NotNull com.github.jinahya.bit.io.BitOutput writer) throws java.io.IOException {
+            DEFERER.defer(writer, this);
         }
     }
 

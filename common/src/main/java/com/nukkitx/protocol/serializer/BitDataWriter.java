@@ -12,9 +12,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-public interface BitDataWriter {
+public interface BitDataWriter extends BitData {
 
     default void writeBoolean(@NotNull BitOutput output, boolean value) throws IOException {
+        output.writeBoolean(value);
+    }
+
+    default <E extends Enum<E>> void writeEnum(@NotNull BitOutput output, E value) throws IOException {
+        writeByte(output, (byte) value.ordinal());
     }
 
     default void writeUnsignedInt(@NotNull BitOutput output, int value) throws IOException {
@@ -65,10 +70,17 @@ public interface BitDataWriter {
         writeUnsignedLong(output, uuid.getLeastSignificantBits());
     }
 
-    default void writeLongArray(@NotNull BitOutput output, @NotNull long[] array) throws IOException {
+    default void writeLongArray(@NotNull BitOutput output, long @NotNull [] array) throws IOException {
         writeUnsignedInt(output, array.length);
         for (long value : array) {
             writeLong(output, value);
+        }
+    }
+
+    default void writeByteArray(@NotNull BitOutput output, byte @NotNull [] array) throws IOException {
+        writeUnsignedInt(output, array.length);
+        for (byte value : array) {
+            writeByte(output, value);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.packet;
 
+import com.github.jinahya.bit.io.BitOutput;
 import com.nukkitx.protocol.bedrock.BedrockPacketHelper;
 import com.nukkitx.protocol.bedrock.BedrockPacketReader;
 import com.nukkitx.protocol.bedrock.protocol.BedrockPacket;
@@ -10,25 +11,21 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface GameRulesChangedPacket extends BedrockPacket {
-    final List<GameRuleData<?>> gameRules = new ObjectArrayList<>();
+    GameRuleData[] gameRules();
 
 
-    record v291 implements GameRulesChangedPacket {
+    record v291(GameRuleData[] gameRules) implements GameRulesChangedPacket {
+        public static final Interpreter<v291> INTERPRETER = Interpreter.generate(v291.class);
+        private static final Deferer<v291> DEFERER = Deferer.generate(v291.class);
 
-
-        @Override
-        public void serialize(ByteBuf buffer, BedrockPacketHelper helper, GameRulesChangedPacket packet) {
-            helper.writeArray(buffer, packet.getGameRules(), helper::writeGameRule);
-        }
-
-        @Override
-        public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, GameRulesChangedPacket packet) {
-            helper.readArray(buffer, packet.getGameRules(), helper::readGameRule);
+        public void write(@NotNull BitOutput output) throws IOException {
+            DEFERER.defer(output, this);
         }
     }
-
 }

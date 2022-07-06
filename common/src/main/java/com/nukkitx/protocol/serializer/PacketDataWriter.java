@@ -11,6 +11,7 @@ import com.nukkitx.nbt.NbtType;
 import com.nukkitx.nbt.NbtUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -39,7 +40,21 @@ public interface PacketDataWriter extends BitDataWriter {
         }
     }
 
-    default <T> void writeArray(@NotNull BitOutput output, T @NotNull [] value, IOExceptionWriter<T> writer) throws IOException {
+    default void writeByteRotation(@NotNull BitOutput output, @NotNull Vector3f rotation) throws IOException {
+        writeByteAngle(output, rotation.getX());
+        writeByteAngle(output, rotation.getY());
+        writeByteAngle(output, rotation.getZ());
+    }
+
+    default void writeByteAngle(@NotNull BitOutput output, float value) throws IOException {
+        writeByte(output, (byte) (value * 256f / 360f));
+    }
+
+    default <T> void writeArray(@NotNull BitOutput output, T @Nullable [] value, IOExceptionWriter<T> writer) throws IOException {
+        if (value == null) {
+            writeUnsignedInt(output, 0);
+            return;
+        }
         writeUnsignedInt(output, value.length);
         for (T t : value) {
             writer.apply(output, t);
@@ -47,6 +62,10 @@ public interface PacketDataWriter extends BitDataWriter {
     }
 
     default <T extends BitDataWritable> void writeArray(@NotNull BitOutput output, T @NotNull[] value) throws IOException {
+        if (value == null) {
+            writeUnsignedInt(output, 0);
+            return;
+        }
         writeUnsignedInt(output, value.length);
         for (T t : value) {
             t.write(output);
@@ -60,8 +79,12 @@ public interface PacketDataWriter extends BitDataWriter {
         }
     }
 
-    default <T> void writeCollectionAsArray(@NotNull BitOutput output, @NotNull Collection<@NotNull T> value,
+    default <T> void writeCollectionAsArray(@NotNull BitOutput output, @Nullable Collection<@NotNull T> value,
                                             IOExceptionWriter<T> writer) throws IOException {
+        if (value == null) {
+            writeUnsignedInt(output, 0);
+            return;
+        }
         writeUnsignedInt(output, value.size());
         for (T t : value) {
             writer.apply(output, t);
